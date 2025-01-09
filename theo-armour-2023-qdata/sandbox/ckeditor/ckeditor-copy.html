@@ -1,0 +1,57 @@
+<head>
+	<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+	<script src="https://unpkg.com/turndown/dist/turndown.js"></script>
+</head>
+
+<body>
+	<div id="editor"></div>
+	<button id="saveButton">Save</button>
+
+	<script>
+		ClassicEditor
+			.create( document.querySelector( '#editor' ), {
+				toolbar: [],
+
+				//extraPlugins: 'markdown',
+				markdown: {
+					enabled: true,
+					// Add any additional configuration options for the Markdown plugin here
+				}
+			} )
+			.then( editor => {
+				fetch( '../../../test-cases/markdown.md' )
+					.then( response => response.text() )
+					.then( data => {
+						const html = marked.parse( data ); // Convert Markdown to HTML
+						editor.setData( html ); // Set the HTML content in the editor
+					} )
+					.catch( error => {
+						console.error( error );
+					} );
+
+				// Save the editor content as a markdown file
+				function saveMarkdownFile () {
+					const content = editor.getData();
+					console.log( "", content );
+					const blob = new Blob( [ content ], { type: 'text/markdown' } );
+					const url = URL.createObjectURL( blob );
+					const link = document.createElement( 'a' );
+					link.href = url;
+					link.download = 'file.md';
+					link.click();
+					URL.revokeObjectURL( url );
+				}
+
+				// Call the saveMarkdownFile function when needed
+				// For example, on a button click event
+				document.querySelector( '#saveButton' ).addEventListener( 'click', saveMarkdownFile );
+			})
+			.catch( error => {
+				console.error( error );
+			});
+	</script>
+</body>
+
+</html>
+

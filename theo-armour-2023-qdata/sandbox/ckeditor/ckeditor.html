@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+	<meta charset="UTF-8">
+
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+	<title>Markdown Editor</title>
+	<script src="https://cdn.ckeditor.com/ckeditor5/40.1.0/classic/ckeditor.js"></script>
+
+
+	<script>
+		const filePath = '../../../test-cases/markdown.md';
+		// Define editor configuration
+		const editorConfig = {
+			//extraPlugins: [ Markdown ],
+			//toolbar: [], // Hide the UI
+			//removePlugins: [ 'sourceEditing' ], // Disable source editing
+			markdown: {
+				dataProcessor: {
+					toData: markdown => {
+						// Convert HTML to markdown on save
+						const converter = new marked.Parser();
+						return converter.parse( markdown );
+					}
+				}
+			}
+		};
+
+		// Get file path from URL query
+		//const filePath = new URLSearchParams( window.location.search ).get( 'file' );
+
+		// Initialize CKEditor and load markdown file
+		ClassicEditor.create( document.querySelector( '#editor' ), editorConfig )
+			.then( editor => {
+				// Load markdown file content
+				fetch( filePath )
+					.then( response => response.text() )
+					.then( content => {
+						editor.setData( content );
+					} );
+
+				// Save edited content upon editor change
+				editor.model.document.on( 'change', () => {
+					const markdownContent = editor.getData();
+					fetch( filePath, {
+						method: 'PUT',
+						body: markdownContent,
+						headers: {
+							'Content-Type': 'text/plain'
+						}
+					} ).then( () => {
+						console.log( 'File saved successfully!' );
+					} );
+				} );
+			} )
+			.catch( error => {
+				console.error( error );
+			} );
+	</script>
+</head>
+
+<body>
+	<div id="editor"></div>
+
+	<p>Editing file: <strong><em>${filePath}</em></strong></p>
+</body>
+
+</html
