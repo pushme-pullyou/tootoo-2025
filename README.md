@@ -1,4 +1,4 @@
-# [![](https://pushme-pullyou.github.io/assets/svg/octicon.svg )](https://github.com/pushme-pullyou/tootoo-2025/ "Source code on GitHub" ) [TooToo 2025]( https://pushme-pullyou.github.io/tootoo-2025/ "2025-01-09" )
+# [![](https://pushme-pullyou.github.io/assets/svg/octicon.svg )](https://github.com/pushme-pullyou/tootoo-2025/ "Source code on GitHub" ) [TooToo 2025]( https://pushme-pullyou.github.io/tootoo-2025/ "home page / 2025-01-09" )
 
 <!--   @@@
 <div class=iframe-resize ><iframe src=https://pushme-pullyou.github.io/tootoo-2025/ height=100% width=100% ></iframe></div>
@@ -28,6 +28,9 @@ Try
 
 
 ### 2025-01-09 First Commit
+
+* Update readme.html
+* Update 404.html
 
 ***
 
