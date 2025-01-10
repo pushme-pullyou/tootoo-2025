@@ -5,7 +5,7 @@
 _"Templates Read Me" in a resizable window_
 @@@  -->
 
-## Full Screen: [TooToo 2025](  https://pushme-pullyou.github.io/tootoo-2025/ )
+## Full Screen: [TooToo 2025]( https://pushme-pullyou.github.io/tootoo-2025/ )
 
 
 ## Concept
@@ -27,6 +27,8 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
+* 2025-01-09 ~ replace grv with gfv (pp-assets/cookbook/github-files-view)
+* 2025-01-09 ~ Create simple file open script using readme.html
 * 2023-10-14 ~ Add tootoo to pushme-pullyou/assets
 * 2023-10-14 ~ Find text in file title
 * 2023-10-14 ~ Cursor keys to load next file in menu
@@ -47,4 +49,4 @@ _"Templates Read Me" in a resizable window_
 
 ***
 
-<a title="Hello! Click me to go up to the top" href=javascript:window.scrollTo(0,0); > ❦ </a>
+<center title="Hello! Click me to go up to the top" ><a class=aDingbat href=javascript:window.scrollTo(0,0);> ❦ </a></center>

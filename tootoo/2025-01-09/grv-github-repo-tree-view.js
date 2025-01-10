@@ -89,7 +89,6 @@ GRV.toggleMenu = function () {
 		GRV.getFiles = GRV.getFilesAll;
 		COR.ignoreFolders = [];
 
-
 	} else {
 
 		GRVbutMenu.innerHTML = GRV.menuAll;

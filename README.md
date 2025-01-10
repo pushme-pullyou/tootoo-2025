@@ -22,7 +22,7 @@ Try
 
 ## Issues
 
-* 2023-10-14 ~ Decide where the tootoo agenda really belongs: here or in tootoo folder
+
 
 ## Change Log
 
@@ -31,6 +31,11 @@ Try
 
 * Update readme.html
 * Update 404.html
+* Add grv-github-repo-tree-view and update
+* GitHub Copilot got it sorting folders and files nicely
+* Start playing with TooToo
+
+
 
 ***
 
