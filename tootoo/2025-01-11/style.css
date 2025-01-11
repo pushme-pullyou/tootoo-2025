@@ -400,9 +400,12 @@ ul li:before {
 		padding: var( --margin);
 		width: 100%;
 	}
-	/* #navMenu {
+  #detNavMenu {
+    
+  }
+	#navMenu {
 		display: block;
-	} */
+	}
 	#spnMenuHelp {
 		display: none;
 	}

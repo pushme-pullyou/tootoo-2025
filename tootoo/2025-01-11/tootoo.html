@@ -115,7 +115,7 @@
             style="font-size:100%;">A</button>
           <button onclick=document.body.style.fontSize="150%" ;sumNavMenu.style.width="20rem" ;
             style="font-size:150%;">A</button>
-            
+
         </div>
 
         <div id=MNUdivContent></div>
@@ -176,6 +176,24 @@
 
       MNUaSource.href = COR.urlSource;
       MNUspnVersion.innerHTML = COR.version;
+
+
+      if ( window.innerWidth < 800 || window.innerHeight < 500 ) {
+
+        //document.documentElement.style.setProperty( "--mnu-width", "35%" );
+        //console.log( "bb", 23 );
+        sumNavMenu.hidden = false;
+        detNavMenu.open = false;
+
+      } else {
+
+        const value = window.getComputedStyle( document.documentElement ).getPropertyValue( '--mnu-width' ); // #999999
+        //console.log( "value", value );
+        detNavMenu.style.width = value;
+        detNavMenu.style.maxWidth = "50%";
+        detNavMenu.open = true;
+        //navMenu.hidden = false;
+        sumNavMenu.hidden = true;
 
     }
 
