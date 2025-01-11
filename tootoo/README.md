@@ -44,6 +44,19 @@ _"Templates Read Me" in a resizable window_
 
 ## Change Log
 
+### 2025-01-10
+
+It's working according to the dream!
+
+* github-file-open.js ~ remake of my longstanding readme.html script is in and working
+* github-tree-view.js ~ GitHubCopilot remake of grv is in and working
+
+We now have a super simple Github Pages content management system!
+
+Is this a dream come true?
+
+
+
 ### 2025-01-09 ~ First commit
 
 
