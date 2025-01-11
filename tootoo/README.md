@@ -44,6 +44,10 @@ _"Templates Read Me" in a resizable window_
 
 ## Change Log
 
+### 2025-01-11
+
+* embedded menu code in the HTML file, dropped menu.js
+
 ### 2025-01-10
 
 It's working according to the dream!

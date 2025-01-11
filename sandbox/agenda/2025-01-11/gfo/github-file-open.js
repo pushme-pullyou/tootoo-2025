@@ -1,7 +1,7 @@
 const GFO = ( function () {
 
-    const defaultFile = "README.md";
-    //const defaultFile = "test.md";
+    //const defaultFile = "README.md";
+    const defaultFile = "test.md";
 
     // Set the flavor of the Markdown converter
     showdown.setFlavor("github");
