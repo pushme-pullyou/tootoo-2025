@@ -11,7 +11,7 @@ if ( !accessToken || accessToken === "" || accessToken === "null" ) {
 
 }
 
-console.log( "user", user );
+console.log( "user", user, accessToken );
 
 async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
