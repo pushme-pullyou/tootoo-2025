@@ -1,9 +1,9 @@
-const owner = COR.user;
+const user = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
 const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
-async function fetchGitHubRepoContents ( owner, repo ) {
+async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
 
   const headers = new Headers( {
@@ -11,7 +11,7 @@ async function fetchGitHubRepoContents ( owner, repo ) {
     'Authorization': `token ${ accessToken }`
   } );
 
-  const response = await fetch( `${ baseUrl }/repos/${ owner }/${ repo }/git/trees/${ branch }?recursive=1`, { headers } );
+  const response = await fetch( `https://api.github.com/repos/${ user }/${ repo }/git/trees/${ branch }?recursive=1`, { headers } );
   const { tree } = await response.json();
   const div = document.getElementById( 'MNUdivContent' );
 
@@ -37,7 +37,7 @@ async function fetchGitHubRepoContents ( owner, repo ) {
     blobs.forEach( item => {
       const fileLink = document.createElement( 'a' );
       fileLink.textContent = item.path.replace( parentPath, '' );
-      fileLink.href = `#https://${ owner }.github.io/${ repo }/${ item.path }`;
+      fileLink.href = `#https://${ user }.github.io/${ repo }/${ item.path }`;
       //fileLink.target = '_blank';
 
       const newLine = document.createElement( 'br' );
@@ -54,7 +54,8 @@ async function fetchGitHubRepoContents ( owner, repo ) {
   } );
   div.appendChild( createTree( topLevelItems, '' ) );
 
+
 }
 
 
-fetchGitHubRepoContents( owner, repo );
+fetchGitHubRepoContents( user, repo );
