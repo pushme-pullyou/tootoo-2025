@@ -1,6 +1,6 @@
-const user = COR.user;
-const repo = COR.repo;
-const branch = COR.branch;
+const user = "pushmme-pullyou"; //COR.user;
+const repo = "tootoo-2025"; //COR.repo;
+const branch = "main"; //COR.branch;
 const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
 console.log( "user", user  );
