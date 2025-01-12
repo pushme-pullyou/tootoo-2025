@@ -1,7 +1,7 @@
 const owner = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
-let accessToken: localStorage.getItem( "githubAccessToken" ) || "";
+let accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
 if ( !accessToken || accessToken === "" || accessToken === "null" ) {
 
