@@ -20,9 +20,17 @@
 
   <script>
 
-  const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
+    const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
-  console.log( "accessToken", accessToken );
+    if ( !accessToken || accessToken === "" || accessToken === "null" ) {
+
+      accessToken = prompt( "Enter GitHub Personal Access Token" );
+
+      localStorage.setItem( "githubAccessToken", accessToken );
+
+    }
+
+    console.log( "accessToken", accessToken );
 
   </script>
 
