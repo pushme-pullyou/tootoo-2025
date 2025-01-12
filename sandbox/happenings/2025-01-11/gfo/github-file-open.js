@@ -1,6 +1,6 @@
 const GFO = ( function () {
 
-    const defaultFile = "../../README.md";
+  const defaultFile = "https://heritage-happenings.github.io/README.md";
     //const defaultFile = "test.md";
 
     // Set the flavor of the Markdown converter
