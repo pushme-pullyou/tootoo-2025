@@ -3,6 +3,7 @@ const repo = COR.repo;
 const branch = COR.branch;
 const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
+console.log( "user", user  );
 async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
 
