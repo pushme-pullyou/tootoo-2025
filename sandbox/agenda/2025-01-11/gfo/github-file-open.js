@@ -1,6 +1,7 @@
 const GFO = ( function () {
 
-    const defaultFile = "README.md";
+  const defaultFile = "https://theo-armour.github.io/agenda/README.md";
+  //const defaultFile = "README.md";
     //const defaultFile = "test.md";
 
     // Set the flavor of the Markdown converter
