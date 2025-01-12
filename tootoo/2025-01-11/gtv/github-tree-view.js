@@ -3,7 +3,7 @@ const repo = "tootoo-2025"; //COR.repo;
 const branch = "main"; //COR.branch;
 const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
-console.log( "user", user  );
+console.log( "user", user, accessToken );
 async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
 
