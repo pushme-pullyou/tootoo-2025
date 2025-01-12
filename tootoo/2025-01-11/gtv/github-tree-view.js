@@ -3,7 +3,8 @@ const repo = COR.repo;
 const branch = COR.branch;
 const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
-console.log( "user", user  );
+console.log( "user", user );
+
 async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
 
@@ -13,6 +14,8 @@ async function fetchGitHubRepoContents ( user, repo ) {
   } );
 
   const response = await fetch( `https://api.github.com/repos/${ user }/${ repo }/git/trees/${ branch }?recursive=1`, { headers } );
+
+
   const { tree } = await response.json();
   const div = document.getElementById( 'MNUdivContent' );
 

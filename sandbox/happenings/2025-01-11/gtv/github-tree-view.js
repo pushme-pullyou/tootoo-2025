@@ -1,7 +1,7 @@
 const owner = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
-const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
+const accessToken = COR.accessToken;
 
 async function fetchGitHubRepoContents ( owner, repo ) {
   const baseUrl = 'https://api.github.com';
