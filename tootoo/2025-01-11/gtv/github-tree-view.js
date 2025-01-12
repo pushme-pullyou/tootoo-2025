@@ -1,7 +1,15 @@
-const user = "pushmme-pullyou"; //COR.user;
+const user = "pushme-pullyou"; //COR.user;
 const repo = "tootoo-2025"; //COR.repo;
 const branch = "main"; //COR.branch;
 const accessToken = localStorage.getItem( "githubAccessToken" ) || "";
+
+if ( !accessToken || accessToken === "" || accessToken === "null" ) {
+
+  accessToken = prompt( "Enter GitHub Personal Access Token" );
+
+  localStorage.setItem( "githubAccessToken", accessToken );
+
+}
 
 console.log( "user", user );
 
