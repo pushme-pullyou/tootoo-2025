@@ -7,6 +7,10 @@ _"example.com" in a resizable window_
 
 ## Full Screen: [TooToo 2025]( https://pushme-pullyou.github.io/tootoo-2025/ )
 
+* https://pushme-pullyou.github.io/tootoo-2025/sandbox/agenda/
+* https://pushme-pullyou.github.io/tootoo-2025/sandbox/happenings/
+
+
 ## Concept
 
 ## Links of Interest
