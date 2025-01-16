@@ -45,6 +45,8 @@ async function fetchGitHubRepoContents ( user, repo ) {
       details.appendChild( createTree( childItems, item.path + '/' ) );
 
       folderContents.appendChild( details );
+
+      console.log( "item", item );
     } );
 
     blobs.forEach( item => {
@@ -53,18 +55,18 @@ async function fetchGitHubRepoContents ( user, repo ) {
       fileLink.href = `#${ item.path }`;
       //fileLink.target = '_blank';
 
-      readmeLink = document.createElement( 'a' );
-      readmeLink.innerHTML = "✎";
-      readmeLink.href = `https://theo-armour.github.io/qdata/apps/notesy/#https://${user}.github.io/${repo}/${ item.path }`;
-      readmeLink.target = '_blank';
+      const editmeLink = document.createElement( 'a' );
+      editmeLink.innerHTML = "✎";
+      editmeLink.href = `https://theo-armour.github.io/qdata/apps/notesy/#https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/${ item.path }`;
+      editmeLink.target = '_blank';
 
       const newLine = document.createElement( 'br' );
       const space = document.createElement( 'span' );
       space.innerHTML = " ";
 
-      const folderContents.appendChild( fileLink );
+      folderContents.appendChild( fileLink );
       folderContents.appendChild( space );
-      folderContents.appendChild( readmeLink );
+      folderContents.appendChild( editmeLink );
       folderContents.appendChild( newLine );
     } );
 
