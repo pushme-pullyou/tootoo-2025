@@ -43,6 +43,10 @@ _"Templates Read Me" in a resizable window_
 
 
 ## Change Log
+### 2025-01-16
+
+* Latest TooToo copied from Heritage Happenings
+
 
 ### 2025-01-11
 
