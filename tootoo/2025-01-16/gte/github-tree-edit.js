@@ -4,23 +4,22 @@ const branch = COR.branch;
 //const path = COR.pathContent;
 const filterFolders = COR.filterFolders;
 const ignoreFiles = COR.ignoreFiles;
-// let accessToken = localStorage.getItem( "githubAccessToken" ) || "";
+let accessToken = localStorage.getItem( "githubAccessToken" ) || "";
 
-// if ( !accessToken || accessToken === "" || accessToken === "null" ) {
+if ( !accessToken || accessToken === "" || accessToken === "null" ) {
 
-//   accessToken = prompt( "Enter GitHub Personal Access Token" );
+  accessToken = prompt( "Enter GitHub Personal Access Token" );
 
-//   localStorage.setItem( "githubAccessToken", accessToken );
+  localStorage.setItem( "githubAccessToken", accessToken );
 
-// }
-var readmeLink
+}
 
 async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
 
   const headers = new Headers( {
     'Accept': 'application/vnd.github+json',
-    //'Authorization': `token ${ accessToken }`
+    'Authorization': `token ${ accessToken }`
   } );
 
   const response = await fetch( `${ baseUrl }/repos/${ user }/${ repo }/git/trees/${ branch }?recursive=1`, { headers } );
@@ -55,13 +54,16 @@ async function fetchGitHubRepoContents ( user, repo ) {
       //fileLink.target = '_blank';
 
       readmeLink = document.createElement( 'a' );
-      readmeLink.innerHTML = " <img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >";
-
-      readmeLink.href = `../../readme.html#${ item.path }`;
+      readmeLink.innerHTML = "✎";
+      readmeLink.href = `https://theo-armour.github.io/qdata/apps/notesy/#https://${user}.github.io/${repo}/${ item.path }`;
       readmeLink.target = '_blank';
-      const newLine = document.createElement( 'br' );
 
-      folderContents.appendChild( fileLink );
+      const newLine = document.createElement( 'br' );
+      const space = document.createElement( 'span' );
+      space.innerHTML = " ";
+
+      const folderContents.appendChild( fileLink );
+      folderContents.appendChild( space );
       folderContents.appendChild( readmeLink );
       folderContents.appendChild( newLine );
     } );
