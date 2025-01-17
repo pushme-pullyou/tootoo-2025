@@ -13,7 +13,6 @@ const ignoreFiles = COR.ignoreFiles;
 //   localStorage.setItem( "githubAccessToken", accessToken );
 
 // }
-var readmeLink
 
 async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
@@ -74,7 +73,7 @@ async function fetchGitHubRepoContents ( user, repo ) {
     return pathParts.length === 1;
   } );
 
-  topLevelItems = topLevelItems.filter( item => ( item.type === 'blob' && ignoreFiles.includes( item.path ) === false ) || filterFolders.includes( item.path ) );
+  //topLevelItems = topLevelItems.filter( item => ( item.type === 'blob' && ignoreFiles.includes( item.path ) === false ) || filterFolders.includes( item.path ) );
   div.appendChild( createTree( topLevelItems, '' ) );
 
   //console.log( "topLevelItems", topLevelItems );
