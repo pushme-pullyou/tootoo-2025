@@ -38,7 +38,6 @@
     const COR = {
 
       // Used by GFO ~ github file open
-
       defaultFile: "README.md",
       pathContent: "../../",
 
@@ -47,9 +46,9 @@
       repo: "tootoo-2025",
       branch: "main",
 
-      filterFolders: [], //[ "food-service", "happenings-issues:", "histories", "pages", "photos", "scans"],
+      filterFolders: [], //[ "code"],
 
-      ignoreFiles: "", //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html", "test.md" ],
+      ignoreFiles: "", //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
     }
 
   </script>
@@ -58,7 +57,7 @@
   <script src="gtv/github-tree-view.js"></script>
 
 
-  <div id=MNUdivShowHide>
+  <div id=divShowHide>
 
     <details id=detNavMenu class="gmd-4" open>
 
@@ -141,21 +140,9 @@
 
       if ( location.protocol === "https:" ) {
 
-        //COR.pathContent = "";
-
         window.history.pushState( "", "", "./" + location.hash );
 
-        COR.ignoreFolders = COR.defaultIgnoreFolders;
-
-      } else {
-
-        //COR.pathContent = "https://heritage-happenings.github.io/";
-        COR.ignoreFolders = [];
-
       }
-
-      //MNUaSource.href = COR.urlSource;
-      //MNUspnVersion.innerHTML = COR.version;
 
 
       if ( window.innerWidth < 800 || window.innerHeight < 500 ) {
