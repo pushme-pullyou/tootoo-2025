@@ -10,6 +10,7 @@ _"Templates Read Me" in a resizable window_
 
 ## Concept
 
+* TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.
 
 ## Text you can include in read me files
 
@@ -27,25 +28,36 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
-* 2025-01-09 ~ replace grv with gfv (pp-assets/cookbook/github-files-view)
-* 2025-01-09 ~ Create simple file open script using readme.html
-* 2023-10-14 ~ Add tootoo to pushme-pullyou/assets
-* 2023-10-14 ~ Find text in file title
+* 2025-01-16 ~ Bring Notesy into same page
+* 2025-01-16 ~ Notesy data displayed as text not HTML
+* 2025-01-16 ~ update style sheet
+* 2023-10-14 ~ Find text in files
 * 2023-10-14 ~ Cursor keys to load next file in menu
 * 2023-10-13 ~ Check if follows Win11 light and dark mode
-* 2023-10-13 ~ Add edit file and save to GitHub
-* 2023-10-13 ~ Hamburger menu that is out of the way
+
 
 ## Issues
 
+* 2025-01-16 ~ check links for GitHub icons
 
 ## Links of Interest
 
+* ?
 
 ## Change Log
+
 ### 2025-01-16
 
 * Latest TooToo copied from Heritage Happenings
+* agenda, pages, Heritage Happenings, pushme-pullyou assets, tootoo 2025, qdata: all up to date
+
+Done
+
+* 2025-01-09 ~ replace grv with gfv (pp-assets/cookbook/github-files-view)
+* 2025-01-09 ~ Create simple file open script using readme.html
+* 2023-10-14 ~ Add tootoo to pushme-pullyou/assets
+* 2023-10-13 ~ Add edit file and save to GitHub
+* 2023-10-13 ~ Hamburger menu that is out of the way
 
 
 ### 2025-01-11
