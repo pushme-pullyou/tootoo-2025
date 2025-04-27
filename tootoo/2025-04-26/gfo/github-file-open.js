@@ -120,23 +120,35 @@ const GFO = ( function () {
           // Enhanced image handling with responsive options and loading indicator
           divMainContent.innerHTML = `
             <div style="text-align:center;">
+              <div class="loading">Loading image...</div>
               <img src="${ url }" 
                 style="border:none;max-width:100%;height:auto;" 
                 alt="${url.split('/').pop()}"
-                onload="this.previousElementSibling?.remove()"
+                onload="this.previousElementSibling.style.display='none';"
                 onerror="this.onerror=null;this.src='';this.insertAdjacentHTML('afterend', '<p>Error loading image</p>');"
               >
-              <div class="loading">Loading image...</div>
             </div>`;
 
         } else if ( [ "pdf" ].includes( extension ) ) {
-          // Special handling for PDFs
-          divMainContent.innerHTML = `<iframe src="${ url }#view=fit" 
-            height="${ window.innerHeight * 0.9 }" 
-            data-auto-height="true"
-            style="border:none;width:100%;" 
-            title="${url.split('/').pop()}"
-            sandbox="allow-scripts allow-same-origin"></iframe>`;
+          // Improved PDF handling with fallback options
+          divMainContent.innerHTML = `
+            <div style="text-align:center;padding:1em;">
+              <div class="loading">Loading PDF...</div>
+              <object 
+                data="${url}" 
+                type="application/pdf" 
+                width="100%" 
+                height="${window.innerHeight * 0.9}px"
+                style="display:block;margin:0 auto;"
+                onload="this.previousElementSibling.style.display='none';"
+                onerror="this.style.display='none';">
+                <div style="padding:1em;">
+                  <p>It appears your browser doesn't support embedded PDFs.</p>
+                  <p>You can <a href="${url}" target="_blank">download the PDF</a> to view it.</p>
+                  <p>Or try the alternate viewer: <button onclick="GFO.usePDFEmbed('${url}')">View with PDF Embed</button></p>
+                </div>
+              </object>
+            </div>`;
             
         } else if ( [ "mp4", "webm", "ogg" ].includes( extension ) ) {
           // Video file handling
@@ -216,12 +228,36 @@ const GFO = ( function () {
     location.hash = url;
   }
 
+  /**
+   * Alternative PDF viewer using iframe embed
+   * @param {string} url - URL of the PDF to display
+   */
+  function usePDFEmbed(url) {
+    divMainContent.innerHTML = `
+      <div style="text-align:center;padding:1em;">
+        <div class="loading">Loading PDF via alternative method...</div>
+        <iframe 
+          src="https://mozilla.github.io/pdf.js/web/viewer.html?file=${encodeURIComponent(url)}"
+          width="100%" 
+          height="${window.innerHeight * 0.95}px"
+          style="border:none;"
+          data-auto-height="true"
+          onload="this.previousElementSibling.style.display='none';">
+        </iframe>
+        <p style="margin-top:10px;">
+          <a href="${url}" target="_blank" download>Download PDF</a> | 
+          <button onclick="GFO.onHashChange()">Reload Original</button>
+        </p>
+      </div>`;
+  }
+
   return {
     onHashChange,
     setDocumentTitle,
     fetchFile,
     loadFile,
-    getExtension
+    getExtension,
+    usePDFEmbed
   };
 } )();
 
