@@ -58,7 +58,21 @@ const GFO = ( function () {
     setDocumentTitle( url );
 
     // Fetch the file and update the page content
+
+    if ( location.protocol === "https:" ) {
+
+      window.history.pushState( "", "", "./" + location.hash );
+      COR.pathContent = ".";
+
+    } else {
+
+      COR.pathContent = "../../"
+      
+    }
+
     fetchFile( COR.pathContent + url, options );
+
+
   }
 
   function setDocumentTitle ( url ) {
