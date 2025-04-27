@@ -32,6 +32,9 @@ Try
 
 ### 2025-04-26
 
+* Fix link to GitHub. 
+* Add diminishing font sizes to details. 
+* Add indentations to details. 
 
 ### 2025-01-09 First Commit
 
