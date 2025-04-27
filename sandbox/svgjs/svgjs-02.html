@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Text Along Arc</title>
+</head>
+<body>
+    <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+        <!-- Define the path -->
+        <path id="arcPath" d="M 50,150 A 100,100 0 0,1 150,150" fill="transparent" stroke="black"/>
+
+        <!-- Define the text along the path -->
+        <text>
+            <textPath href="#arcPath" startOffset="0%">
+                Text along an arc
+            </textPath>
+        </text>
+    </svg>
+</body>
+</html>

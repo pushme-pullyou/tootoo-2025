@@ -47,6 +47,11 @@ _"Templates Read Me" in a resizable window_
 
 ## Change Log
 
+### 2025-04-26
+
+* Add diminishing font size to to folder titles
+* Add indents to folder titles
+
 ### 2025-01-16
 
 * Latest TooToo copied from Heritage Happenings
