@@ -14,6 +14,7 @@ const ignoreFiles = COR.ignoreFiles;
 
 // }
 
+
 async function fetchGitHubRepoContents ( user, repo ) {
   const baseUrl = 'https://api.github.com';
 
@@ -57,6 +58,13 @@ async function fetchGitHubRepoContents ( user, repo ) {
       readmeLink.innerHTML = " <img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >";
       readmeLink.href = `../../readme.html#${ item.path }`;
 
+      let extension = getExtension(item.path);
+
+      const editmeLink = document.createElement( 'a' );
+      editmeLink.innerHTML = "✎";
+      editmeLink.href = `https://theo-armour.github.io/qdata/apps/notesy/#https://api.github.com/repos/${ user }/${ repo }/contents/${ item.path }`;
+      editmeLink.target = '_blank';
+
       const newLine = document.createElement( 'br' );
       const space = document.createElement( 'span' );
       space.innerHTML = " ";
@@ -64,6 +72,11 @@ async function fetchGitHubRepoContents ( user, repo ) {
       folderContents.appendChild( fileLink );
       folderContents.appendChild( space );
       folderContents.appendChild( readmeLink );
+      
+      if ( [ "", "LICENSE", "txt", "md", "markdown" ].includes( extension ) ) {
+              folderContents.appendChild( editmeLink );
+      }
+
       folderContents.appendChild( newLine );
     } );
 
@@ -82,5 +95,10 @@ async function fetchGitHubRepoContents ( user, repo ) {
 
 }
 
+function getExtension(url) {
+  return url.includes( "." ) ? 
+    url.toLowerCase().split( '.' ).pop() : 
+    "";
+}
 
 fetchGitHubRepoContents( user, repo );

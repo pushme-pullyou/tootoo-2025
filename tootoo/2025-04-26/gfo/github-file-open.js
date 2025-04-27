@@ -62,7 +62,7 @@ const GFO = ( function () {
     if ( location.protocol === "https:" ) {
 
       window.history.pushState( "", "", "./" + location.hash );
-      COR.pathContent = "./";
+      COR.pathContent = "../";
 
     } else {
 
