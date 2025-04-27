@@ -113,9 +113,10 @@ bbbimg {
 
 
 /* Top level summary elements start at 16px */
-.folder-contents>details>summary {
+div div>.folder-contents>details>summary {
   font-size: 16pt;
-  margin-left: 0px;
+  margin: 0 0 5px 0px;
+  background-color: var(--color-2-background);
 }
 
 /* First level of nesting */
