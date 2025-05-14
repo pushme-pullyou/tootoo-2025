@@ -58,7 +58,7 @@ const GFO = (function () {
 
     if (location.protocol === "https:") {
 
-      window.history.pushState("", "", "./" + location.hash);
+      //window.history.pushState("", "", "https://pushme-pullyou.github.io/tootoo-2025/tootoo/" + location.hash);
 
     }
 
