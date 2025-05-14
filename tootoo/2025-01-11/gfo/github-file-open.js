@@ -69,6 +69,8 @@ const GFO = ( function () {
     }
 
     function fetchFile(url, options) {
+
+      console.log( "url", url );
         fetch(url)
             .then(response => response.text())
           .then( txt => {
