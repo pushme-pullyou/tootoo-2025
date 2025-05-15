@@ -12,11 +12,11 @@ const GFO = (function () {
   }
 
   // If the hash ends with ".md", call onHashChange. Otherwise, navigate to the URL specified by the hash
-  if (location.hash.endsWith(".md")) {
-    onHashChange();
-  } else {
-    window.location.href = location.hash.slice(1);
-  }
+  // if (location.hash.endsWith(".md")) {
+  //   onHashChange();
+  // } else {
+  //   window.location.href = location.hash.slice(1);
+  // }
 
   // Listen for changes to the hash in the URL
   window.addEventListener("hashchange", onHashChange, false);

@@ -179,7 +179,7 @@
 			//base: "https://api.github.com/repos/theo-armour/qdata/contents/",
 			//path: "apps/notesy/test.md",
 
-			base: "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/tootoo/",
+			base: "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/",
 			path: "test.md",
 
 			lastSaveTime: 0, // Timestamp of the last successful save *for this instance*
@@ -237,7 +237,7 @@
 
 
 		test1 = () => location.hash = XGP.base + "apps/notesy/README.md";
-		test2 = () => location.hash = XGP.base + "apps/notesy/test.md";
+		test2 = () => location.hash = XGP.base + "test.md";
 		test3 = () => location.hash = XGP.base + "text-to-hack.md";
 		test4 = () => location.hash = XGP.base + "apps/notesy/original-agenda.md";
 
@@ -412,7 +412,10 @@
 			const currentTime = new Date().getTime();
 
 			if (XGP.url === "") { alert("No URL"); return; }
-			if (XGP.saving) { console.log("getSha: Already saving."); return "saving"; }
+			if (XGP.saving) { 
+				//console.log("getSha: Already saving."); 
+				return "saving"; 
+			}
 
 			// 1. More robust change detection
 			let currentMarkdown;
@@ -450,7 +453,7 @@
 				return "not markdown";
 			}
 
-			console.log("getSha: Checks passed, proceeding to fetch SHA for", XGP.fileName);
+			//console.log("getSha: Checks passed, proceeding to fetch SHA for", XGP.fileName);
 			XGP.saving = true; // Set saving flag for this instance
 
 			const xhr = new XMLHttpRequest();
@@ -583,7 +586,7 @@
 					if (text === url) {
 						return url;
 					}
-					console.log( "url",text, utl );
+					console.log( "url",text, url );
 					return `[${text}](${url})`;
 				})
 

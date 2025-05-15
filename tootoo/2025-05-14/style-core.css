@@ -196,8 +196,8 @@ div div>.folder-contents>details>summary:hover {
 
 /* IDs */
 
-#main {
-  border: 0px solid red;
+#divMainContent{
+  border: 5px solid red;
   /* height: 100vh; */
   left: calc(var(--mnu-width) + 1.5rem);
   position: absolute;
@@ -209,11 +209,11 @@ div div>.folder-contents>details>summary:hover {
   z-index: 1;
 }
 
-#navMenu {
+#divNavMenu {
   /* padding: 0 var( --margin); */
   /* width */
   background-color: var(--color-1-background);
-  border: 1px solid #8a8;
+  border: 5px solid #8a8;
   border-radius: var(--margin);
   left: 0.25rem;
   max-height: calc(100vh - 2rem);
