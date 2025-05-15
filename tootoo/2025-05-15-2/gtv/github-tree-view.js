@@ -76,8 +76,8 @@ async function fetchGitHubRepoContents(user, repo) {
 
       let extension = getExtension(item.path);
 
-      const editmeLink = document.createElement('a');
-      editmeLink.innerHTML = "✎";
+      //const editmeLink = document.createElement('a');
+      //editmeLink.innerHTML = "✎";
       //editmeLink.href = `../../notesy.html#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
       //editmeLink.target = '_blank';      // Create a paragraph element instead of a simple line break for better spacing control
       
@@ -92,9 +92,9 @@ async function fetchGitHubRepoContents(user, repo) {
       fileContainer.appendChild(space);
       fileContainer.appendChild(readmeLink);
 
-      if (["", "LICENSE", "txt", "md", "markdown"].includes(extension)) {
-        fileContainer.appendChild(editmeLink);
-      }
+      // if (["", "LICENSE", "txt", "md", "markdown"].includes(extension)) {
+      //   fileContainer.appendChild(editmeLink);
+      // }
 
       folderContents.appendChild(fileContainer);
     });

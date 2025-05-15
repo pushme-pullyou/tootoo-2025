@@ -197,11 +197,13 @@ div div>.folder-contents>details>summary:hover {
 /* IDs */
 
 #divMainContent{
-  border: 5px solid red;
+  border: 1px solid red;
   /* height: 100vh; */
   left: calc(var(--mnu-width) + 1.5rem);
   position: absolute;
+  top: 0;
   width: calc(100% - var(--mnu-width) - 2rem);
+
 }
 
 

@@ -22,17 +22,17 @@ async function fetchGitHubRepoContents ( user, repo ) {
     'Authorization': `token ${ accessToken }`
   } );
 
-  const response = await fetch( `${ baseUrl }/repos/${ user }/${ repo }/git/trees/${ branch }?recursive=1`, { headers } );
+  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`, { headers });
   const { tree } = await response.json();
-  const div = document.getElementById( 'divNavTreeView' );
-
-  const createTree = ( items, parentPath ) => {
-    const folderContents = document.createElement( 'div' );
+  const div = document.getElementById('divNavTreeView');
+  
+  const createTree = (items, parentPath) => {
+    const folderContents = document.createElement('div');
     folderContents.className = 'folder-contents';
 
-    const trees = items.filter( item => item.type === 'tree' )
-      //.filter( item => filterFolders.includes( item ) );
-    const blobs = items.filter( item => item.type === 'blob' );
+    const trees = items.filter(item => item.type === 'tree');
+    //.filter( item => filterFolders.includes( item ) );
+    const blobs = items.filter(item => item.type === 'blob');
 
     //console.log( "trees", trees );
     trees.forEach( item => {
@@ -41,14 +41,17 @@ async function fetchGitHubRepoContents ( user, repo ) {
       summary.textContent = item.path.replace( parentPath, '' );
       details.appendChild( summary );
 
-      const childItems = tree.filter( child => child.path.startsWith( item.path + '/' ) && child.path.split( '/' ).length === item.path.split( '/' ).length + 1 );
-      details.appendChild( createTree( childItems, item.path + '/' ) );
+      const childItems = tree.filter(child => child.path.startsWith(item.path + '/') && child.path.split('/').length === item.path.split('/').length + 1);
+      details.appendChild(createTree(childItems, item.path + '/'));
 
-      folderContents.appendChild( details );
-
-      //console.log( "item", item );
-      
-    } );
+      folderContents.appendChild(details);
+    });
+    
+    // Add a horizontal rule between folders and files if both exist
+    if (trees.length > 0 && blobs.length > 0) {
+      const hr = document.createElement('hr');
+      folderContents.appendChild(hr);
+    }
 
     blobs.forEach( item => {
       const fileLink = document.createElement( 'a' );
@@ -61,7 +64,7 @@ async function fetchGitHubRepoContents ( user, repo ) {
       editmeLink.href = `https://theo-armour.github.io/qdata/apps/notesy/#https://api.github.com/repos/${ user }/${ repo }/contents/${ item.path }`;
       editmeLink.target = '_blank';
 
-      const newLine = document.createElement( 'br' );
+      const newLine = document.createElement( 'p' );
       const space = document.createElement( 'span' );
       space.innerHTML = " ";
 
@@ -74,10 +77,10 @@ async function fetchGitHubRepoContents ( user, repo ) {
     return folderContents;
   };
 
-  let topLevelItems = tree.filter( item => {
-    const pathParts = item.path.split( '/' );
+  let topLevelItems = tree.filter(item => {
+    const pathParts = item.path.split('/');
     return pathParts.length === 1;
-  } );
+  });
 
   //topLevelItems = topLevelItems.filter( item => ( item.type === 'blob' && ignoreFiles.includes( item.path ) === false ) || filterFolders.includes( item.path ) );
   div.appendChild( createTree( topLevelItems, '' ) );
