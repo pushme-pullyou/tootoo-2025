@@ -56,7 +56,7 @@
 
 		<div id=divMenuBar>
 
-			<a href="text-to-hack.md">t2h</a>
+			<a href="#text-to-hack.md">t2h</a>
 
 		</div>
 
@@ -71,23 +71,24 @@
 
 	<script>
 
+        const baseA = "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/thrthr/";
 		init();
 
 		function init () {
 
-			const baseA = "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/thrthr/2025-05-14/";
 
 			ifr.onload = () => { ifr.contentWindow.init( baseA + `test.md` ); };
 
 			window.addEventListener( 'hashchange', onHashChange, false );
 
-			//requestFile();
 
 		}
 
 		function onHashChange () {
 
-			ifr.contentWindow.init( location.hash.slice( 1 ) );
+            console.log( "", location.hash.slice( 1 ) );
+
+			ifr.contentWindow.init( baseA + location.hash.slice( 1 ) );
 
 		}
 

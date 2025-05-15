@@ -124,10 +124,10 @@
 		<div id="header">
 
 			<h2>
-				<a id=aSource href="https://github.com/theo-armour/qdata/tree/main/apps/notesy" target="_blank"
+				<!-- <a id=aSource href="https://github.com/theo-armour/qdata/tree/main/apps/notesy" target="_blank"
 					title="delSha/getSHA: test3"><img
 						src=https://pushme-pullyou.github.io/assets/svg/mark-github.svg></a>
-				<a href="" id="aPath" title="Click this menu title to reload the file">
+				<a href="" id="aPath" title="Click this menu title to reload the file"> -->
 					<span id=spnTitle></span><span id=spnVersion></span></a>
 			</h2>
 
@@ -164,8 +164,8 @@
 		const XGP = {
 
 
-			base: "https://api.github.com/repos/theo-armour/agenda/contents/",
-			path: "1-notes.md",
+			//base: "https://api.github.com/repos/theo-armour/agenda/contents/",
+			//path: "1-notes.md",
 
 			//base: "https://api.github.com/repos/theo-armour/qdata/contents/",
 			//path: "text-to-hack.md",
@@ -176,8 +176,11 @@
 			//base: "https://api.github.com/repos/theo-armour/qdata/contents/",
 			//path: "apps/notesy/README.md",
 
-			base: "https://api.github.com/repos/theo-armour/qdata/contents/",
-			path: "apps/notesy/test.md",
+			//base: "https://api.github.com/repos/theo-armour/qdata/contents/",
+			//path: "apps/notesy/test.md",
+
+			base: "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/thrthr/",
+			path: "test.md",
 
 			lastSaveTime: 0, // Timestamp of the last successful save *for this instance*
 			saving: false,   // Flag to indicate if this instance is currently saving
@@ -206,7 +209,7 @@
 
 			XGP.url = url;
 
-			aPath.title = document.head.querySelector("[ name=date ]").content;
+			//aPath.title = document.head.querySelector("[ name=date ]").content;
 
 			XGP.accessToken = localStorage.getItem("githubAccessToken") || "";
 
@@ -244,7 +247,7 @@
 		function onHashChange(event) {
 
 			XGP.url = location.hash ? location.hash.slice(1) : XGP.url;
-			//console.log("XGP.url", XGP.url);
+			console.log("XGP.url", XGP.url);
 
 			XGP.base = XGP.url.split("contents")[0] + "contents/";
 			XGP.path = XGP.url.split("contents")[1].slice(1);
@@ -342,9 +345,9 @@
 			XGP.lastSavedMarkdown = htmlToMarkdown(); // Convert the displayed HTML back to MD to store the canonical "saved" state
 
 			divMessage.innerText = `T:${new Date().toLocaleString().slice(11, -3)} B:${fileContentAsMarkdown.length.toLocaleString()}`;
-			aSource.href = xhr.target.response.html_url;
+			//aSource.href = xhr.target.response.html_url;
 			console.log("XGP.url", XGP.url);
-			aPath.href = XGP.notesyURL + XGP.url;
+			//aPath.href = XGP.notesyURL + XGP.url;
 			spnTitle.innerHTML = XGP.url.split("/").pop().split(".").shift();
 			document.title = spnTitle.innerText;
 			window.scrollTo(0, 0);
