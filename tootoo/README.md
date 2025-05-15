@@ -47,6 +47,10 @@ _"Templates Read Me" in a resizable window_
 
 ## Change Log
 
+### 2025-05-14
+
+Trying to fix Source Control issues 
+
 ### 2025-04-26
 
 * Add diminishing font size to to folder titles
