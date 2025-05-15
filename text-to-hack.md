@@ -4,7 +4,7 @@ https://heritageonthemarina.org
 
 nnnnnnn
 
-<details open="">
+<details>
 
 <summary>det</summary>
 
