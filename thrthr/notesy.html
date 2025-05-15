@@ -210,7 +210,7 @@
 
 			XGP.accessToken = localStorage.getItem("githubAccessToken") || "";
 
-			console.log("XGP.accessToken", XGP.accessToken);
+			//console.log("XGP.accessToken", XGP.accessToken);
 
 			if (!XGP.accessToken || XGP.accessToken === "" || XGP.accessToken === "null") {
 
@@ -244,12 +244,12 @@
 		function onHashChange(event) {
 
 			XGP.url = location.hash ? location.hash.slice(1) : XGP.url;
-			console.log("XGP.url", XGP.url);
+			//console.log("XGP.url", XGP.url);
 
 			XGP.base = XGP.url.split("contents")[0] + "contents/";
 			XGP.path = XGP.url.split("contents")[1].slice(1);
 
-			console.log("XGP.base", XGP.base);
+			//console.log("XGP.base", XGP.base);
 
 			XGP.fileName = XGP.url.split("/").pop();
 
@@ -343,7 +343,7 @@
 
 			divMessage.innerText = `T:${new Date().toLocaleString().slice(11, -3)} B:${fileContentAsMarkdown.length.toLocaleString()}`;
 			aSource.href = xhr.target.response.html_url;
-			console.log("XGP.url", XGP.url);
+			//console.log("XGP.url", XGP.url);
 			aPath.href = XGP.notesyURL + XGP.url;
 			spnTitle.innerHTML = XGP.url.split("/").pop().split(".").shift();
 			document.title = spnTitle.innerText;

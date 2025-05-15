@@ -50,14 +50,13 @@
 				title="source code on GitHub"><img
 					src=https://pushme-pullyou.github.io/assets/svg/mark-github.svg></a>
 			<a href="" title="Click this menu title to reset the model">
-				<span id=spnTitle></span>
-				<span id=spnVersion></span>
-			</a>
+				<span id=spnTitle>ThrThr</span>
+				<span id=spnVersion>2025-05-14</span></a>
 		</h1>
 
 		<div id=divMenuBar>
 
-			<a href="https://api.github.com/repos/theo-armour/qdata/contents/1-notes.md">notes</a>
+			<a href="text-to-hack.md">t2h</a>
 
 		</div>
 
@@ -65,7 +64,7 @@
 
 	<div id="divContent">
 
-		<iframe id=ifr src="notesy.html"></iframe>
+		<iframe id=ifr src="../notesy.html"></iframe>
 
 	</div>
 
@@ -76,19 +75,9 @@
 
 		function init () {
 
-			const baseA = "https://api.github.com/repos/pusme-pullyou/tootoo-2025/contents/thrthr/2025-05-14";
+			const baseA = "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/thrthr/";
 
-			spnTitle.innerHTML = document.title ? document.title : location.href.split( '/' ).pop().slice( 0, - 5 ).replace( /-/g, ' ' );
-
-			spnVersion.innerHTML = document.head.querySelector( "[ name=date ]" ).content;
-
-			const aDate = new Date();
-			const month = ( 1 + aDate.getMonth() ).toString().padStart( 2, "0" );
-			const today = aDate.getDate().toString().padStart( 2, "0" );
-			//console.log( "today", today );
-			const path = `2025-${ month }-${ today }.md`;
-			console.log( "path", path );
-			ifr.onload = () => { ifr.contentWindow.init( `https://api.github.com/repos/theo-armour/qdata/contents/journal/months-of-the-year/2025/2025-05-may/${path}` ); };
+			ifr.onload = () => { ifr.contentWindow.init( baseA + `2025-05-14/test.md` ); };
 
 			window.addEventListener( 'hashchange', onHashChange, false );
 
