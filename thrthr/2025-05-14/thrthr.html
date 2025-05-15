@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0" />
+	<meta name="description" content="">
+	<meta name="date" content="2025-05-06">
+	<title></title>
+	<style>
+		body {
+			font: 100% monospace;
+		}
+		h1 {
+			display: inline;
+			margin: 0;
+			padding: 0;
+		}
+		#divMenuBar {
+			display: inline;
+			margin: 0;
+			padding: 0;
+
+		}
+
+		#divContent {
+			border: 1px solid #ccc;
+			height: 500px;
+			position: absolute;
+			width: 100%
+		}
+
+		#ifr {
+
+			border: 1px solid #fcc;
+			height: 100%;
+			overflow: hidden;
+			width: 100;
+		}
+
+	</style>
+</head>
+
+<body>
+
+	<nav>
+
+		<h1>
+			<a href="https://github.com/theo-armour/qdata/tree/main/apps/notesy/" target="_blank"
+				title="source code on GitHub"><img
+					src=https://pushme-pullyou.github.io/assets/svg/mark-github.svg></a>
+			<a href="" title="Click this menu title to reset the model">
+				<span id=spnTitle></span>
+				<span id=spnVersion></span>
+			</a>
+		</h1>
+
+		<div id=divMenuBar>
+
+			<a href="https://api.github.com/repos/theo-armour/qdata/contents/1-notes.md">notes</a>
+
+		</div>
+
+	</nav>
+
+	<div id="divContent">
+
+		<iframe id=ifr src="notesy.html"></iframe>
+
+	</div>
+
+
+	<script>
+
+		init();
+
+		function init () {
+
+			const baseA = "https://api.github.com/repos/pus/qdata/contents/journal/days-of-the-year";
+
+			spnTitle.innerHTML = document.title ? document.title : location.href.split( '/' ).pop().slice( 0, - 5 ).replace( /-/g, ' ' );
+
+			spnVersion.innerHTML = document.head.querySelector( "[ name=date ]" ).content;
+
+			const aDate = new Date();
+			const month = ( 1 + aDate.getMonth() ).toString().padStart( 2, "0" );
+			const today = aDate.getDate().toString().padStart( 2, "0" );
+			//console.log( "today", today );
+			const path = `2025-${ month }-${ today }.md`;
+			console.log( "path", path );
+			ifr.onload = () => { ifr.contentWindow.init( `https://api.github.com/repos/theo-armour/qdata/contents/journal/months-of-the-year/2025/2025-05-may/${path}` ); };
+
+			window.addEventListener( 'hashchange', onHashChange, false );
+
+			//requestFile();
+
+		}
+
+		function onHashChange () {
+
+			ifr.contentWindow.init( location.hash.slice( 1 ) );
+
+		}
+
+	</script>
+
+
+</body>
+
+</html>
