@@ -343,7 +343,7 @@
 
 			divMessage.innerText = `T:${new Date().toLocaleString().slice(11, -3)} B:${fileContentAsMarkdown.length.toLocaleString()}`;
 			aSource.href = xhr.target.response.html_url;
-			//console.log("XGP.url", XGP.url);
+			console.log("XGP.url", XGP.url);
 			aPath.href = XGP.notesyURL + XGP.url;
 			spnTitle.innerHTML = XGP.url.split("/").pop().split(".").shift();
 			document.title = spnTitle.innerText;
