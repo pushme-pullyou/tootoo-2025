@@ -197,9 +197,10 @@ div div>.folder-contents>details>summary:hover {
 /* IDs */
 
 #divMainContent{
-  border: 1px solid red;
+  border: 0px solid red;
   /* height: 100vh; */
-  left: calc(var(--mnu-width) + 1.5rem);
+  left: calc(var(--mnu-width) + 5rem);
+  max-width: 30rem;
   position: absolute;
   top: 0;
   width: calc(100% - var(--mnu-width) - 2rem);
@@ -215,7 +216,7 @@ div div>.folder-contents>details>summary:hover {
   /* padding: 0 var( --margin); */
   /* width */
   background-color: var(--color-1-background);
-  border: 5px solid #8a8;
+  border: 1px solid #8a8;
   border-radius: var(--margin);
   left: 0.25rem;
   max-height: calc(100vh - 2rem);
