@@ -67,7 +67,7 @@
       branch: "main",
       filterFolders: [], //["food-service", "happenings-issues","histories","pages","photos", "scans"],
       ignoreFiles: [], // ["404.html", "favicon.ico", "index.html", "LICENSE", "readme.html", "test.md"],
-
+      urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo",
     }
 
     const baseA = "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/";
@@ -80,22 +80,16 @@
   <script src="./github-tree-edit.js"></script>
 
 
-
-
   <nav id="navMenu">
 
     <div id="header">
 
       <h2>
-        <!-- <a id=aSource href="https://github.com/theo-armour/qdata/tree/main/apps/notesy" target="_blank"
-					title="delSha/getSHA: test3"><img
+        <a id=aSource href="" target="_top" title="Click to go to the source code on GitHub"><img
 						src=https://pushme-pullyou.github.io/assets/svg/mark-github.svg></a>
-				<a href="" id="aPath" title="Click this menu title to reload the file"> -->
-        <span id=spnTitle></span><span id=spnVersion></span></a>
+				<a href="" id="aPath" title="Click this menu title to reload the file">
+        <span id=spnTitle>TooTooEdit</span><span id=spnVersion></span></a>
       </h2>
-
-      <div id=divMessage style=display:inline;></div>
-      <button id="saveButton" onclick="getSha()">save</button>
 
     </div>
 
@@ -120,6 +114,8 @@
   init();
 
   function init() {
+
+    document.getElementById("aSource").href = COR.urlSource;
 
     ifr.onload = () => { ifr.contentWindow.init(baseA + `test.md`); };
 

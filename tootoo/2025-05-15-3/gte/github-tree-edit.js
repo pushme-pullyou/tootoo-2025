@@ -54,22 +54,21 @@ async function fetchGitHubRepoContents ( user, repo ) {
     }
 
     blobs.forEach( item => {
-      const fileLink = document.createElement( 'a' );
-      fileLink.textContent = item.path.replace( parentPath, '' );
-      fileLink.href = `#${ item.path }`;
+      const editmeLink = document.createElement( 'a' );
+      editmeLink.textContent = item.path.replace( parentPath, '' );
+      //fileLink.href = `#${ item.path }`;
       //fileLink.target = '_blank';
 
-      const editmeLink = document.createElement( 'a' );
-      editmeLink.innerHTML = "✎";
-      editmeLink.href = `https://theo-armour.github.io/qdata/apps/notesy/#https://api.github.com/repos/${ user }/${ repo }/contents/${ item.path }`;
-      editmeLink.target = '_blank';
+      //const editmeLink = document.createElement( 'a' );
+      //editmeLink.innerHTML = "✎";
+      editmeLink.href = `#https://api.github.com/repos/${ user }/${ repo }/contents/${ item.path }`;
 
       const newLine = document.createElement( 'p' );
       const space = document.createElement( 'span' );
       space.innerHTML = " ";
 
-      folderContents.appendChild( fileLink );
-      folderContents.appendChild( space );
+      //folderContents.appendChild( fileLink );
+      //folderContents.appendChild( space );
       folderContents.appendChild( editmeLink );
       folderContents.appendChild( newLine );
     } );

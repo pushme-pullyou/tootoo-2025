@@ -124,10 +124,10 @@
 		<div id="header">
 
 			<h2>
-				<!-- <a id=aSource href="https://github.com/theo-armour/qdata/tree/main/apps/notesy" target="_blank"
-					title="delSha/getSHA: test3"><img
+				<a id=aSource href="https://github.com/theo-armour/qdata/tree/main/apps/notesy" target="_blank"
+					title=""><img
 						src=https://pushme-pullyou.github.io/assets/svg/mark-github.svg></a>
-				<a href="" id="aPath" title="Click this menu title to reload the file"> -->
+				<a href="" id="aPath" title="Click this menu title to reload the file">
 					<span id=spnTitle></span><span id=spnVersion></span></a>
 			</h2>
 
@@ -213,7 +213,7 @@
 
 			XGP.accessToken = localStorage.getItem("githubAccessToken") || "";
 
-			//console.log("XGP.accessToken", XGP.accessToken);
+			console.log("XGP.accessToken", XGP.accessToken);
 
 			if (!XGP.accessToken || XGP.accessToken === "" || XGP.accessToken === "null") {
 
@@ -252,7 +252,7 @@
 			XGP.base = XGP.url.split("contents")[0] + "contents/";
 			XGP.path = XGP.url.split("contents")[1].slice(1);
 
-			//console.log("XGP.base", XGP.base);
+			console.log("XGP.base", XGP.base);
 
 			XGP.fileName = XGP.url.split("/").pop();
 

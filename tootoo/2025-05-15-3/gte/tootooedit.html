@@ -14,7 +14,7 @@
 
   <!-- Copyright 2025 Theo Armour. MIT license -->
 
-  <link id=CORstyle rel="stylesheet" href="style-core.css">
+  <link id=CORstyle rel="stylesheet" href="../style-core.css">
 
   <style>
     :root {
@@ -22,6 +22,13 @@
       --main-hue: 120;
       /* 0 to 360 0=red 120=green 240=blue */
     }
+
+   ifr, #divMainContent {
+
+      height: 100vh;
+    }
+
+    ifr 
   </style>
 
 </head>
@@ -55,8 +62,7 @@
 
   </script>
 
-  <script src="gfo/github-file-open.js"></script>
-  <script src="gtv/github-tree-view.js"></script>
+  <script src="./github-tree-edit.js"></script>
 
 
   <div id=divShowHide>
@@ -75,17 +81,16 @@
             <h1>
               <div class="title-link">
                 <a id=aSource href="" target="_top" title="Click to go to the source code on GitHub">
-                  <img id="imgGitHub"
-                    src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
-              <a href="" title="21:05 Click this title to reload this page">
-                <span id=spnTitle>TooToo 2025</span>
-                <span id=spnVersion></span>
-              </a>
+                  <img id="imgGitHub" src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
+                <a href="" title="21:05 Click this title to reload this page">
+                  <span id=spnTitle>TooTooEdit 2025</span>
+                  <span id=spnVersion></span>
+                </a>
               </div>
             </h1>
 
           </header>
-          
+
         </div>
 
         <div id=divNavExtras>
@@ -131,11 +136,11 @@
   </div>
 
 
-  <main id=main>
+    <div id="divMainContent">
 
-    <div id="divMainContent"></div>
+      <iframe id=ifr src="notesy.html"></iframe>
 
-  </main>
+    </div>
 
 
   <script>
@@ -146,9 +151,9 @@
 
       document.getElementById("aSource").href = COR.urlSource;
 
-      if ( location.protocol === "https:" ) {
+      if (location.protocol === "https:") {
 
-        window.history.pushState( "", "", "https://pushme-pullyou.github.io/tootoo-2025/tootoo/" + location.hash );
+        window.history.pushState("", "", "https://pushme-pullyou.github.io/tootoo-2025/tootoo/" + location.hash);
 
       }
 
@@ -169,9 +174,21 @@
 
       }
 
-      GFO.onHashChange();
+      window.addEventListener('hashchange', onHashChange, false);
+
+
+      onHashChange();
 
     }
+
+    function onHashChange() {
+
+      ifr.contentWindow.init(location.hash.slice(1));
+
+    }
+
+
+
 
   </script>
 
