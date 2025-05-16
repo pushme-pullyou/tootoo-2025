@@ -29,7 +29,7 @@ _"Templates Read Me" in a resizable window_
 ## To Do / Wish List
 
 
-* 2025-05-16 ~ Add callapse all button
+* 2025-05-16 ~ Add collapse all button
 * 2025-01-16 ~ Add GitHub icon to each file
 * 2025-01-16 ~ Bring Notesy into same page
 * 2025-01-16 ~ Notesy data displayed as text not HTML
