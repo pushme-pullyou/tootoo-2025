@@ -34,7 +34,7 @@ const GFO = (function () {
       excludeTrailingPunctuationFromURLs: true,
       ghMention: true,
       noHeaderId: true,
-      openLinksInNewWindow: false,
+      //openLinksInNewWindow: false,
       simplifiedAutoLink: true,
       simpleLineBreaks: true,
       smoothLivePreview: true,

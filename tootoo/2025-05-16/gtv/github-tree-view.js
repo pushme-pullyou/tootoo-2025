@@ -61,8 +61,8 @@ async function fetchGitHubRepoContents(user, repo) {
       
       const readmeLink = document.createElement('a');
       readmeLink.innerHTML = " <img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >";
-      readmeLink.href = `../../index.html#${item.path}`;
-      readmeLink.target = '_blank'
+      readmeLink.href = `../../readme.html#${item.path}`;
+      readmeLink.target = '_blank';
 
       const fileContainer = document.createElement('p');
       fileContainer.style.marginBottom = '6px'; // Add bottom margin for spacing
