@@ -1,7 +1,8 @@
 const GFO = (function () {
 
+  COR.pathContent = "https://pushme-pullyou.github.io/tootoo-2025/"
+
   const defaultFile = COR.defaultFile;
-  //const defaultFile = "test.md";
 
   // Set the flavor of the Markdown converter
   showdown.setFlavor("github");
@@ -11,20 +12,8 @@ const GFO = (function () {
     location.hash = defaultFile;
   }
 
-  // If the hash ends with ".md", call onHashChange. Otherwise, navigate to the URL specified by the hash
-  // if (location.hash.endsWith(".md")) {
-  //   onHashChange();
-  // } else {
-  //   window.location.href = location.hash.slice(1);
-  // }
-
   // Listen for changes to the hash in the URL
   window.addEventListener("hashchange", onHashChange, false);
-
-  // If the page is loaded over HTTPS, remove the hash from the URL
-  // if (location.protocol === "https:") {
-  //     window.history.pushState("", "", "./" + location.hash);
-  // }
 
   function onHashChange() {
     // If the hash doesn't include a ".", it's probably an internal link, so do nothing
@@ -32,7 +21,6 @@ const GFO = (function () {
       return;
     }
 
-    // Get the URL from the hash and update the document title
     const url = location.hash.slice(1);
 
     setDocumentTitle(url);
@@ -62,7 +50,6 @@ const GFO = (function () {
 
     }
 
-    COR.pathContent = "https://pushme-pullyou.github.io/tootoo-2025/"
 
     fetchFile(COR.pathContent + url, options);
 
@@ -104,6 +91,6 @@ const GFO = (function () {
 })();
 
 test = function () {
-  console.log("test1");
+  console.log("test");
   location.hash = "test.md";
 }
