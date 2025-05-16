@@ -8,7 +8,7 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="2025-05-15">
+  <meta name="version" content="2025-05-16">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
@@ -23,12 +23,11 @@
       /* 0 to 360 0=red 120=green 240=blue */
     }
 
-   ifr, #divMainContent {
+    ifr,
+    #divMainContent {
 
       height: 100vh;
     }
-
-    ifr 
   </style>
 
 </head>
@@ -82,7 +81,7 @@
               <div class="title-link">
                 <a id=aSource href="" target="_top" title="Click to go to the source code on GitHub">
                   <img id="imgGitHub" src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
-                <a href="" title="21:05 Click this title to reload this page">
+                <a href="" title="11:45 Click this title to reload this page">
                   <span id=spnTitle>TooTooEdit 2025</span>
                   <span id=spnVersion></span>
                 </a>
@@ -136,11 +135,15 @@
   </div>
 
 
+  <main id=main>
+
     <div id="divMainContent">
 
-      <iframe id=ifr src="notesy.html"></iframe>
+      <iframe id=ifr src="notesy.html" height="100%" width="100%"></iframe>
 
     </div>
+
+  </main>
 
 
   <script>
