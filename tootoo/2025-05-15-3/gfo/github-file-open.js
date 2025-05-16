@@ -23,7 +23,7 @@ const GFO = (function () {
 
     const url = location.hash.slice(1);
 
-    setDocumentTitle(url);
+    
 
     // Set the options for the Markdown converter
     const options = {
@@ -42,15 +42,6 @@ const GFO = (function () {
       tasklists: true,
     };
 
-    // Fetch the file and update the page content
-
-    if (location.protocol === "https:") {
-
-      //window.history.pushState("", "", "https://pushme-pullyou.github.io/tootoo-2025/tootoo/" + location.hash);
-
-    }
-
-
     fetchFile(COR.pathContent + url, options);
 
   }
@@ -62,7 +53,7 @@ const GFO = (function () {
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
 
-    document.title = title;
+    document.title = "TooToo: " + title;
   }
 
   function fetchFile(url, options) {
@@ -79,6 +70,9 @@ const GFO = (function () {
           divMainContent.innerHTML = `<iframe src="${url}" height=${window.innerHeight} style="border:none;width:100%;" ></iframe>`;
         }
         window.scrollTo(0, 0);
+
+        setDocumentTitle(url);
+
       })
       .catch(err => console.error("Error fetching file:", err));
   }

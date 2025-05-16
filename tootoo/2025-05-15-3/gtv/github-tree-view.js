@@ -1,21 +1,12 @@
 const user = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
-//const path = COR.pathContent;
+
 const filterFolders = COR.filterFolders;
 const ignoreFiles = COR.ignoreFiles;
-// let accessToken = localStorage.getItem( "githubAccessToken" ) || "";
-
-// if ( !accessToken || accessToken === "" || accessToken === "null" ) {
-
-//   accessToken = prompt( "Enter GitHub Personal Access Token" );
-
-//   localStorage.setItem( "githubAccessToken", accessToken );
-
-// }
-
 
 async function fetchGitHubRepoContents(user, repo) {
+
   const baseUrl = 'https://api.github.com';
 
   const headers = new Headers({
@@ -32,10 +23,8 @@ async function fetchGitHubRepoContents(user, repo) {
     folderContents.className = 'folder-contents';
 
     const trees = items.filter(item => item.type === 'tree');
-    //.filter( item => filterFolders.includes( item ) );
-    const blobs = items.filter(item => item.type === 'blob');
+     const blobs = items.filter(item => item.type === 'blob');
 
-    //console.log( "trees", trees );
     trees.forEach(item => {
       const details = document.createElement('details');
       const summary = document.createElement('summary');
@@ -63,24 +52,18 @@ async function fetchGitHubRepoContents(user, repo) {
     }
 
     blobs.forEach(item => {
-      const fileLink = document.createElement('a');
-      // Format display text for markdown files: remove .md extension and replace hyphens with spaces
+      
       const fileName = item.path.replace(parentPath, '');
+      
+      const fileLink = document.createElement('a');
       fileLink.textContent = formatDisplayName(fileName);
       fileLink.href = `#${item.path}`;
-      //fileLink.target = '_blank';
-
+      
       const readmeLink = document.createElement('a');
       readmeLink.innerHTML = " <img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >";
       readmeLink.href = `../../index.html#${item.path}`;
+      readmeLink.target = '_blank'
 
-      let extension = getExtension(item.path);
-
-      //const editmeLink = document.createElement('a');
-      //editmeLink.innerHTML = "✎";
-      //editmeLink.href = `../../notesy.html#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
-      //editmeLink.target = '_blank';      // Create a paragraph element instead of a simple line break for better spacing control
-      
       const fileContainer = document.createElement('p');
       fileContainer.style.marginBottom = '6px'; // Add bottom margin for spacing
       fileContainer.style.marginTop = '0px';     // No top margin needed
@@ -91,10 +74,6 @@ async function fetchGitHubRepoContents(user, repo) {
       fileContainer.appendChild(fileLink);
       fileContainer.appendChild(space);
       fileContainer.appendChild(readmeLink);
-
-      // if (["", "LICENSE", "txt", "md", "markdown"].includes(extension)) {
-      //   fileContainer.appendChild(editmeLink);
-      // }
 
       folderContents.appendChild(fileContainer);
     });
@@ -118,10 +97,6 @@ async function fetchGitHubRepoContents(user, repo) {
 
   div.appendChild(createTree(topLevelItems, ''));
 
-  //console.log( "topLevelItems", topLevelItems );
-
-  //console.log("ignoreFiles:", ignoreFiles);
-
 }
 
 function formatDisplayName(fileName, isFolder = false) {
@@ -133,18 +108,7 @@ function formatDisplayName(fileName, isFolder = false) {
     displayName = displayName.slice(0, -3);
   }
 
-  // Convert to title case (capitalize first letter of each word)
-  // displayName = displayName.split(' ')
-  //   .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-  //   .join(' ');
-
   return displayName;
-}
-
-function getExtension(url) {
-  return url.includes(".") ?
-    url.toLowerCase().split('.').pop() :
-    "";
 }
 
 fetchGitHubRepoContents(user, repo);
