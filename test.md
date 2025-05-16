@@ -8,7 +8,7 @@ abc
 
 mmmm hhhh&nbsp;
 
-<details>
+<details open="">
 
 <summary>try</summary>
 
