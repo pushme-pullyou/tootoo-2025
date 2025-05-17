@@ -16,7 +16,9 @@ const COR = {
 
     menuTitle: "TooToo 2025",
     version: "Version: 2025-05-17 11:41",
+    
     filterFolders: [], //[ "code"],
 
     ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 }
+
