@@ -150,7 +150,7 @@
 		<button onclick=test2()>test</button>
 		<button onclick=test3()>text-to-hack</button>
 		<button onclick=test4()>agenda</button>
-		<button onclick=location.hash="">clear hash</button>
+		<button onclick=parent.location.hash="">clear hash</button>
 		<button onclick=delSha()>delSha</button>
 
 	</main>
@@ -208,6 +208,8 @@
 
 			XGP.url = url;
 
+			console.log( "XGP.base",  XGP.base );
+
 			aPath.title = document.head.querySelector("[ name=date ]").content;
 
 			XGP.accessToken = localStorage.getItem("githubAccessToken") || "";
@@ -246,10 +248,11 @@
 		function onHashChange(event) {
 
 			XGP.url = location.hash ? location.hash.slice(1) : XGP.url;
-			//console.log("XGP.url", XGP.url);
+			//console.log("XGP.url", XGP.url, );
+			//console.log( "location.hash", location.hash.length );
 
-			XGP.base = XGP.url.split("contents")[0] + "contents/";
-			XGP.path = XGP.url.split("contents")[1].slice(1);
+			//XGP.base = XGP.url.split("contents")[0] + "contents/";
+			//XGP.path = XGP.url.split("contents")[1].slice(1);
 
 			//console.log("XGP.base", XGP.base);
 
@@ -279,8 +282,6 @@
 			event.returnValue = "";
 
 		};
-
-
 
 		function onBlur(event) {
 
@@ -584,7 +585,7 @@
 					if (text === url) {
 						return url;
 					}
-					console.log( "url",text, url );
+					//console.log( "url",text, url );
 					return `[${text}](${url})`;
 				})
 

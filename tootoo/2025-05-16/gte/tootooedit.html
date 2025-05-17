@@ -184,7 +184,7 @@
 
     function onHashChange() {
 
-      ifr.contentWindow.init();
+      ifr.contentWindow.init(location.hash.slice(1));
 
     }
 
