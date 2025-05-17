@@ -25,7 +25,7 @@
 		}
 
 		p {
-			margin: 0 0 0.25rem 0;
+			margin: 0 0 0.5rem 0;
 			padding: 0;
 		}
 
@@ -142,7 +142,6 @@
 			<a class=aDingbat href=javascript:window.scrollTo(0,0);> ❦ </a>
 		</center>
 
-
 		<button id="toggleMarkdowButton" onclick="toggleMarkdown()">markdown<>html</button>
 		<button id="toggleTextButton" onclick="toggleText()">text<>html</button>
 		<button id="saveButton" onclick="getSha()">save</button>
@@ -197,7 +196,6 @@
 			lastSavedMarkdown: null,    // Stores the last successfully saved Markdown content
 		};
 
-
 		if (window.self === window.top) {
 
 			init();
@@ -206,17 +204,15 @@
 
 		function init(url = XGP.base + XGP.path) {
 
-			console.log( "", 23 );
-
 			showdown.setFlavor("github");
 
 			XGP.url = url;
 
-			//aPath.title = document.head.querySelector("[ name=date ]").content;
+			aPath.title = document.head.querySelector("[ name=date ]").content;
 
 			XGP.accessToken = localStorage.getItem("githubAccessToken") || "";
 
-			console.log("XGP.accessToken", XGP.accessToken);
+			//console.log("XGP.accessToken", XGP.accessToken);
 
 			if (!XGP.accessToken || XGP.accessToken === "" || XGP.accessToken === "null") {
 
@@ -250,18 +246,18 @@
 		function onHashChange(event) {
 
 			XGP.url = location.hash ? location.hash.slice(1) : XGP.url;
-			console.log("XGP.url", XGP.url);
+			//console.log("XGP.url", XGP.url);
 
 			XGP.base = XGP.url.split("contents")[0] + "contents/";
 			XGP.path = XGP.url.split("contents")[1].slice(1);
 
-			console.log("XGP.base", XGP.base);
+			//console.log("XGP.base", XGP.base);
 
 			XGP.fileName = XGP.url.split("/").pop();
 
 			//XGP.extension = XGP.fileName.split( "." ).pop();
 
-			console.log("onHashChange", XGP.fileName);
+			//console.log("onHashChange", XGP.fileName);
 
 			//if ( XGP.content ) getSha();
 
@@ -349,7 +345,7 @@
 
 			divMessage.innerText = `T:${new Date().toLocaleString().slice(11, -3)} B:${fileContentAsMarkdown.length.toLocaleString()}`;
 			//aSource.href = xhr.target.response.html_url;
-			console.log("XGP.url", XGP.url);
+			//console.log("XGP.url", XGP.url);
 			//aPath.href = XGP.notesyURL + XGP.url;
 			spnTitle.innerHTML = XGP.url.split("/").pop().split(".").shift();
 			document.title = spnTitle.innerText;
@@ -396,7 +392,6 @@
 				XGP.saveInterval = null;
 
 			}
-
 		};
 
 
@@ -420,7 +415,6 @@
 				return "saving"; 
 			}
 
-			// 1. More robust change detection
 			let currentMarkdown;
 			if (XGP.state === "markdown") {
 				currentMarkdown = divContent.innerText;
@@ -488,6 +482,7 @@
 
 
 		function putFileToGitHub(markdownToSave) { // Accepts markdownToSave
+
 			if (!markdownToSave) {
 				console.error("putFileToGitHub: No markdown content provided to save.");
 				XGP.saving = false;
@@ -621,8 +616,6 @@
 
 		function toggleMarkdown() {
 
-			//console.log( "start", divContent.innerText.substr( 0, 5 ) );
-
 			if (XGP.state === "text") return;
 
 			if (XGP.state === "markdown") {
@@ -636,8 +629,6 @@
 				XGP.state = "markdown";
 
 			}
-
-			//onBlur();
 
 		}
 
