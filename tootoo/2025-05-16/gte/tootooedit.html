@@ -14,19 +14,26 @@
 
   <!-- Copyright 2025 Theo Armour. MIT license -->
 
-  <link id=CORstyle rel="stylesheet" href="../style-core.css">
+  <!-- <link id=CORstyle rel="stylesheet" href="../style-core.css"> -->
 
   <style>
-    :root {
-      /* --mnu-width: 20rem; */
-      --main-hue: 120;
-      /* 0 to 360 0=red 120=green 240=blue */
+    #navMenu {
+      float: left;
+      border: 1px solid blue;
+      width: 15rem;
     }
 
-    ifr,
-    #divMainContent {
-
+    main {
+      border: 1px solid green;
+      float: left;
+      margin-left: 2rem;
+      width: 40rem;
       height: 100vh;
+    }
+
+    iframe {
+      height: 100%;
+      width: 100%;
     }
   </style>
 
@@ -81,7 +88,7 @@
               <div class="title-link">
                 <a id=aSource href="" target="_top" title="Click to go to the source code on GitHub">
                   <img id="imgGitHub" src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
-                <a href="" title="11:45 Click this title to reload this page">
+                <a href="" title="19:48 Click this title to reload this page">
                   <span id=spnTitle>TooTooEdit 2025</span>
                   <span id=spnVersion></span>
                 </a>
@@ -92,7 +99,7 @@
 
         </div>
 
-        <!-- <div id=divNavExtras>
+        <div id=divNavExtras>
           Text size:&nbsp;
           <button
             onclick="document.body.style.fontSize='80%'; sumNavMenu.style.width='10rem'; document.getElementById('imgGitHub').style.width='16px';"
@@ -104,7 +111,7 @@
             onclick="document.body.style.fontSize='150%'; sumNavMenu.style.width='20rem'; document.getElementById('imgGitHub').style.width='30px';"
             style="font-size:150%;" title="Large text">A</button>
 
-        </div> -->
+        </div>
 
         <hr>
 
@@ -137,11 +144,7 @@
 
   <main id=main>
 
-    <div id="divMainContent">
-
-      <iframe id=ifr src="notesy.html" height="100%" width="100%"></iframe>
-
-    </div>
+    <iframe id=ifr src="notesy.html" onload="onHashChange()"></iframe>
 
   </main>
 
@@ -167,12 +170,10 @@
 
       } else {
 
-        const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width'); // #999999
-        //console.log( "value", value );
+        const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width');
         detNavMenu.style.width = value;
         detNavMenu.style.maxWidth = "50%";
         detNavMenu.open = true;
-        //navMenu.hidden = false;
         sumNavMenu.hidden = true;
 
       }
@@ -183,12 +184,9 @@
 
     function onHashChange() {
 
-      ifr.contentWindow.init(location.hash.slice(1));
+      ifr.contentWindow.init();
 
     }
-
-
-
 
   </script>
 

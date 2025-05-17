@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<meta name="description" content="Get and put Markdown files to a private or public GitHub repo">
-	<meta name="date" content="2025-05-15">
+	<meta name="date" content="2025-05-16">
 
 	<title>notesy</title>
 
@@ -165,7 +165,6 @@
 
 		const XGP = {
 
-
 			//base: "https://api.github.com/repos/theo-armour/agenda/contents/",
 			//path: "1-notes.md",
 
@@ -199,13 +198,15 @@
 		};
 
 
-		//if (window.self === window.top) {
+		if (window.self === window.top) {
 
 			init();
 
-		//}
+		}
 
 		function init(url = XGP.base + XGP.path) {
+
+			console.log( "", 23 );
 
 			showdown.setFlavor("github");
 
