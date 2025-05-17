@@ -12,10 +12,10 @@ const COR = {
 
     urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo",
     urlPathContent: "https://pushme-pullyou.github.io/tootoo-2025/",
+    urlPushPath: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/",
 
     menuTitle: "TooToo 2025",
-    version: "Version: 2025-05-17 10:41",
-
+    version: "Version: 2025-05-17 11:41",
     filterFolders: [], //[ "code"],
 
     ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
