@@ -15,7 +15,7 @@ const COR = {
     urlPushPath: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/",
 
     menuTitle: "TooToo 2025",
-    version: "Version: 2025-05-17 11:41",
+    version: "Version: 2025-05-17 12:06",
     
     filterFolders: [], //[ "code"],
 
