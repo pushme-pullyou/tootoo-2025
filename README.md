@@ -8,6 +8,8 @@ _"example.com" in a resizable window_
 
 * <a href="https://pushme-pullyou.github.io/tootoo-2025/sandbox/agenda/">https://pushme-pullyou.github.io/tootoo-2025/sandbox/agenda/</a>
 * <a href="https://pushme-pullyou.github.io/tootoo-2025/sandbox/happenings/">https://pushme-pullyou.github.io/tootoo-2025/sandbox/happenings/</a>
+* https://pushme-pullyou.github.io/tootoo-2025/tootoo/2025-05-17/gfo/github-file-open.html
+
 
 ## Concept
 
