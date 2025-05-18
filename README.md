@@ -1,15 +1,14 @@
-# <a href="https://github.com/pushme-pullyou/tootoo-2025/" title="Source code on GitHub"><img src="https://pushme-pullyou.github.io/assets/svg/octicon.svg" alt=""></a> <a href="https://pushme-pullyou.github.io/tootoo-2025/" title="home page / 2025-01-09">TooToo 2025</a>
+# [![](https://pushme-pullyou.github.io/assets/svg/octicon.svg)](https://github.com/pushme-pullyou/tootoo-2025/) [TooToo 2025](https://pushme-pullyou.github.io/tootoo-2025/)
 
-<!--   @@@
+<!-- @@@
 <div class=iframe-resize ><iframe src=https://pushme-pullyou.github.io/tootoo-2025/ height=100% width=100% ></iframe>
 _"example.com" in a resizable window_
-@@@  -->
-## Full Screen: <a href="https://pushme-pullyou.github.io/tootoo-2025/">TooToo 2025</a>
+@@@ -->
+## Full Screen: [TooToo 2025](https://pushme-pullyou.github.io/tootoo-2025/)
 
-* <a href="https://pushme-pullyou.github.io/tootoo-2025/sandbox/agenda/">https://pushme-pullyou.github.io/tootoo-2025/sandbox/agenda/</a>
-* <a href="https://pushme-pullyou.github.io/tootoo-2025/sandbox/happenings/">https://pushme-pullyou.github.io/tootoo-2025/sandbox/happenings/</a>
+* https://pushme-pullyou.github.io/tootoo-2025/sandbox/agenda/
+* https://pushme-pullyou.github.io/
 * https://pushme-pullyou.github.io/tootoo-2025/tootoo/2025-05-17/gfo/github-file-open.html
-
 
 ## Concept
 
@@ -17,9 +16,9 @@ _"example.com" in a resizable window_
 
 Try
 
-* <a href="https://simplemde.com/">https://simplemde.com/</a>
-* <a href="https://github.com/Ionaru/easy-markdown-editor">https://github.com/Ionaru/easy-markdown-editor</a>
-* <a href="https://github.com/sparksuite/simplemde-markdown-editor">https://github.com/sparksuite/simplemde-markdown-editor</a>
+* https://simplemde.com/
+* https://github.com/Ionaru/easy-markdown-editor
+* https://github.com/sparksuite/simplemde-markdown-editor
 
 ## To Do / Wish List
 
@@ -33,9 +32,9 @@ Try
 
 ### 2025-04-26
 
-* Fix link to GitHub. 
-* Add diminishing font sizes to details. 
-* Add indentations to details. 
+* Fix link to GitHub.
+* Add diminishing font sizes to details.
+* Add indentations to details.
 * Improve file loading
 
 ### 2025-01-09 First Commit
