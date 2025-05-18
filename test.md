@@ -10,7 +10,7 @@ abc
 mmmm hhhh
 * kkkkk
 
-&lt;details open=""&gt;
+<details open=""&gt;
 
 &lt;summary&gt;try&lt;/summary&gt;
 
