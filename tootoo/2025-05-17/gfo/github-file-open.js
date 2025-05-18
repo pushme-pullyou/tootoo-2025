@@ -15,7 +15,7 @@ const GFO = (function () {
 
   function onHashChange() {
     // If the hash doesn't include a ".", it's probably an internal link, so do nothing
-    if (!location.hash.includes(".")) {
+    if (!location.hash.includes(".") && !location.hash === "LICENSE") {
       return;
     }
 

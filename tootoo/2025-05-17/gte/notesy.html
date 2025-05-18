@@ -11,7 +11,7 @@
 
 	<style>
 		body {
-			border: 1px solid red;
+			border: 3px solid red;
 			box-sizing: border-box;
 			font: 100% monospace;
 			margin: 0;
@@ -33,6 +33,10 @@
 			margin: 0.5em 0;
 		}
 
+		iframe {
+			height: 100%;
+			width: 100%;
+		}
 		ul {
 			margin: 0;
 			padding: 0 0 0 1rem;
@@ -105,6 +109,7 @@
 
 		#divContent {
 			border: 1px solid #ccc;
+			height: 95vh;
 			margin: 25px 0 0 0;
 			padding: 0.25rem;
 			top: 25px;
@@ -206,9 +211,9 @@
 
 			showdown.setFlavor("github");
 
-			XGP.url = url;
+			XGP.url = url ? url : XGP.base + XGP.path;
 
-			console.log( "XGP.base",  XGP.base );
+			console.log( "XGP.url", XGP.url );
 
 			aPath.title = document.head.querySelector("[ name=date ]").content;
 
@@ -249,7 +254,7 @@
 
 			XGP.url = location.hash ? location.hash.slice(1) : XGP.url;
 			//console.log("XGP.url", XGP.url, );
-			//console.log( "location.hash", location.hash.length );
+			//console.log( "location.hash", parent.location.hash.length );
 
 			//XGP.base = XGP.url.split("contents")[0] + "contents/";
 			//XGP.path = XGP.url.split("contents")[1].slice(1);
@@ -258,13 +263,24 @@
 
 			XGP.fileName = XGP.url.split("/").pop();
 
-			//XGP.extension = XGP.fileName.split( "." ).pop();
+			XGP.extension = XGP.fileName.split( "." ).pop();
 
 			//console.log("onHashChange", XGP.fileName);
 
 			//if ( XGP.content ) getSha();
+			console.log( "XGP.url", XGP.url );
 
-			fetchMarkdown();
+			if (XGP.url.endsWith("md") || XGP.fileName === "LICENSE") {
+
+				fetchMarkdown();
+
+
+			} else {
+
+	
+divContent.innerHTML = `<iframe id=ifr src=${XGP.url} ></iframe>`
+				
+			}
 
 		};
 
@@ -273,7 +289,7 @@
 
 			if (divContent.innerHTML === XGP.content) { return; }
 
-			if (!XGP.url.endsWith("md")) return;
+			if (!XGP.url.endsWith("md") || XGP.fileName === "LICENSE") return;
 
 			console.log("checkForChange", XGP.fileName);
 
@@ -446,7 +462,7 @@
 				return "instance throttle";
 			}
 
-			if (!XGP.url.endsWith("md")) {
+			if (!XGP.url.endsWith("md") && !XGP.fileName === "LICENSE") {
 				console.warn("getSha: Not a Markdown file, skipping save.");
 				return "not markdown";
 			}
