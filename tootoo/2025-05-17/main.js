@@ -16,9 +16,14 @@ const COR = {
 
     menuTitle: "TooToo 2025",
     version: "Version: 2025-05-17 12:06",
-    
+
     filterFolders: [], //[ "code"],
 
     ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 }
+
+/* 0 to 360 10=red 120=green 240=blue */
+let r = document.querySelector(':root');
+r.style.setProperty('--main-hue', '120');
+r.style.setProperty('--mnu-width', '17rem');
 
