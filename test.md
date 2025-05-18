@@ -7,14 +7,15 @@ abc
 * mmm
 * llll
 
-mmmm hhhh&nbsp;
+mmmm hhhh
+* kkkkk
 
-<details open="">
+&lt;details open=""&gt;
 
-<summary>try</summary>
+&lt;summary&gt;try&lt;/summary&gt;
 
 1234
 
-</details>
+&lt;/details&gt;
 
 nnn
