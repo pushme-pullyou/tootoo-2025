@@ -8,7 +8,7 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="Version 2025-05-17 14:03">
+  <meta name="version" content="Version 2025-05-18">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
@@ -116,8 +116,8 @@
     function init() {
 
       document.title = COR.menuTitle;
-      document.getElementById("aSource").href = COR.urlSource;
       spnTitle.innerText = COR.menuTitle;
+      document.getElementById("aSource").href = COR.urlSource;
       main.title = document.querySelector("[ name=version ]").content;
 
       if ( location.protocol === "https:" ) {

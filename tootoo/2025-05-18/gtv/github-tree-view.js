@@ -1,13 +1,14 @@
 const user = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
+const pathContent = COR.pathContent
 
 const filterFolders = COR.filterFolders;
 const ignoreFiles = COR.ignoreFiles;
 
-async function fetchGitHubRepoContents(user, repo) {
+const baseUrl = 'https://api.github.com';
 
-  const baseUrl = 'https://api.github.com';
+async function fetchGitHubRepoContents(user, repo) {
 
   const headers = new Headers({
     'Accept': 'application/vnd.github+json',
@@ -17,17 +18,18 @@ async function fetchGitHubRepoContents(user, repo) {
   const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`, { headers });
   const { tree } = await response.json();
   const div = document.getElementById('divNavTreeView');
-  
+
   const createTree = (items, parentPath) => {
     const folderContents = document.createElement('div');
     folderContents.className = 'folder-contents';
 
     const trees = items.filter(item => item.type === 'tree');
-     const blobs = items.filter(item => item.type === 'blob');
+    const blobs = items.filter(item => item.type === 'blob');
 
     trees.forEach(item => {
       const details = document.createElement('details');
       const summary = document.createElement('summary');
+
       // Format folder names: replace hyphens with spaces
       const folderName = item.path.replace(parentPath, '');
       summary.textContent = formatDisplayName(folderName, true);
@@ -43,8 +45,9 @@ async function fetchGitHubRepoContents(user, repo) {
       details.appendChild(createTree(childItems, item.path + '/'));
 
       folderContents.appendChild(details);
+
     });
-    
+
     // Add a horizontal rule between folders and files if both exist
     if (trees.length > 0 && blobs.length > 0) {
       const hr = document.createElement('hr');
@@ -52,22 +55,22 @@ async function fetchGitHubRepoContents(user, repo) {
     }
 
     blobs.forEach(item => {
-      
+
       const fileName = item.path.replace(parentPath, '');
-      
+
       const fileLink = document.createElement('a');
       fileLink.textContent = formatDisplayName(fileName);
       fileLink.href = `#${item.path}`;
-      
+
       const readmeLink = document.createElement('a');
       readmeLink.innerHTML = " <img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >";
-      readmeLink.href = `${COR.urlPathContent}/readme.html#${item.path}`;
+      readmeLink.href = `${pathContent}/readme.html#${item.path}`;
       readmeLink.target = '_blank';
 
       const fileContainer = document.createElement('p');
       fileContainer.style.marginBottom = '6px'; // Add bottom margin for spacing
       fileContainer.style.marginTop = '0px';     // No top margin needed
-      
+
       const space = document.createElement('span');
       space.innerHTML = " ";
 
@@ -109,6 +112,7 @@ function formatDisplayName(fileName, isFolder = false) {
   }
 
   return displayName;
+
 }
 
 fetchGitHubRepoContents(user, repo);
