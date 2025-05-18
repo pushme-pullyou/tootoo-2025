@@ -1,9 +1,9 @@
 # [![](https://pushme-pullyou.github.io/assets/svg/octicon.svg)](https://github.com/pushme-pullyou/tootoo-2025/) [TooToo 2025](https://pushme-pullyou.github.io/tootoo-2025/)
 
-<!-- @@@
-<div class=iframe-resize ><iframe src=https://pushme-pullyou.github.io/tootoo-2025/ height=100% width=100% ></iframe>
+&lt;!-- @@@
+&lt;div class=iframe-resize &gt;&lt;iframe src=https://pushme-pullyou.github.io/tootoo-2025/ height=100% width=100% &gt;&lt;/iframe&gt;
 _"example.com" in a resizable window_
-@@@ -->
+@@@ --&gt;
 ## Full Screen: [TooToo 2025](https://pushme-pullyou.github.io/tootoo-2025/)
 
 * https://pushme-pullyou.github.io/tootoo-2025/
@@ -13,7 +13,7 @@ _"example.com" in a resizable window_
 
 Testing
 
-* https://pushme-pullyou.github.io/tootoo-2025/tootoo/2025-05-17/gfo/github-file-open.html
+* https://pushme-pullyou.github.io/tootoo-2025/tootoo/2025-05-1/gfo/github-file-open.html
 
 ## Concept
 
@@ -52,4 +52,4 @@ Try
 
 ***
 
-<center title="Hello! Click me to go up to the top"><a class="aDingbat" href="javascript:window.scrollTo(0,0);"> ❦ </a></center>
+&lt;center title="Hello! Click me to go up to the top"&gt;&lt;a class="aDingbat" href="javascript:window.scrollTo(0,0);"&gt; ❦ &lt;/a&gt;&lt;/center&gt;
