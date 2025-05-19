@@ -2,11 +2,9 @@ initGFO();
 
 function initGFO() {
 
-
   window.addEventListener("hashchange", onHashChange, false);
 
 }
-
 
 function onHashChange() {
 
@@ -17,8 +15,6 @@ function onHashChange() {
 }
 
 function update() {
-
-  console.log( "", 33 );
 
   ifr.contentWindow.location.hash = COR.pathContent  + location.hash.slice(1);
 

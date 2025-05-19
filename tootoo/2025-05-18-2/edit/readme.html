@@ -110,7 +110,6 @@
 
 	<script>
 
-
 		defaultFile = "../../README.md";
 
 		//location.hash = ""; // test
@@ -128,17 +127,10 @@
 
 			window.addEventListener("hashchange", onHashChange, false);
 
-			// if ( location.protocol === "https:" ) {
-
-			// 	window.history.pushState( "", "", "./" + location.hash );
-
-			// }
-
 		}
 
 
 		function onHashChange() {
-
 
 			// if no file extension then probably an internal link
 			if (!location.hash.includes(".")) { return; }
@@ -172,7 +164,6 @@
 				parent.divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${url}" height=100% width=100% ><iframe>`;
 
 			}
-
 
 		}
 
