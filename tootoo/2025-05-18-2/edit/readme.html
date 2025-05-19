@@ -119,6 +119,8 @@
 
 		function init() {
 
+			console.log( "", 22 );
+
 			showdown.setFlavor("github");
 
 			if (!location.hash) { location.hash = defaultFile; }
@@ -131,6 +133,8 @@
 
 
 		function onHashChange() {
+
+			console.log( "location.hash", location.hash );
 
 			// if no file extension then probably an internal link
 			if (!location.hash.includes(".")) { return; }

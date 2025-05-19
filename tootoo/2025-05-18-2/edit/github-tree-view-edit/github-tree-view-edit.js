@@ -10,7 +10,7 @@ const baseUrl = 'https://api.github.com';
 
 async function fetchGitHubRepoContents(user, repo) {
 
-  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1` );  //{ headers }
+  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);  //{ headers }
   const { tree } = await response.json();
   const div = document.getElementById('divNavTreeView');
 
@@ -55,9 +55,9 @@ async function fetchGitHubRepoContents(user, repo) {
 
       const fileSource = document.createElement('a');
       fileSource.innerHTML = COR.iconGitHub;
-      fileSource.href = COR.urlSource + item.path; 
-      fileSource.title="Source code on GitHub" 
-      fileSource.target="_blank"
+      fileSource.href = COR.urlSource + item.path;
+      fileSource.title = "Source code on GitHub"
+      fileSource.target = "_blank"
       //console.log( "fileSource", fileSource );
 
       const fileLink = document.createElement('a');
@@ -70,6 +70,11 @@ async function fetchGitHubRepoContents(user, repo) {
       readmeLink.href = `${COR.pathContent}readme.html#${item.path}`;
       readmeLink.target = '_blank';
 
+      const editmeLink = document.createElement('a');
+      if (item.path.endsWith("md") || item.path === "LICENSE") {
+        editmeLink.textContent = "✎";
+        editmeLink.href = `#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
+      }
       const fileContainer = document.createElement('p');
       fileContainer.style.marginBottom = '6px'; // Add bottom margin for spacing
       fileContainer.style.marginTop = '0px';     // No top margin needed
@@ -77,13 +82,13 @@ async function fetchGitHubRepoContents(user, repo) {
       const space = document.createElement('span');
       space.innerHTML = "&nbsp;";
 
-
       fileContainer.appendChild(fileSource);
+
+      if (editmeLink) { fileContainer.appendChild(editmeLink); }
       fileContainer.appendChild(space);
       fileContainer.appendChild(fileLink);
       const space2 = document.createElement('span');
       space.innerHTML = "&nbsp;";
-
       fileContainer.appendChild(space2);
       fileContainer.appendChild(readmeLink);
       fileContainer.className = 'file-container';
