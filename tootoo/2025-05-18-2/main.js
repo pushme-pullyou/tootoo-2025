@@ -22,6 +22,16 @@ const COR = {
     ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 }
 
+if (location.protocol === "https:") {
+
+    COR.pathContent = COR.urlPathContent;
+
+} else {
+
+    // COR.pathContent unchanged
+
+}
+
 /* 0 to 360 10=red 120=green 240=blue */
 let r = document.querySelector(':root');
 r.style.setProperty('--main-hue', '120');
