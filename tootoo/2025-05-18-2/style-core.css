@@ -55,7 +55,7 @@ header h1 .title-link {
   background: linear-gradient(135deg, #fff5f5 0%, var(--color-2-text) 200%);
   border-left: 4px solid var(--color-2-text);
   border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   border-left: 4px solid var(--color-2-text);
   width: calc(100% - 20px);
@@ -72,7 +72,7 @@ header h1 .title-link a {
 
 header h1 .title-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   background: linear-gradient(135deg, #ffe0e0 0%, var(--color-2-text) 200%);
   text-decoration: none;
 }
@@ -125,7 +125,6 @@ a:active {
 }
 
 
-
 /* GitHub icon vertical alignment */
 #imgGitHub {
   vertical-align: middle;
@@ -133,7 +132,7 @@ a:active {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   background-color: white;
   padding: 2px;
   margin-right: 8px;
@@ -150,6 +149,13 @@ a:active {
   text-decoration: none;
 }
 
+.iframe-resize {
+  height: 95vh;
+  overflow: hidden;
+  padding: 0.5rem;
+  resize: both;
+  width: 100%;
+}
 
 /* Top level summary elements start at 16px */
 div div>.folder-contents>details>summary {
@@ -158,15 +164,15 @@ div div>.folder-contents>details>summary {
   background: linear-gradient(135deg, #fff5f5 0%, var(--color-2-text) 200%);
   padding: 5px 10px;
   border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   border-left: 4px solid var(--color-2-text);
 }
 
 div div>.folder-contents>details>summary:hover {
-  background: linear-gradient(135deg, #ffe0e0 0%, var(--color-2-text)  300%);
+  background: linear-gradient(135deg, #ffe0e0 0%, var(--color-2-text) 300%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 /* First level of nesting */
@@ -196,7 +202,7 @@ div div>.folder-contents>details>summary:hover {
 
 /* IDs */
 
-#divMainContent{
+#divMainContent {
   border: 0px solid red;
   /* height: 100vh; */
   left: calc(var(--mnu-width) + 5rem);

@@ -25,10 +25,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
 
-  <script src="main.js"></script>
-  <script src="gfo/github-file-open.js"></script>
-  <script src="gtv/github-tree-view.js"></script>
-
 
   <div id=divShowHide>
 
@@ -108,7 +104,9 @@
 
   </main>
 
-
+  <script src="main.js"></script>
+  <script src="gfo/github-file-open.js"></script>
+  <script src="gtv/github-tree-view.js"></script>
   <script>
 
     init();
@@ -143,7 +141,7 @@
 
       }
 
-      GFO.onHashChange();
+      initGFO();
 
     }
 
