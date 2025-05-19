@@ -10,9 +10,14 @@ const COR = {
     repo: "tootoo-2025",
     branch: "main",
 
-    urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo",
+    urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/",
     urlPathContent: "https://pushme-pullyou.github.io/tootoo-2025/",
     urlPushPath: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/",
+
+    iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
+ 	iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
+	iconInfo: `<img class=infoImg src="https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg">`,
+	iconRepo: "❦",
 
     menuTitle: "TooToo 2025",
     version: "Version: 2025-05-18",

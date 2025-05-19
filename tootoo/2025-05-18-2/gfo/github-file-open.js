@@ -53,7 +53,7 @@ function onHashChange() {
 
   } else {
 
-    divMainContent.innerHTML = `<iframe class=iframe-resize src="${ url }" height=100% width=100% ><iframe>`;
+    divMainContent.innerHTML = `<iframe id=ifr class=iframe-resize src="${ url }" height=100% width=100% ><iframe>`;
 
   }
 

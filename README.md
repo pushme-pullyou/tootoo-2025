@@ -1,9 +1,9 @@
 # [![](https://pushme-pullyou.github.io/assets/svg/octicon.svg)](https://github.com/pushme-pullyou/tootoo-2025/) [TooToo 2025](https://pushme-pullyou.github.io/tootoo-2025/)
 
-<!--@@@
+<!-- @@@
 <div class=iframe-resize ><iframe src=https://pushme-pullyou.github.io/tootoo-2025/ height=100% width=100% ></iframe>;
 _"example.com" in a resizable window_
-@@@-->
+@@@ -->
 
 ## Full Screen: [TooToo 2025](https://pushme-pullyou.github.io/tootoo-2025/)
 

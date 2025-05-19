@@ -2,18 +2,13 @@ const user = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
 const pathContent = COR.pathContent
-
+COR.pathContent = "../../../";
 const filterFolders = COR.filterFolders;
 const ignoreFiles = COR.ignoreFiles;
 
 const baseUrl = 'https://api.github.com';
 
 async function fetchGitHubRepoContents(user, repo) {
-
-  // const headers = new Headers({
-  //   'Accept': 'application/vnd.github+json',
-  //   //'Authorization': `token ${ accessToken }`
-  // });
 
   const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1` );  //{ headers }
   const { tree } = await response.json();
@@ -58,13 +53,21 @@ async function fetchGitHubRepoContents(user, repo) {
 
       const fileName = item.path.replace(parentPath, '');
 
+      const fileSource = document.createElement('a');
+      fileSource.innerHTML = COR.iconGitHub;
+      fileSource.href = COR.urlSource + item.path; 
+      fileSource.title="Source code on GitHub" 
+      fileSource.target="_blank"
+      //console.log( "fileSource", fileSource );
+
       const fileLink = document.createElement('a');
       fileLink.textContent = formatDisplayName(fileName);
       fileLink.href = `#${item.path}`;
+      //console.log( "fileLink", fileLink );
 
       const readmeLink = document.createElement('a');
-      readmeLink.innerHTML = " <img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >";
-      readmeLink.href = `${pathContent}/readme.html#${item.path}`;
+      readmeLink.innerHTML = COR.iconExternalLink;
+      readmeLink.href = `${COR.pathContent}readme.html#${item.path}`;
       readmeLink.target = '_blank';
 
       const fileContainer = document.createElement('p');
@@ -72,11 +75,18 @@ async function fetchGitHubRepoContents(user, repo) {
       fileContainer.style.marginTop = '0px';     // No top margin needed
 
       const space = document.createElement('span');
-      space.innerHTML = " ";
+      space.innerHTML = "&nbsp;";
 
-      fileContainer.appendChild(fileLink);
+
+      fileContainer.appendChild(fileSource);
       fileContainer.appendChild(space);
+      fileContainer.appendChild(fileLink);
+      const space2 = document.createElement('span');
+      space.innerHTML = "&nbsp;";
+
+      fileContainer.appendChild(space2);
       fileContainer.appendChild(readmeLink);
+      fileContainer.className = 'file-container';
 
       folderContents.appendChild(fileContainer);
     });

@@ -118,7 +118,7 @@
       document.getElementById("aSource").href = COR.urlSource;
       main.title = document.querySelector("[ name=version ]").content;
 
-      if ( location.protocol === "https:" ) {
+      if (location.protocol === "https:") {
 
         window.history.pushState( "", "", COR.urlPushPath + location.hash );
 
@@ -131,7 +131,7 @@
 
       } else {
 
-        const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width'); // #999999
+        const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width');
         //console.log( "value", value );
         detNavMenu.style.width = value;
         detNavMenu.style.maxWidth = "50%";
