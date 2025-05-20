@@ -1,7 +1,7 @@
 const user = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
-const pathContent = COR.pathContent
+
 
 const filterFolders = COR.filterFolders;
 const ignoreFiles = COR.ignoreFiles;

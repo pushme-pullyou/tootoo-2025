@@ -37,6 +37,7 @@ if (location.protocol === "https:") {
 
 }
 
+console.log( "COR.pathContent", COR.pathContent );
 /* 0 to 360 10=red 120=green 240=blue */
 let r = document.querySelector(':root');
 r.style.setProperty('--main-hue', '120');
