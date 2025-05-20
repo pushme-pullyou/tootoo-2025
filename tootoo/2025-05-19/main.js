@@ -2,7 +2,7 @@
 const COR = {
 
     // Used by GFO ~ github file open
-    pathContent: "../",
+    pathContent: "../../",
     defaultFile: "README.md",
 
     // Used by GTV ~ github tree view

@@ -28,7 +28,8 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
-
+* 2025-05-20 ~ Images in div content directly
+* 2025-05-20 ~ Iframe files for different types of files
 * 2025-05-16 ~ Add collapse all button
 * 2025-01-16 ~ Add GitHub icon to each file
 * 2025-01-16 ~ Bring Notesy into same page
