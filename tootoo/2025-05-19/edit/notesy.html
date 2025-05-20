@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<meta name="description" content="Get and put Markdown files to a private or public GitHub repo">
-	<meta name="date" content="2025-05-18">
+	<meta name="date" content="2025-05-19">
 
 	<title>notesy</title>
 
@@ -100,6 +100,14 @@
 			font-size: 1.5rem;
 		}
 
+		.iframe-resize {
+			height: 400px;
+			overflow: hidden;
+			padding: 0.5rem;
+			resize: both;
+			width: 100%;
+		}
+
 		#header {
 			background: white;
 			position: fixed;
@@ -110,8 +118,9 @@
 
 		#divContent {
 			border: 1px solid #ccc;
-			height: 95vh;
+			height: 75vh;
 			margin: 25px 0 0 0;
+			overflow: auto;
 			padding: 0.25rem;
 			top: 25px;
 
@@ -138,7 +147,7 @@
 
 			<div id=divMessage style=display:inline;></div>
 			<button id="saveButton" onclick="getSha()">save</button>
-
+			<div id=divLocationHash style=display:inline;></div>
 		</div>
 
 		<div id="divContent" contenteditable="true"></div>
@@ -201,11 +210,11 @@
 			lastSavedMarkdown: null,    // Stores the last successfully saved Markdown content
 		};
 
-		if (window.self === window.top) {
+		//if (window.self === window.top) {
 
-			init();
+		init();
 
-		}
+		//}
 
 		function init(url = XGP.base + XGP.path) {
 
@@ -213,7 +222,7 @@
 
 			XGP.url = url ? url : XGP.base + XGP.path;
 
-			console.log("XGP.url", XGP.url);
+			//console.log("XGP.url", XGP.url);
 
 			aPath.title = document.head.querySelector("[ name=date ]").content;
 
@@ -229,7 +238,7 @@
 
 			}
 
-			window.addEventListener("hashchange", onHashChange, false);
+			//window.addEventListener("hashchange", onHashChange, false);
 			window.addEventListener("beforeunload", checkForChange);
 
 			divContent.addEventListener('blur', onBlur);
@@ -268,7 +277,9 @@
 			//console.log("onHashChange", XGP.fileName);
 
 			//if ( XGP.content ) getSha();
-			console.log("XGP.url", XGP.url);
+			//console.log("XGP.url", XGP.url);
+
+			divLocationHash.innerText = location.hash
 
 			if (XGP.url.endsWith("md") || XGP.fileName === "LICENSE") {
 
@@ -277,7 +288,7 @@
 
 			} else {
 
-				divContent.innerHTML = `<iframe id=ifr src=${XGP.url} ></iframe>`
+				divContent.innerHTML = `<iframe id=ifr class="iframe-resize" src=${XGP.url} ></iframe>`
 
 			}
 
@@ -341,7 +352,6 @@
 			divContent.innerText = fileContentAsMarkdown;
 			XGP.content = divContent.innerText;
 			XGP.lastSavedMarkdown = XGP.content
-
 
 			divMessage.innerText = `T:${new Date().toLocaleString().slice(11, -3)} B:${fileContentAsMarkdown.length.toLocaleString()}`;
 			//aSource.href = xhr.target.response.html_url;

@@ -3,12 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>TooToo Edit</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="2025-05-18">
+  <meta name="version" content="2025-05-19">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
@@ -21,18 +21,14 @@
 			font: 100% monospace;
 		}
 
-		* {
-			box-sizing: border-box;
-		}
-
-    main {
-      border: 1px solid green;
-      /* float: left; */
-      height: 95vh;
-      Left: 18rem;
-      position:absolute;
-      width: 25rem;
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+      /* margin: 0; */
+      /* padding: 0; */
     }
+
+
 
     /* iframe {
       height: 100%;
@@ -40,12 +36,38 @@
     } */
 
     #navMenu {
-      float: left;
-      border: 1px solid blue;
-      width: 15rem;
+      /* padding: 0 var( --margin); */
+      /* width */
+      background-color: var(--color-1-background);
+      border: 2px solid #00f;
+      border-radius: var(--margin);
+      left: 0.25rem;
+      height: calc(100vh - 2rem);
+      padding: var(--margin);
+      position: fixed;
+      top: 0.5rem;
+      overflow: auto;
+      resize: both;
+      width: var(--mnu-width);
+      z-index: 1;
+    }
+
+
+    #divNavTreeView {
+      border: 2px blue solid;
+    }
+
+    #main {
+      border: 0px solid red;
+      left: 20rem;
+      position:absolute;
+      top: 1rem;
+      width: 25rem;
     }
 
 		.iframe-resize {
+
+      border: 2px solid green;
 			height: 95vh;
 			overflow: hidden;
 			padding: 0.5rem;
@@ -142,7 +164,7 @@
   </main>
 
   <script src="../main.js"></script>
-  <script src="../gfo/github-file-open-2.js"></script>
+  <script src="../gfo/github-file-open.js"></script>
   <script src="./github-tree-view-edit/github-tree-view-edit.js"></script>
   <script>
 
