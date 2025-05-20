@@ -1,8 +1,8 @@
 const user = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
-const pathContent = COR.pathContent
-COR.pathContent = "../../../";
+
+
 const filterFolders = COR.filterFolders;
 const ignoreFiles = COR.ignoreFiles;
 
@@ -10,7 +10,7 @@ const baseUrl = 'https://api.github.com';
 
 async function fetchGitHubRepoContents(user, repo) {
 
-  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);  //{ headers }
+  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1` );  //{ headers }
   const { tree } = await response.json();
   const div = document.getElementById('divNavTreeView');
 
@@ -62,12 +62,11 @@ async function fetchGitHubRepoContents(user, repo) {
 
       const fileLink = document.createElement('a');
       fileLink.textContent = formatDisplayName(fileName);
-      fileLink.href = `#${item.path}`;
-      //console.log( "fileLink", fileLink );
+      fileLink.href = `#${ COR.pathContent }${item.path}`;
 
       const readmeLink = document.createElement('a');
       readmeLink.innerHTML = COR.iconExternalLink;
-      readmeLink.href = `${COR.pathContent}readme.html#${item.path}`;
+      readmeLink.href = `readme.html#${ COR.pathContent }${item.path}`;
       readmeLink.target = '_blank';
 
       const editmeLink = document.createElement('a');
@@ -76,11 +75,11 @@ async function fetchGitHubRepoContents(user, repo) {
         editmeLink.href = `#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
       }
       const fileContainer = document.createElement('p');
-      fileContainer.style.marginBottom = '6px'; // Add bottom margin for spacing
-      fileContainer.style.marginTop = '0px';     // No top margin needed
+      //fileContainer.style.marginBottom = '6px'; // Add bottom margin for spacing
+      //fileContainer.style.marginTop = '0px';     // No top margin needed
 
       const space = document.createElement('span');
-      space.innerHTML = "&nbsp;";
+      space.innerHTML = " ";
 
       fileContainer.appendChild(fileSource);
 
