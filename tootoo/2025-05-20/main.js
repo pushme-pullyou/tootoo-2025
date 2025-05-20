@@ -31,8 +31,7 @@ const COR = {
 if (location.protocol === "https:") {
 
     COR.pathContent = COR.urlPathContent;
-    COR.pathApps = location.pathname.replace("tootoo.html", "");
-
+    COR.pathApps = COR.urlPathApps;
 } else {
 
     COR.pathContent = "../../";
