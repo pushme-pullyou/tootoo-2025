@@ -17,13 +17,13 @@ function onHashChange() {
 
     console.log( "notesy",  );
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="../notesy.html" onload=update() height=100% width=100% ><iframe>`;
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="notesy.html" onload=update() height=100% width=100% ><iframe>`;
   
   } else {
 
     console.log( "readme", location.hash );
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="../view-file.html" onload=update() height=100% width=100% ><iframe>`;
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="view-file.html" onload=update() height=100% width=100% ><iframe>`;
 
   }
 

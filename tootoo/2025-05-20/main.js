@@ -2,8 +2,8 @@
 const COR = {
 
     // Used by GFO ~ github file open
-    pathContent: "../../",
     defaultFile: "README.md",
+    pathApps: "./",
 
     // Used by GTV ~ github tree view
     user: "pushme-pullyou",
@@ -12,6 +12,7 @@ const COR = {
 
     urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/",
     urlPathContent: "https://pushme-pullyou.github.io/tootoo-2025/",
+    urlPathApps: "https://pushme-pullyou.github.io/tootoo-2025/2025-05-20/",
     urlPushPath: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/",
 
     iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
@@ -30,10 +31,12 @@ const COR = {
 if (location.protocol === "https:") {
 
     COR.pathContent = COR.urlPathContent;
+    COR.pathApps = location.pathname.replace("tootoo.html", "");
 
 } else {
 
-    // COR.pathContent unchanged
+    COR.pathContent = "../../";
+    COR.pathApps = "./";
 
 }
 
