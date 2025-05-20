@@ -21,7 +21,7 @@ const COR = {
 	iconRepo: "❦",
 
     menuTitle: "TooToo 2025",
-    version: "Version: 2025-05-18",
+    version: "Version: 2025-05-20",
 
     filterFolders: [], //[ "code"],
 
@@ -39,7 +39,7 @@ if (location.protocol === "https:") {
 
 }
 
-console.log( "COR.pathContent", COR.pathContent );
+console.log( "COR.pathApps", COR.pathApps);
 /* 0 to 360 10=red 120=green 240=blue */
 let r = document.querySelector(':root');
 r.style.setProperty('--main-hue', '120');
