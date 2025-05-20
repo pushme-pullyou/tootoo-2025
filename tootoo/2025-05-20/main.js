@@ -12,7 +12,7 @@ const COR = {
 
     urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/",
     urlPathContent: "https://pushme-pullyou.github.io/tootoo-2025/",
-    urlPathApps: "https://pushme-pullyou.github.io/tootoo-2025/2025-05-20/",
+    urlPathApps: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/2025-05-20/",
     urlPushPath: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/",
 
     iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
@@ -32,6 +32,7 @@ if (location.protocol === "https:") {
 
     COR.pathContent = COR.urlPathContent;
     COR.pathApps = COR.urlPathApps;
+
 } else {
 
     COR.pathContent = "../../";
