@@ -10,7 +10,31 @@ _"Templates Read Me" in a resizable window_
 
 ## Concept
 
+### TooToo 2025
+
 * TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.
+* Accordion tree view menu of all the files in a repository.
+* Browse the entire contents of files in a repository very quickly 
+* View contents of many file types including images, text, and HTML files.
+* Open files in a new tab or window so they can be printed or shared.
+* Hosted on GitHub Pages, so all benefits and safety of GitHub.
+* Viewed using Pages, no server required.
+* Code is plain HTML, CSS, and JavaScript.
+* No dependencies, no frameworks, no libraries.
+* No need to install anything.
+* Works on all modern browsers.
+* Runs locally on your computer.
+
+### Tootoo Edit
+
+* Everything in Tootoo 2025
+* Every file links to 
+  * Its source code on GitHub
+  * A text editor to edit the file
+  * View the file in a new tab
+  * View the file in a new tab
+
+
 
 ## Text you can include in read me files
 
@@ -28,13 +52,9 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
-* 2025-05-20 ~ Images in div content directly
-* 2025-05-20 ~ Iframe files for different types of files
+
+* 2025-05-20 ~ Add a button to open files not using Pages
 * 2025-05-16 ~ Add collapse all button
-* 2025-01-16 ~ Add GitHub icon to each file
-* 2025-01-16 ~ Bring Notesy into same page
-* 2025-01-16 ~ Notesy data displayed as text not HTML
-* 2025-01-16 ~ update style sheet
 * 2023-10-14 ~ Find text in files
 * 2023-10-14 ~ Cursor keys to load next file in menu
 * 2023-10-13 ~ Check if follows Win11 light and dark mode
@@ -42,7 +62,7 @@ _"Templates Read Me" in a resizable window_
 
 ## Issues
 
-* 2025-01-16 ~ check links for GitHub icons
+
 
 ## Links of Interest
 
@@ -50,9 +70,17 @@ _"Templates Read Me" in a resizable window_
 
 ## Change Log
 
-### 2025-05-18
+### 2025-05-20
 
+Done or deprecated
 
+* 2025-05-20 ~ Images in div content directly
+* 2025-05-20 ~ Iframe files for different types of files
+* 2025-01-16 ~ Add GitHub icon to each file
+* 2025-01-16 ~ Bring Notesy into same page
+* 2025-01-16 ~ Notesy data displayed as text not HTML
+* 2025-01-16 ~ update style sheet
+* 2025-01-16 ~ check links for GitHub icons
 
 ### 2025-05-14
 
