@@ -9,7 +9,7 @@
 	<meta name="description"
 		content="File wrangler. Default index.html file. Opens HTML or Markdown files. Passes location.hash.">
 	<meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-	<meta name="version" content="2025-05-18">
+	<meta name="version" content="2025-05-20">
 
 	<style>
 		/* Copyright 2025 Theo Armour. MIT License */
@@ -128,12 +128,6 @@
 
 			window.addEventListener( "hashchange", onHashChange, false );
 
-			// if ( location.protocol === "https:" ) {
-
-			// 	window.history.pushState( "", "", "./" + location.hash );
-
-			// }
-
 		}
 
 
@@ -144,6 +138,7 @@
 
 			const url = location.hash.slice( 1 );
 			const txt = url.split( "/" ).pop();
+			
 			let title = txt
 				.split( "-" )
 				.filter( x => x.length > 0 )

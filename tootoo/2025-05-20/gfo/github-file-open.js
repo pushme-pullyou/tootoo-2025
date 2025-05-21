@@ -15,7 +15,7 @@ function onHashChange() {
 
   if ( location.hash.includes( "https://api.github.com")) {
 
-    console.log( "notesy",  );
+    console.log( "notesy", COR.pathApps );
 
     divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${ COR.pathApps}notesy.html" onload=update() height=100% width=100% ><iframe>`;
   
@@ -31,7 +31,7 @@ function onHashChange() {
 
 function update() {
 
-  ifr.contentWindow.location.hash = parent.location.hash;
+  //ifr.contentWindow.location.hash = parent.location.hash;
 
 }
 
