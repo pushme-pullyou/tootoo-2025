@@ -28,10 +28,3 @@ function onHashChange() {
   }
 
 }
-
-function update() {
-
-  //ifr.contentWindow.location.hash = parent.location.hash;
-
-}
-
