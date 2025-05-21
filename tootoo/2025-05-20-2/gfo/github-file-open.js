@@ -19,7 +19,7 @@ function onHashChange() {
 
     //console.log("notesy", COR.pathApps);
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=update() height=100% width=100% ><iframe>`;
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" height=100% width=100% ><iframe>`;
 
   } else {
 

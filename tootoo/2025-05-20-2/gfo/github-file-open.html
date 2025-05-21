@@ -26,6 +26,7 @@
       max-width: 100%;
       margin: 0 auto;
     }
+    
 
     .iframe-resize {
       height: 400px;
@@ -48,14 +49,21 @@
   <div id=divMainContent></div>
 
   <br>
-
+  test getfile <br>
   <button onclick=test2()>test</button>
   <button onclick=test3()>text-to-hack</button>
   <button onclick=test1()>readme</button>
   <button onclick=test4()>text-to-hack</button>
+  <br>
+  test notesy<br>
+  <button onclick=test6()>test</button>
+  <button onclick=test7()>text-to-hack</button>
+  <button onclick=test5()>readme</button>
+  <button onclick=test8()>text-to-hack</button>
+  <br>
+  more<br>
   <button onclick=parent.location.hash="">clear hash</button>
   <button onclick=delSha()>delSha</button>
-
 
   <script src="../main.js"></script>
   <script src="github-file-open.js"></script>
@@ -91,6 +99,12 @@
     test3 = () => location.hash = COR.pathContent + "text-to-hack.md";
     test4 = () => location.hash = COR.pathContent + "test-cases/text-to-hack-2.md";
 
+    test5 = () => location.hash = COR.base + "README.md";
+    test6 = () => location.hash = COR.base + "test.md";
+    test7 = () => location.hash = COR.base + "text-to-hack.md";
+    test8 = () => location.hash = COR.base + "test-cases/text-to-hack-2.md";
+
+    
     delSha = () => localStorage.setItem("githubAccessToken", "");
 
   </script>
