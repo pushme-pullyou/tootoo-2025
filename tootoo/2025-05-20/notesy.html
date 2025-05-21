@@ -216,13 +216,26 @@ console.log( "", 23 );
 
 		//}
 
-		function init(url = XGP.base + XGP.path) {
+		function init() {
 
 			//showdown.setFlavor("github");
 
-			XGP.url = url ? url : XGP.base + XGP.path;
+			const hash = parent.location.hash.slice(1);
 
-			console.log("XGP.url", XGP.url);
+			// //console.log( "hash", hash );
+
+			// if ( hash.endsWith("md") || hash.includes( "LICENSE") ){
+
+			// 	getHTMLfromURL();
+
+			// } else {
+
+			// 	divContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${ hash }"" ></iframe>`
+
+			// }
+
+
+			//console.log("hash", hash );
 
 			aPath.title = document.head.querySelector("[ name=date ]").content;
 
@@ -246,7 +259,7 @@ console.log( "", 23 );
 
 			autoSave(); // Keeps your existing interval-based autosave trigger
 
-			onHashChange();
+			onHashChange(hash);
 
 		};
 
@@ -259,13 +272,13 @@ console.log( "", 23 );
 		delSha = () => localStorage.setItem("githubAccessToken", "");
 
 
-		function onHashChange(event) {
+		function onHashChange(hash) {
 
-			XGP.url = location.hash ? location.hash.slice(1) : XGP.url;
-			//console.log("XGP.url", XGP.url, );
+			XGP.url = hash // ? location.hash.slice(1) : XGP.url;
+			console.log("XGP.url", XGP.url, );
 			//console.log( "location.hash", parent.location.hash.length );
 
-			//XGP.base = XGP.url.split("contents")[0] + "contents/";
+			XGP.base = XGP.url.split("contents")[0] + "contents/";
 			//XGP.path = XGP.url.split("contents")[1].slice(1);
 
 			//console.log("XGP.base", XGP.base);
