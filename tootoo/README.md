@@ -13,6 +13,7 @@ _"Templates Read Me" in a resizable window_
 ### TooToo 2025
 
 * TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.
+* Interact with files with the fewest possible clicks. As easy as sending an email
 * Accordion tree view menu of all the files in a repository.
 * Browse the entire contents of files in a repository very quickly 
 * View contents of many file types including images, text, and HTML files.
@@ -52,8 +53,7 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
-
-* 2025-05-20 ~ Add a button to open files not using Pages
+* 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages 
 * 2025-05-16 ~ Add collapse all button
 * 2023-10-14 ~ Find text in files
 * 2023-10-14 ~ Cursor keys to load next file in menu
@@ -69,6 +69,11 @@ _"Templates Read Me" in a resizable window_
 * ?
 
 ## Change Log
+
+### 2025-05-22
+
+* Update notesy added ~ now always in markdown text format
+* Tootooo Edit: edit and view files only on the repo, not locally
 
 ### 2025-05-20
 
