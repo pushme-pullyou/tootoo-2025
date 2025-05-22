@@ -8,16 +8,13 @@ abc
 * llll
 
 mmmm
-
 hhhh
 
 * kkkkk
 * uuuu
 
 nnn
-
 8888888888888888888888888
-
 mmmm
 
 * 999
