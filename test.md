@@ -19,7 +19,7 @@ nnn
 mmmm
 
 
-.lo
+lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. ut enim ad minima 
 
 * 999
 * 999
