@@ -1,7 +1,7 @@
 
 const COR = {
 
-    version: "2025-05-20-2",
+    version: "2025-05-24",
 
     // Used by GFO ~ github file open
     defaultFile: "README.md",
