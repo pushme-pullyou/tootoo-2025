@@ -13,13 +13,13 @@ function onHashChange() {
 
   const hash = location.hash.slice(1);
 
-  //console.log( "hash", hash );
+  console.log( "hash", hash );
 
   if (hash.includes("https://api.github.com")) {
 
-    //console.log("notesy", COR.pathApps);
+    console.log("notesy", COR.pathApps);
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=init(); ><iframe>`;
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.init() ><iframe>`;
 
   } else {
 
