@@ -53,7 +53,8 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
-* 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages 
+* 2025-05-24 ~ Update TooToo Edit to same level as TooToo
+* 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages ~ do pages without Pages!?!
 * 2025-05-16 ~ Add collapse all button
 * 2023-10-14 ~ Find text in files
 * 2023-10-14 ~ Cursor keys to load next file in menu
@@ -69,6 +70,15 @@ _"Templates Read Me" in a resizable window_
 * ?
 
 ## Change Log
+
+### 2025-05-24
+
+* Now uses short hash links to files in the repo
+* Fixed links being supplanted bt default file
+* Added TooToo to Theo 2025
+* Fixed tab titles
+* Updates test files
+
 
 ### 2025-05-22
 
