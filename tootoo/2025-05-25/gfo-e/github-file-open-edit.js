@@ -15,13 +15,13 @@ function onHashChange() {
 
   console.log( "hash", hash );
 
-  // if (hash.includes("https://api.github.com")) {
+  if (hash.includes("https://api.github.com")) {
 
-  //   console.log("notesy", COR.pathApps);
+    console.log("notesy", COR.pathApps);
 
-  //   divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.init() ><iframe>`;
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.init() ><iframe>`;
 
-  // } else {
+  } else {
 
     if (hash.endsWith("md") || hash.includes("LICENSE")) {
 
@@ -38,7 +38,7 @@ function onHashChange() {
       divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${ COR.pathContent }${hash}" ></iframe>`
 
     }
-  //}
+  }
 }
 
 

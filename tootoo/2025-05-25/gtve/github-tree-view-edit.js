@@ -64,12 +64,14 @@ async function fetchGitHubRepoContents(user, repo) {
 
       if (item.path.endsWith("md") || item.path === "LICENSE") {
         editmeLink.textContent = "✎";
-        editmeLink.href = `#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
+        //editmeLink.href = `#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
+        editmeLink.href = `@@@${item.path}`;
+
       }
 
       const fileLink = document.createElement('a');
       fileLink.textContent = formatDisplayName(fileName);
-      fileLink.href = `#${ COR.urlPathContent }${item.path}`;
+      fileLink.href = `#${item.path}`;
 
       const readmeLink = document.createElement('a');
       readmeLink.innerHTML = COR.iconExternalLink;

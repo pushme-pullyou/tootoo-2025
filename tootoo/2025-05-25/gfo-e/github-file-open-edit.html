@@ -55,10 +55,11 @@
   <button onclick=test1()>readme</button>
   <button onclick=test4()>text-to-hack</button>
   <br>
-  <button onclick=test5()>favicon</button>
-  <button onclick=test6()>heritage</button>
-  <!-- <button onclick=test7()></button>
-  <button onclick=test8()>text-to-hack</button> -->
+  test notesy<br>
+  <button onclick=test6()>test</button>
+  <button onclick=test7()>text-to-hack</button>
+  <button onclick=test5()>readme</button>
+  <button onclick=test8()>text-to-hack</button>
   <br>
   more<br>
   <button onclick=parent.location.hash="">clear hash</button>
@@ -80,7 +81,7 @@
 
     COR.base = "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/";
 		
-    //COR.path = "test.md";
+    COR.path = "test.md";
 
     if (location.protocol === "https:") {
 
@@ -99,10 +100,13 @@
     test2 = () => location.hash = "test.md";
     test3 = () => location.hash = "text-to-hack.md";
     test4 = () => location.hash = "test-cases/text-to-hack-2.md";
-    test5 = () => location.hash = "favicon.ico";
-    test6 = () => location.hash = "test-cases/heritage-front.jpg";
 
-   
+    test5 = () => location.hash = "@@" + "README.md";
+    test6 = () => location.hash = "@@" + "test.md";
+    test7 = () => location.hash = "@@" + "text-to-hack.md";
+    test8 = () => location.hash = "@@" + "test-cases/text-to-hack-2.md";
+
+    
     delSha = () => localStorage.setItem("githubAccessToken", "");
 
   </script>
