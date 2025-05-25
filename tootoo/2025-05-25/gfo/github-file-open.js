@@ -25,18 +25,22 @@ function onHashChange() {
 
     if (hash.endsWith("md") || hash.includes("LICENSE")) {
 
-      getTextfromURL(hash);
+      getHTMLfromURL(hash);
+
+    } else if ( /\.(jpg|png|gif|svg)$/i.test(hash) ) {
+
+      divMainContent.innerHTML = `<img width=100% src="${ COR.pathContent }${hash}" ></img>`;
 
     } else {
 
-      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${ COR.pathContent }${hash}"" ></iframe>`
+      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${ COR.pathContent }${hash}" ></iframe>`
 
     }
   }
 }
 
 
-function getTextfromURL(url = location.hash.slice(1)) {
+function getHTMLfromURL(url = location.hash.slice(1)) {
 
   console.log("url", url);
 

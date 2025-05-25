@@ -58,7 +58,6 @@ _"Templates Read Me" in a resizable window_
 * 2025-05-25 ~ sort folders with files staring with dates with newest st op
 * 2025-05-24 ~ Update TooToo Edit to same level as TooToo
 * 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages ~ do pages without Pages!?!
-* 2025-05-16 ~ Add collapse all button
 * 2023-10-14 ~ Find text in files
 * 2023-10-14 ~ Cursor keys to load next file in menu
 * 2023-10-13 ~ Check if follows Win11 light and dark mode
@@ -79,6 +78,9 @@ _"Templates Read Me" in a resizable window_
 
 Prompt: divNavTreeView is populated with many details tags. create a button with a function to collapse all the details tags
 
+#### Done
+
+* 2025-05-16 ~ Add collapse all button
 
 ### 2025-05-24
 
