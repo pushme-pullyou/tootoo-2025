@@ -29,7 +29,7 @@ function onHashChange() {
 
     } else {
 
-      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${hash}"" ></iframe>`
+      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${ COR.pathContent }${hash}"" ></iframe>`
 
     }
   }
