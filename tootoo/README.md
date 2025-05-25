@@ -53,6 +53,9 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
+* 2025-05-25 ~ omitting the date from the file name in the menu, and adding the date to the file title
+* 2025-05-25 ~ images in div content directly
+* 2025-05-25 ~ sort folders with files staring with dates with newest st op
 * 2025-05-24 ~ Update TooToo Edit to same level as TooToo
 * 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages ~ do pages without Pages!?!
 * 2025-05-16 ~ Add collapse all button
@@ -70,6 +73,12 @@ _"Templates Read Me" in a resizable window_
 * ?
 
 ## Change Log
+
+
+### 2025-05-25
+
+Prompt: divNavTreeView is populated with many details tags. create a button with a function to collapse all the details tags
+
 
 ### 2025-05-24
 
