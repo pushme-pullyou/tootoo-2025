@@ -204,9 +204,19 @@
 
 			githubAccessToken();
 
+			//window.addEventListener("hashchange", onHashChange, false);
+
 			window.addEventListener("beforeunload", checkForChange);
 
-			divContent.addEventListener('blur', requestSync); 
+			divContent.addEventListener('blur', requestSync); // Changed from onBlur -> getSha to requestSync
+
+			// divContent.addEventListener('focus', onFocus); // Removed onFocus save trigger
+
+			//autoSave(); // Will call requestSync
+
+			//location.hash = location.hash ? location.hash : XGP.url;
+
+			//onHashChange(); // Load initial file based on hash or default XGP.url
 
 			fetchMarkdown();
 		};
@@ -234,6 +244,27 @@
 			}
 		}
 
+
+		function onHashChange(event) {
+
+			//const hash = parent.location.hash ? parent.location.hash.slice(3) : XGP.url;
+			//XGP.url = XGP.base + hash;
+			//console.log("XGP.url", XGP.url);
+
+			XGP.fileName = XGP.url.split("/").pop();
+			//console.log("onHashChange", XGP.fileName);	
+
+			//XGP.base = XGP.url.split("contents")[0] + "contents/";
+			//XGP.path = XGP.url.split("contents")[1].slice(1);
+			//XGP.extension = XGP.fileName.split( "." ).pop();
+			
+			//console.log("XGP.base", XGP.base);
+			
+			fetchMarkdown();
+
+		};
+
+
 		function checkForChange(event) {
 
 			if (divContent.innerText === XGP.githubContent) { return; } // Compare with githubContent
@@ -249,7 +280,28 @@
 		};
 
 
+		function onBlur(event) {
+
+			// This function is now directly requestSync, so onBlur can be removed if not used otherwise
+			// For now, keep original onBlur structure if it had other purposes, but its call to getSha is replaced.
+			// If it only called getSha, it can be removed and requestSync used directly in addEventListener.
+			// Based on current code, it seems it only added a message and called getSha.
+			// We'll simplify by having the event listener call requestSync directly.
+			// The `divMessage.innerText += " onBlur";` was likely for debugging and can be removed for cleaner messages.
+			requestSync();
+
+		};
+
+		function onFocus( event ) {
+
+			// getSha(); // Removed: onFocus save attempts are often too frequent and covered by autosave/blur.
+			console.log( "onFocus event triggered - no save action.", new Date().toLocaleTimeString() );
+
+		}
+
+
 		function fetchMarkdown(event) {
+
 
 			console.log( "url", XGP.url );
 			const xhrFetch = new XMLHttpRequest(); // Localized variable
@@ -322,6 +374,7 @@
 			window.scrollTo(0, 0);
 
 			autoSave();
+			
 
 		};
 
@@ -467,6 +520,10 @@
 
 			putXhr.send(body);
 		}
+
+
+		// Original getSha and putFileToGitHub are now replaced by requestSync and doPutContent
+
 
 	</script>
 
