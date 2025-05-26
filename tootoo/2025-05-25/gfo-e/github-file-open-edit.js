@@ -21,9 +21,9 @@ function onHashChange() {
 
     hash = hash.slice(2);
 
-    //console.log("notesy", hash );
+    console.log("notesy", hash );
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.init() ><iframe>`;
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
 
   } else {
 
