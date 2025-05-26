@@ -33,8 +33,6 @@ function onHashChange() {
       
     }
 
-
-
   } else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
 
     console.log( "img", hash  );
