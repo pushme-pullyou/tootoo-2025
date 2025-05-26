@@ -15,7 +15,7 @@ _"Templates Read Me" in a resizable window_
 * TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.
 * Interact with files with the fewest possible clicks. As easy as sending an email
 * Accordion tree view menu of all the files in a repository.
-* Browse the entire contents of files in a repository very quickly 
+* Browse the entire contents of files in a repository very quickly
 * View contents of many file types including images, text, and HTML files.
 * Open files in a new tab or window so they can be printed or shared.
 * Hosted on GitHub Pages, so all benefits and safety of GitHub.
@@ -29,11 +29,11 @@ _"Templates Read Me" in a resizable window_
 ### Tootoo Edit
 
 * Everything in Tootoo 2025
-* Every file links to 
-  * Its source code on GitHub
-  * A text editor to edit the file
-  * View the file in a new tab
-  * View the file in a new tab
+* Every file links to
+* Its source code on GitHub
+* A text editor to edit the file
+* View the file in a new tab
+* View the file in a new tab
 
 
 
@@ -80,7 +80,8 @@ Prompt: divNavTreeView is populated with many details tags. create a button with
 
 #### Done
 
-* 2025-05-16 ~ Add collapse all button
+* 2025-05-16 ~ Add collapse open all toggle button
+* TooToo Edit is working
 
 ### 2025-05-24
 
