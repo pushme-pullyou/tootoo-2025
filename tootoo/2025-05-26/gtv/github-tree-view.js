@@ -10,11 +10,6 @@ const baseUrl = 'https://api.github.com';
 
 async function fetchGitHubRepoContents(user, repo) {
 
-  // const headers = new Headers({
-  //   'Accept': 'application/vnd.github+json',
-  //   //'Authorization': `token ${ accessToken }`
-  // });
-
   const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1` );  //{ headers }
   const { tree } = await response.json();
   const div = document.getElementById('divNavTreeView');
@@ -68,14 +63,10 @@ async function fetchGitHubRepoContents(user, repo) {
       readmeLink.target = '_blank';
 
       const fileContainer = document.createElement('p');
-       const space = document.createElement('span');
-      space.innerHTML = " ";
-
       fileContainer.appendChild(fileLink);
-      fileContainer.appendChild(space);
+      fileContainer.appendChild(document.createTextNode(" "));
       fileContainer.appendChild(readmeLink);
       fileContainer.className = 'file-container';
-
       folderContents.appendChild(fileContainer);
     });
 

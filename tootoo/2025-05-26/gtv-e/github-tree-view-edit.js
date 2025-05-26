@@ -66,7 +66,6 @@ async function fetchGitHubRepoContents(user, repo) {
         editmeLink.textContent = "✎";
         //editmeLink.href = `#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
         editmeLink.href = `#@@${item.path}`;
-
       }
 
       const fileLink = document.createElement('a');
@@ -75,31 +74,18 @@ async function fetchGitHubRepoContents(user, repo) {
 
       const readmeLink = document.createElement('a');
       readmeLink.innerHTML = COR.iconExternalLink;
-      readmeLink.href = `${ COR.urlPathContent }readme.html#${item.path}`;
+      readmeLink.href = `${ COR.urlPathApps }readme.html#${item.path}`;
       readmeLink.target = '_blank';
 
       const fileContainer = document.createElement('p');
-
-
-
       fileContainer.appendChild(fileSource);
-      let space = document.createElement('span');
-      space.innerHTML = " ";
-      fileContainer.appendChild(space);
+      fileContainer.appendChild(document.createTextNode(" "));
+      fileContainer.appendChild(editmeLink);
+      fileContainer.appendChild(document.createTextNode(" "));
       fileContainer.appendChild(fileLink);
-
-      if (editmeLink) { fileContainer.appendChild(editmeLink); }
-      space = document.createElement('span');
-      space.innerHTML = " ~ ";
-      fileContainer.appendChild(space);
-
-      fileContainer.appendChild(fileLink);
-      space = document.createElement('span');
-      space.innerHTML = " ";
-      fileContainer.appendChild(space);
+      fileContainer.appendChild(document.createTextNode(" "));
       fileContainer.appendChild(readmeLink);
       fileContainer.className = 'file-container';
-
       folderContents.appendChild(fileContainer);
     });
 

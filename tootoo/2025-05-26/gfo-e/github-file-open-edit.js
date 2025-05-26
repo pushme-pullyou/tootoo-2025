@@ -2,8 +2,6 @@ initGFOE();
 
 function initGFOE() {
 
-  //COR.pathContent = "https://pushme-pullyou.github.io/tootoo-2025/";
-
   window.addEventListener("hashchange", onHashChange, false);
 
   onHashChange();
@@ -17,7 +15,7 @@ function onHashChange() {
 
   console.log("hash", hash);
 
-  if (/\.(md|txt|ini)$/i.test(hash)) {
+  if ( (/\.(md|txt|ini)$/i.test(hash)) || hash === "LICENSE" ) {
 
     console.log("notesy", hash);
 
@@ -46,6 +44,7 @@ function onHashChange() {
     divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
 
   }
+
 }
 
 

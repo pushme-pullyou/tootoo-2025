@@ -15,19 +15,21 @@ function onHashChange() {
 
   console.log("hash", hash);
 
-  if (/\.(md|txt|ini)$/i.test(hash)) {
+  if ( (/\.(md|txt|ini)$/i.test(hash)) || hash === "LICENSE" ) {
 
     getHTMLfromURL(hash);
 
   } else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
 
-    //console.log( "img", hash  );
+    console.log( "img", hash  );
 
     divMainContent.innerHTML = `<img src="${ COR.pathContent }${hash}" ></img>`;
 
   } else {
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathContent}${hash}" ></iframe>`
+    console.log( "else", COR.urlPathContent + hash  );
+
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
 
   }
 
@@ -36,7 +38,7 @@ function onHashChange() {
 
 function getHTMLfromURL(url = location.hash.slice(1)) {
 
-  console.log("url", url);
+  console.log("url", COR.pathContent + url);
 
   showdown.setFlavor("github");
   const options = { openLinksInNewWindow: false, excludeTrailingPunctuationFromURLs: true, ghMention: true, simplifiedAutoLink: true, simpleLineBreaks: true, emoji: true };
