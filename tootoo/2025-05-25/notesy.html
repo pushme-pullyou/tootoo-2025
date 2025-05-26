@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<meta name="description" content="Get and put Markdown files to a private or public GitHub repo">
-	<meta name="date" content="2025-05-24">
+	<meta name="date" content="2025-05-25">
 
 	<title>notesy</title>
 
@@ -158,7 +158,6 @@
 
 		const XGP = {
 
-
 			//base: "https://api.github.com/repos/theo-armour/agenda/contents/",
 			//path: "1-notes.md",
 
@@ -186,7 +185,6 @@
 			notesyURL: "https://pushme-pullyou.github.io/tootoo-2025/apps/tootoo/#",
 			commitMessage: "notesy: file update" // Default commit message
 
-
 		};
 
 
@@ -212,9 +210,11 @@
 
 			// divContent.addEventListener('focus', onFocus); // Removed onFocus save trigger
 
-			autoSave(); // Will call requestSync
+			//autoSave(); // Will call requestSync
 
-			onHashChange(); // Load initial file based on hash or default XGP.url
+			location.hash = location.hash ? location.hash : XGP.url;
+
+			//onHashChange(); // Load initial file based on hash or default XGP.url
 
 		};
 
@@ -244,8 +244,10 @@
 
 		function onHashChange(event) {
 
-			XGP.url = location.hash ? location.hash.slice(1) : XGP.url;
-			console.log("XGP.url", XGP.url);
+			const hash = parent.location.hash ? parent.location.hash.slice(3) : XGP.url;
+			XGP.url = XGP.base + hash;
+			//console.log("XGP.url", XGP.url);
+
 			XGP.fileName = XGP.url.split("/").pop();
 			//console.log("onHashChange", XGP.fileName);	
 
@@ -297,6 +299,7 @@
 
 		function fetchMarkdown(event) {
 
+			console.log( "url", XGP.url );
 			const xhrFetch = new XMLHttpRequest(); // Localized variable
 
 			xhrFetch.open("get", XGP.url, true);
@@ -309,13 +312,16 @@
 					alert("GitHub Authorization Error: Could not fetch file. Your token might be invalid or expired. Please try deleting the token (delSha button) and re-entering it.");
 					divMessage.innerText = `Error fetching file (Auth ${xhrFetch.status})`;
 					XGP.githubContent = ""; // Clear content as fetch failed
+					XGP.githubContent = "";
 					XGP.sha = "";
+					autoSave();
 					divContent.innerText = "Error loading file. Please check your GitHub token and refresh.";
 				} else if (xhrFetch.status === 404) {
 					alert("File not found on GitHub. Please check the URL/path.");
 					divMessage.innerText = `Error fetching file (Not Found ${xhrFetch.status})`;
 					XGP.githubContent = "";
 					XGP.sha = "";
+					autoSave();
 					divContent.innerText = `File not found: ${XGP.url}`;
 				}
 				else {
@@ -323,6 +329,7 @@
 					divMessage.innerText = `Error fetching file (Status ${xhrFetch.status})`;
 					XGP.githubContent = "";
 					XGP.sha = "";
+					autoSave();
 					divContent.innerText = "Error loading file content.";
 				}
 			};
@@ -331,6 +338,7 @@
 				divMessage.innerText = "Network error fetching file.";
 				XGP.githubContent = "";
 				XGP.sha = "";
+				autoSave();
 				divContent.innerText = "Error loading file due to network issue.";
 			};
 			xhrFetch.send(null);
@@ -360,6 +368,9 @@
 			document.title = spnTitle.innerText;
 
 			window.scrollTo(0, 0);
+
+			autoSave();
+			
 
 		};
 

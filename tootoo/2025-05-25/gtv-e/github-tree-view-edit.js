@@ -65,7 +65,7 @@ async function fetchGitHubRepoContents(user, repo) {
       if (item.path.endsWith("md") || item.path === "LICENSE") {
         editmeLink.textContent = "✎";
         //editmeLink.href = `#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
-        editmeLink.href = `@@@${item.path}`;
+        editmeLink.href = `#@@${item.path}`;
 
       }
 
@@ -79,20 +79,24 @@ async function fetchGitHubRepoContents(user, repo) {
       readmeLink.target = '_blank';
 
       const fileContainer = document.createElement('p');
-      //fileContainer.style.marginBottom = '6px'; // Add bottom margin for spacing
-      //fileContainer.style.marginTop = '0px';     // No top margin needed
 
-      const space = document.createElement('span');
-      space.innerHTML = " ";
+
 
       fileContainer.appendChild(fileSource);
-
-      if (editmeLink) { fileContainer.appendChild(editmeLink); }
+      let space = document.createElement('span');
+      space.innerHTML = " ";
       fileContainer.appendChild(space);
       fileContainer.appendChild(fileLink);
-      const space2 = document.createElement('span');
-      space.innerHTML = "&nbsp;";
-      fileContainer.appendChild(space2);
+
+      if (editmeLink) { fileContainer.appendChild(editmeLink); }
+      space = document.createElement('span');
+      space.innerHTML = " ~ ";
+      fileContainer.appendChild(space);
+
+      fileContainer.appendChild(fileLink);
+      space = document.createElement('span');
+      space.innerHTML = " ";
+      fileContainer.appendChild(space);
       fileContainer.appendChild(readmeLink);
       fileContainer.className = 'file-container';
 

@@ -1,6 +1,8 @@
-initGFO();
+initGFOE();
 
-function initGFO() {
+function initGFOE() {
+
+  COR.pathContent = "https://pushme-pullyou.github.io/tootoo-2025/";
 
   window.addEventListener("hashchange", onHashChange, false);
 
@@ -11,13 +13,15 @@ function initGFO() {
 
 function onHashChange() {
 
-  const hash = location.hash.slice(1);
+  let hash = location.hash.slice(1);
 
-  console.log( "hash", hash );
+  //console.log( "hash", hash );
 
-  if (hash.includes("https://api.github.com")) {
+  if (hash.includes("@@")) {
 
-    console.log("notesy", COR.pathApps);
+    hash = hash.slice(2);
+
+    //console.log("notesy", hash );
 
     divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.init() ><iframe>`;
 
@@ -27,11 +31,11 @@ function onHashChange() {
 
       getHTMLfromURL(hash);
 
-    } else if ( /\.(jpg|png|gif|svg)$/i.test(hash) ) {
+    } else if ( /\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash) ) {
 
       //console.log( "img", hash  );
 
-      divMainContent.innerHTML = `<img width=100% src="${ COR.pathContent }${hash}" ></img>`;
+      divMainContent.innerHTML = `<img src="${ COR.pathContent }${hash}" ></img>`;
 
     } else {
 
@@ -44,7 +48,7 @@ function onHashChange() {
 
 function getHTMLfromURL(url = location.hash.slice(1)) {
 
-  console.log("url", url);
+  console.log("url", COR.pathContent + url);
 
   showdown.setFlavor("github");
   const options = { openLinksInNewWindow: false, excludeTrailingPunctuationFromURLs: true, ghMention: true, simplifiedAutoLink: true, simpleLineBreaks: true, emoji: true };

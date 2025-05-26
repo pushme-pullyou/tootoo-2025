@@ -3,12 +3,12 @@
 
 <head>
   <meta charset="utf-8">
-  <title>Open Index or Markdown</title>
+  <title>GFO-E</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
   <meta name="description" content="File wrangler: Opens HTML or Markdown files. Passes location.hash.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="2025-05-24-2">
+  <meta name="version" content="2025-05-25">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025">
 
@@ -50,12 +50,11 @@
 
   <br>
   test getfile <br>
+  <button onclick=test1()>readme</button>
   <button onclick=test2()>test</button>
   <button onclick=test3()>text-to-hack</button>
-  <button onclick=test1()>readme</button>
   <button onclick=test4()>text-to-hack</button>
   <br>
-  test notesy<br>
   <button onclick=test6()>test</button>
   <button onclick=test7()>text-to-hack</button>
   <button onclick=test5()>readme</button>
@@ -66,7 +65,7 @@
   <button onclick=delSha()>delSha</button>
 
   <script src="../main.js"></script>
-  <script src="github-file-open.js"></script>
+  <script src="github-file-open-edit.js"></script>
 
   <script>
 
@@ -75,13 +74,16 @@
     } else {
 
       COR.pathApps = "../";
-      COR.pathContent = "../../../";
+      //COR.pathContent = "../../../";
+      COR.pathContent = "https://pushme-pullyou.github.io/tootoo-2025/tootoo/"
 
     }
 
     COR.base = "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/";
 		
     COR.path = "test.md";
+
+    COR.defaultFile = "test.md";
 
     if (location.protocol === "https:") {
 
