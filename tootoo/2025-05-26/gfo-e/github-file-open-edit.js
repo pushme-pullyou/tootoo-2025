@@ -19,11 +19,21 @@ function onHashChange() {
 
   if (/\.(md|txt|ini)$/i.test(hash)) {
 
-    //hash = hash.slice(2);
-
     console.log("notesy", hash);
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
+    if ( hash.includes( "@@" ) ) {
+
+      hash = hash.slice(2);
+
+      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
+
+    } else {
+
+      getHTMLfromURL( hash )
+      
+    }
+
+
 
   } else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
 
@@ -33,7 +43,9 @@ function onHashChange() {
 
   } else {
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathContent}${hash}" ></iframe>`
+    console.log( "else", COR.urlPathContent + hash  );
+
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
 
   }
 }
