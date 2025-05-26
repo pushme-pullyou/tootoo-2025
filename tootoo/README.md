@@ -33,7 +33,6 @@ _"Templates Read Me" in a resizable window_
 * Its source code on GitHub
 * A text editor to edit the file
 * View the file in a new tab
-* View the file in a new tab
 
 
 
