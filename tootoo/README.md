@@ -33,7 +33,6 @@ _"Templates Read Me" in a resizable window_
 * Its source code on GitHub
 * A text editor to edit the file
 * View the file in a new tab
-* View the file in a new tab
 
 
 
@@ -43,7 +42,7 @@ _"Templates Read Me" in a resizable window_
 
 <summary> Things you can do using this script</summary>
 
-* Click the three bars( 'hamburger menu icon' ) to slide the menu in and out
+* Click the three bars('hamburger menu icon' ) to slide the menu in and out
 * Click the GitHub Octocat icon to view or edit the source code on GitHub
 * Click on title to reload te page
 * Press Control-U/Command-Option-U to view the source code
@@ -54,9 +53,7 @@ _"Templates Read Me" in a resizable window_
 ## To Do / Wish List
 
 * 2025-05-25 ~ omitting the date from the file name in the menu, and adding the date to the file title
-* 2025-05-25 ~ images in div content directly
 * 2025-05-25 ~ sort folders with files staring with dates with newest st op
-* 2025-05-24 ~ Update TooToo Edit to same level as TooToo
 * 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages ~ do pages without Pages!?!
 * 2023-10-14 ~ Find text in files
 * 2023-10-14 ~ Cursor keys to load next file in menu
@@ -82,6 +79,8 @@ Prompt: divNavTreeView is populated with many details tags. create a button with
 
 * 2025-05-16 ~ Add collapse open all toggle button
 * TooToo Edit is working
+* 2025-05-25 ~ images in div content directly
+* 2025-05-24 ~ Update TooToo Edit to same level as TooToo
 
 ### 2025-05-24
 
