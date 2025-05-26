@@ -42,7 +42,7 @@ _"Templates Read Me" in a resizable window_
 
 <summary> Things you can do using this script</summary>
 
-* Click the three bars( 'hamburger menu icon' ) to slide the menu in and out
+* Click the three bars('hamburger menu icon' ) to slide the menu in and out
 * Click the GitHub Octocat icon to view or edit the source code on GitHub
 * Click on title to reload te page
 * Press Control-U/Command-Option-U to view the source code
