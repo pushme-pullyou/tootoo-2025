@@ -80,7 +80,8 @@ Prompt: divNavTreeView is populated with many details tags. create a button with
 #### Done
 
 * 2025-05-16 ~ Add collapse open all toggle button
-* TooToo Edit is working* 2025-05-25 ~ images in div content directly
+* TooToo Edit is working
+* 2025-05-25 ~ images in div content directly
 
 ### 2025-05-24
 
