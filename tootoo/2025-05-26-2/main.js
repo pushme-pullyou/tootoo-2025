@@ -1,10 +1,11 @@
 
 const COR = {
 
-    version: "2025-05-26",
+    version: "2025-05-26-2",
 
     // Used by GFO ~ github file open
-    defaultFile: "@@test.md",
+    defaultFile: "test.md",
+    defaultFileEdit: "@@test.md",
     pathApps: "./",
     pathContent: "../../",
 
@@ -25,10 +26,9 @@ const COR = {
 	iconRepo: "❦",
 
     menuTitle: "TooToo 2025",
+    menuTitleEdit: "TooToo Edit",
     
-
     filterFolders: [], //[ "code"],
-
     ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 
 }
@@ -44,8 +44,6 @@ if (location.protocol === "https:") {
     COR.pathApps = "./";
 
 }
-
-var urlBaseAPI = COR.urlBaseAPI;
 
 //console.log( "COR.pathApps", COR.pathApps);
 /* 0 to 360 10=red 120=green 240=blue */
