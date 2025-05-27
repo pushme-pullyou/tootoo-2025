@@ -70,6 +70,9 @@ _"Templates Read Me" in a resizable window_
 
 ## Change Log
 
+### 2025-05-26
+
+
 
 ### 2025-05-25
 
