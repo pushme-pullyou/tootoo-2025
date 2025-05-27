@@ -76,7 +76,8 @@ _"Templates Read Me" in a resizable window_
 Another complicated day. 
 
 
-I tried to get rid of notesy. but failed. 
+I tried to get rid of notesy. but failed. Something to do with permissions and GAT.
+
 ### 2025-05-25
 
 Prompt: divNavTreeView is populated with many details tags. create a button with a function to collapse all the details tags
