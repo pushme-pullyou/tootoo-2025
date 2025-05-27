@@ -30,7 +30,6 @@ const COR = {
     
     filterFolders: [], //[ "code"],
     ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
-
 }
 
 if (location.protocol === "https:") {
