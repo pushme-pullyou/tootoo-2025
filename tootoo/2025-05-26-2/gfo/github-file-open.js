@@ -1,6 +1,6 @@
-initGFOE();
+initGFO();
 
-function initGFOE() {
+function initGFO() {
 
   window.addEventListener("hashchange", onHashChange, false);
 
@@ -11,44 +11,23 @@ function initGFOE() {
 
 function onHashChange() {
 
-  let hash = location.hash.slice(1);
+  const hash = location.hash.slice(1);
 
-  //console.log("hash", hash);
+  console.log("hash", hash);
 
-  if (/\.(md|txt|ini)$/i.test(hash)) {
-
-    console.log("notesy", hash);
-
-    if (hash.includes("@@")) {
-
-      hash = hash.slice(2);
-
-      fileDisplay(hash);
-      //divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
-
-    } else {
-
-      console.log("getHTMLfromURL", hash);
-
-      getHTMLfromURL(hash);
-
-    }
-
-  } else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
-
-    console.log("img", hash);
-
-    divMainContent.innerHTML = `<img src="${COR.urlPathContent}${hash}" ></img>`;
-
-  } else if (hash === "LICENSE") {
-
-    console.log("getHTMLfromURL", hash);
+  if ( (/\.(md|txt|ini)$/i.test(hash)) || hash === "LICENSE" ) {
 
     getHTMLfromURL(hash);
 
+  } else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
+
+    console.log( "img", hash  );
+
+    divMainContent.innerHTML = `<img src="${ COR.pathContent }${hash}" ></img>`;
+
   } else {
 
-    console.log("else", COR.urlPathContent + hash);
+    console.log( "else", COR.urlPathContent + hash  );
 
     divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
 
@@ -59,7 +38,7 @@ function onHashChange() {
 
 function getHTMLfromURL(url = location.hash.slice(1)) {
 
-  console.log("url", COR.urlPathContent + url);
+  console.log("url", COR.pathContent + url);
 
   showdown.setFlavor("github");
   const options = { openLinksInNewWindow: false, excludeTrailingPunctuationFromURLs: true, ghMention: true, simplifiedAutoLink: true, simpleLineBreaks: true, emoji: true };

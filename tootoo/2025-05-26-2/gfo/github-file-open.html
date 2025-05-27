@@ -3,8 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>GFO-E</title>
-
+  <title>GFO</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
   <meta name="description" content="File wrangler: Opens HTML or Markdown files. Passes location.hash.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
@@ -30,9 +29,9 @@
     }
 
     img {
-      max-width: 100%;
-      vertical-align: middle;
-    }
+			max-width: 100%;
+			vertical-align: middle;
+		}
 
     #divMainContent {
       border: 1px solid red;
@@ -57,8 +56,8 @@
   <!-- https://showdownjs.com/docs/available-options/ -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
-  <a href="" id="aPath" title="Click this menu title to reload the file"></a>
 
+  test getfile <br>
   <button onclick=testFiles(1)>readme</button>
   <button onclick=testFiles(2)>license</button>
   <button onclick=testFiles(3)>favicon</button>
@@ -72,13 +71,13 @@
   <p>
     <button onclick=parent.location.hash="">clear hash</button>
     <button onclick=delSha()>delSha</button>
-  </p>
-  <div id="divMessage"></div>
-  <div id=divMainContent contenteditable="true"></div>
+
+  <div id=divMainContent></div>
+
+
 
   <script src="../main.js"></script>
-  <script src="../gfd/github-file-display.js"></script>
-  <script src="github-file-open-edit.js"></script>
+  <script src="github-file-open.js"></script>
 
   <script>
 
@@ -87,8 +86,7 @@
     } else {
 
       COR.pathApps = "../";
-      //COR.pathContent = "../../../";
-      //COR.pathContent = "https://pushme-pullyou.github.io/tootoo-2025/tootoo/"
+      COR.pathContent = "../../../";
 
     }
 
@@ -102,8 +100,6 @@
 
     }
 
-    githubAccessToken();
-
     location.hash = location.hash ? location.hash : COR.defaultFile;
 
 
@@ -112,15 +108,15 @@
   <script>
 
     const files = [
-      "@@README.md",
+      "README.md",
       "LICENSE",
       "favicon.ico",
-      "@@test.md",
-      "@@text-to-hack.md",
-      "@@test-cases/text-to-hack-2.md",
-      "@@test-cases/desktop.ini",
+      "test.md",
+      "text-to-hack.md",
+      "test-cases/text-to-hack-2.md",
+      "test-cases/desktop.ini",
       "test-cases/heritage-front.jpg",
-      "@@test-cases/snippets.txt",
+      "test-cases/snippets.txt",
 
       //"test-cases/",
     ];
@@ -129,21 +125,6 @@
     const testFiles = (index) => location.hash = files[index - 1];
 
     const delSha = () => localStorage.setItem("githubAccessToken", "");
-
-    function githubAccessToken() {
-
-			XGP.accessToken = localStorage.getItem("githubAccessToken") || "";
-
-			//console.log("XGP.accessToken", XGP.accessToken);
-
-			if (!XGP.accessToken || XGP.accessToken === "" || XGP.accessToken === "null") {
-
-				XGP.accessToken = prompt("Enter GitHub Personal Access Token");
-
-				localStorage.setItem("githubAccessToken", XGP.accessToken);
-
-			}
-		}
 
   </script>
 

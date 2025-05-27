@@ -23,8 +23,7 @@ function onHashChange() {
 
       hash = hash.slice(2);
 
-      fileDisplay(hash);
-      //divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
+      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
 
     } else {
 
