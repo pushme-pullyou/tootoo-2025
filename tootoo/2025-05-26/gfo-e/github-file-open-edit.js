@@ -22,38 +22,36 @@ function onHashChange() {
     if (hash.includes("@@")) {
 
       hash = hash.slice(2);
-      
+
+      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
+
+    } else {
+
+      console.log("getHTMLfromURL", hash);
+
+      getHTMLfromURL(hash);
+
     }
 
-    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
+  } else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
 
-  } else {
+    console.log("img", hash);
+
+    divMainContent.innerHTML = `<img src="${COR.urlPathContent}${hash}" ></img>`;
+
+  } else if (hash === "LICENSE") {
 
     console.log("getHTMLfromURL", hash);
 
     getHTMLfromURL(hash);
 
+  } else {
+
+    console.log("else", COR.urlPathContent + hash);
+
+    divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
+
   }
-
-} else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
-
-  console.log("img", hash);
-
-  divMainContent.innerHTML = `<img src="${COR.urlPathContent}${hash}" ></img>`;
-
-} else if (hash === "LICENSE") {
-
-  console.log("getHTMLfromURL", hash);
-
-  getHTMLfromURL(hash);
-
-} else {
-
-  console.log("else", COR.urlPathContent + hash);
-
-  divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
-
-}
 
 }
 
