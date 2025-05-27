@@ -60,8 +60,7 @@
 		}
 
 		img {
-
-			width: 100px;
+			max-width: 100%;
 		}
 
 		pre {
@@ -127,6 +126,12 @@
 			location.hash.endsWith(".md") ? onHashChange() : window.location.href = location.hash.slice(1);
 
 			window.addEventListener("hashchange", onHashChange, false);
+
+			// if ( location.protocol === "https:" ) {
+
+			// 	window.history.pushState( "", "", "./" + location.hash );
+
+			// }
 
 		}
 

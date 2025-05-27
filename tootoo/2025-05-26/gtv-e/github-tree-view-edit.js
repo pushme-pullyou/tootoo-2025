@@ -61,10 +61,8 @@ async function fetchGitHubRepoContents(user, repo) {
       //console.log( "fileSource", fileSource );
 
       const editmeLink = document.createElement('a');
-
-      if (item.path.endsWith("md") || item.path === "LICENSE") {
+      if (/\.(md|txt|ini)$/i.test(item.path)) {
         editmeLink.textContent = "✎";
-        //editmeLink.href = `#https://api.github.com/repos/${user}/${repo}/contents/${item.path}`;
         editmeLink.href = `#@@${item.path}`;
       }
 
