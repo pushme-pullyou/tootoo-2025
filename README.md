@@ -14,7 +14,7 @@ _"example.com" in a resizable window_
 
 Testing
 
-* <https://pushme-pullyou.github.io/tootoo-2025/tootoo/2025-05-1/gfo/github-file-open.html>
+* <https://pushme-pullyou.github.io/tootoo-2025/tootoo/2025-05-26-2/tootoo-edit.html>
 
 ## Concept
 
