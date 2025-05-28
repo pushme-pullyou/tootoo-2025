@@ -161,7 +161,7 @@ a:active {
 /* First level of nesting */
 .folder-contents>details>.folder-contents>details>summary {
   font-size: 14pt;
-  margin-left: 20px;
+  margin-left: 10px;
 
 }
 

@@ -6,6 +6,9 @@ const COR = {
     repo: "tootoo-2025",
     branch: "main",
     version: "2025-05-27",
+    
+    menuTitle: "TooToo 2025",
+    menuTitleEdit: "TooToo Edit",
 
     // Used by GFO ~ github file open
     defaultFile: "README.md",
@@ -13,6 +16,9 @@ const COR = {
 
     pathApps: "./",
     pathContent: "../../",
+
+    filterFolders: [], //[ "code"],
+    ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 
     urlBaseAPI: "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/",
     urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/",
@@ -23,14 +29,9 @@ const COR = {
     iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
  	iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
 	iconInfo: `<img class=infoImg src="https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg">`,
-	iconPencil: <img src="https://pushme-pullyou.github.io/assets/svg/https://pushme-pullyou.github.io/assets/svg/mark-github.svg" >;>
+	iconPencil: `<img src="https://pushme-pullyou.github.io/assets/svg/https://pushme-pullyou.github.io/assets/svg/mark-github.svg" >`,
     iconRepo: `<img src=https://pushme-pullyou.github.io/assets/svg/dingbat.svg">`,
 
-    menuTitle: "TooToo 2025",
-    menuTitleEdit: "TooToo Edit",
-    
-    filterFolders: [], //[ "code"],
-    ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 }
 
 if (location.protocol === "https:") {
