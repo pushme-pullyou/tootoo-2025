@@ -25,11 +25,10 @@ const COR = {
     urlPathApps: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/",
     urlPathContent: "https://pushme-pullyou.github.io/tootoo-2025/",
     urlPushPath: "https://pushme-pullyou.github.io/tootoo-2025/",
-
     iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
- 	iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
-	iconInfo: `<img src="https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg">`,
-	iconOpenClose: `<img src="https://pushme-pullyou.github.io/assets/svg/open-close-toggle.svg">`,
+    iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
+	  iconInfo: `<img src="https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg">`,
+	  iconOpenClose: `<img src="https://pushme-pullyou.github.io/assets/svg/open-close-toggle.svg">`,
     iconPencil: `<img src="https://pushme-pullyou.github.io/assets/svg/https://pushme-pullyou.github.io/assets/svg/mark-github.svg" >`,
     iconRepo: `<img src=https://pushme-pullyou.github.io/assets/svg/dingbat.svg">`,
 
