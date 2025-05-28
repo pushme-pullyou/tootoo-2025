@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<meta name="description" content="Get and put Markdown files to a private or public GitHub repo">
-	<meta name="date" content="2025-05-25">
+	<meta name="date" content="2025-05-27">
 
 	<title>notesy</title>
 
@@ -177,7 +177,7 @@
 
 		init();
 
-		function init(url = COR.baseAPI + COR.defaultFileEdit) {
+		function init(url = COR.urlBaseAPI + COR.defaultFileEdit.slice(2)) {
 
 			console.log("url", url);
 
@@ -196,10 +196,10 @@
 		};
 
 
-		test1 = () => location.hash = COR.baseAPI + "apps/notesy/README.md";
-		test2 = () => location.hash = COR.baseAPI + "apps/notesy/test.md";
-		test3 = () => location.hash = COR.baseAPI + "text-to-hack.md";
-		test4 = () => location.hash = COR.baseAPI + "apps/notesy/original-agenda.md";
+		test1 = () => location.hash = COR.urlBaseAPI + "apps/notesy/README.md";
+		test2 = () => location.hash = COR.urlBaseAPI + "apps/notesy/test.md";
+		test3 = () => location.hash = COR.urlBaseAPI + "text-to-hack.md";
+		test4 = () => location.hash = COR.urlBaseAPI + "apps/notesy/original-agenda.md";
 
 		delSha = () => localStorage.setItem("githubAccessToken", "");
 
@@ -226,7 +226,7 @@
 
 			//console.log( "hash", hash );
 
-			COR.url = COR.baseAPI + hash;
+			COR.url = COR.urlBaseAPI + hash;
 			console.log("COR.url", COR.url);
 
 			COR.fileName = COR.url.split("/").pop();
