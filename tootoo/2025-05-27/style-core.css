@@ -161,26 +161,26 @@ a:active {
 /* First level of nesting */
 .folder-contents>details>.folder-contents>details>summary {
   font-size: 14pt;
-  margin-left: 10px;
+  margin-left: 1px;
 
 }
 
 /* Second level of nesting */
 .folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
   font-size: 12pt;
-  margin-left: 40px;
+  margin-left: 10px;
 }
 
 /* Third level of nesting */
 .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
   font-size: 11pt;
-  margin-left: 60px;
+  margin-left: 20px;
 }
 
 /* Fourth level of nesting and beyond */
 .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
   font-size: 10pt;
-  margin-left: 80px;
+  margin-left: 30px;
 }
 
 .file-container {
