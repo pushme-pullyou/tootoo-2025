@@ -12,12 +12,12 @@ const COR = {
 
     // Used by GFO ~ github file open
     defaultFile: "README.md",
-    defaultFileEdit: "@@test.md",
+    defaultFileEdit: "@@README.md",
 
     pathApps: "./",
     pathContent: "../../",
 
-    filterFolders: [], //[ "code"],
+    filterFolders: [], //[ "tootoo"],
     ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 
     urlBaseAPI: "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/",
