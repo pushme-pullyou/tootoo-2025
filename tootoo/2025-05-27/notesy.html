@@ -179,10 +179,11 @@
 
 		function init(url = COR.urlBaseAPI + COR.defaultFileEdit.slice(2)) {
 
-			console.log("url", url);
-
+			
 			COR.url = url; // Set initial URL (can be overridden by hash)
-
+			
+			console.log("COR.url", COR.url);
+			
 			aPath.title = document.head.querySelector("[ name=date ]").content;
 
 			githubAccessToken();
