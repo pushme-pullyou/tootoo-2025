@@ -51,6 +51,7 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
+* 2025-05-29 ~ date sorting folders are identified in COR{}
 * 2025-05-29 ~ Add new file
 * 2025-05-25 ~ omitting the date from the file name in the menu, and adding the date to the file title
 * 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages ~ do pages without Pages!?!
