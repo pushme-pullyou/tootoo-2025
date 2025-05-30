@@ -47,14 +47,16 @@ async function fetchGitHubRepoContents(user, repo) {
     if (trees.length > 0 && blobs.length > 0) {
       const hr = document.createElement('hr');
       folderContents.appendChild(hr);
-    }    // Check if this is a "date-samples" folder by looking at the parent folder name
+    }    
+    
+    // Check if this is a "blog" folder by looking at the parent folder name
     const isBlogFolder = parentPath === '' ? false : 
       parentPath.split('/').some(part => part === 'blog') ||
       (parentPath.split('/').length === 1 && parentPath.replace('/', '') === 'date-samples');
 
     // Sort blobs if this is a date-samples folder and files have date format
     let sortedBlobs = blobs;
-    if (isDateSamplesFolder) {
+    if (isBlogFolder) {
       const datePattern = /^\d{4}-\d{2}-\d{2}/;
       const hasDateFiles = blobs.some(item => {
         const fileName = item.path.replace(parentPath, '');
