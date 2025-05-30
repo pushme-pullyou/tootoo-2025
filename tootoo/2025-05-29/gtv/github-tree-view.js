@@ -47,9 +47,44 @@ async function fetchGitHubRepoContents(user, repo) {
     if (trees.length > 0 && blobs.length > 0) {
       const hr = document.createElement('hr');
       folderContents.appendChild(hr);
+    }    // Check if this is a "date-samples" folder by looking at the parent folder name
+    const isDateSamplesFolder = parentPath === '' ? false : 
+      parentPath.split('/').some(part => part === 'date-samples') ||
+      (parentPath.split('/').length === 1 && parentPath.replace('/', '') === 'date-samples');
+
+    // Sort blobs if this is a date-samples folder and files have date format
+    let sortedBlobs = blobs;
+    if (isDateSamplesFolder) {
+      const datePattern = /^\d{4}-\d{2}-\d{2}/;
+      const hasDateFiles = blobs.some(item => {
+        const fileName = item.path.replace(parentPath, '');
+        return datePattern.test(fileName);
+      });
+      
+      if (hasDateFiles) {
+        sortedBlobs = [...blobs].sort((a, b) => {
+          const fileNameA = a.path.replace(parentPath, '');
+          const fileNameB = b.path.replace(parentPath, '');
+          
+          const dateMatchA = fileNameA.match(datePattern);
+          const dateMatchB = fileNameB.match(datePattern);
+          
+          // If both have date format, sort by date (newest first)
+          if (dateMatchA && dateMatchB) {
+            return dateMatchB[0].localeCompare(dateMatchA[0]);
+          }
+          
+          // If only one has date format, prioritize the dated one
+          if (dateMatchA && !dateMatchB) return -1;
+          if (!dateMatchA && dateMatchB) return 1;
+          
+          // If neither has date format, sort alphabetically
+          return fileNameA.localeCompare(fileNameB);
+        });
+      }
     }
 
-    blobs.forEach(item => {
+    sortedBlobs.forEach(item => {
 
       const fileName = item.path.replace(parentPath, '');
 

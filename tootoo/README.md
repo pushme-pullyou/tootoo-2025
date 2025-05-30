@@ -71,6 +71,10 @@ _"Templates Read Me" in a resizable window_
 ## Change Log
 
 ### 2025-05-29
+in 
+
+
+Nice, this worked!
 
 on a hash change make sure its associated "file-container" menu item for that item is visible by setting all its parent details to open. Do this in the simplest way possible, by using the "open" attribute of the details tag.
 
