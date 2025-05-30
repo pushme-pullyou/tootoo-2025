@@ -35,7 +35,6 @@ _"Templates Read Me" in a resizable window_
 * View the file in a new tab
 
 
-
 ## Text you can include in read me files
 
 <details open >
@@ -52,8 +51,8 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
+* 2025-05-29 ~ Add new file
 * 2025-05-25 ~ omitting the date from the file name in the menu, and adding the date to the file title
-* 2025-05-25 ~ sort folders with files staring with dates with newest st op
 * 2025-05-20 ~ Add a button to open files by going directly to repo and not using Pages ~ do pages without Pages!?!
 * 2023-10-14 ~ Find text in files
 * 2023-10-14 ~ Cursor keys to load next file in menu
@@ -71,10 +70,10 @@ _"Templates Read Me" in a resizable window_
 ## Change Log
 
 ### 2025-05-29
-in 
 
+* 2025-05-25 ~ sort folders with files staring with dates with newest at top
 
-Nice, this worked!
+Prompt, this worked!
 
 on a hash change make sure its associated "file-container" menu item for that item is visible by setting all its parent details to open. Do this in the simplest way possible, by using the "open" attribute of the details tag.
 

@@ -11,11 +11,11 @@ function initGFOE() {
 
 function onHashChange() {
 
-  let hash = location.hash.slice(1);
-
+  const hash = location.hash.slice(1);
+  
   // Open parent details elements to make the file-container visible
   const fileContainers = document.querySelectorAll('.file-container');
-console.log( "fileContainers", fileContainers);
+  //console.log("fileContainers", fileContainers);
   for (const container of fileContainers) {
     const link = container.querySelector('a');
     if (link && link.getAttribute('href') === '#' + hash) {
@@ -26,6 +26,8 @@ console.log( "fileContainers", fileContainers);
         }
         parentNode = parentNode.parentNode;
       }
+      // Set focus to the link
+      link.focus();
       break;
     }
   }
