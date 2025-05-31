@@ -1,16 +1,45 @@
+initGFOE();
+
+function initGFOE() {
+
+  window.addEventListener("hashchange", onHashChange, false);
+
+  onHashChange();
+
+}
+
 
 function onHashChange() {
 
-  COR.hash = hash = location.hash.slice(1);
+  const hash = location.hash.slice(1);
+  
+  // Open parent details elements to make the file-container visible
+  const fileContainers = document.querySelectorAll('.file-container');
+  //console.log("fileContainers", fileContainers);
+  for (const container of fileContainers) {
+    const link = container.querySelector('a');
+    if (link && link.getAttribute('href') === '#' + hash) {
+      let parentNode = container.parentNode;
+      while (parentNode && parentNode.id !== "detNavMenu") {
+        if (parentNode.tagName === 'DETAILS') {
+          parentNode.open = true;
+        }
+        parentNode = parentNode.parentNode;
+      }
+      // Set focus to the link
+      link.focus();
+      break;
+    }
+  }
 
-  //console.log("hash", hash, "url", COR.pathContent);
+  //console.log("hash", hash);
 
   if (/\.(md|txt|ini)$/i.test(hash)) {
-    
+
+    console.log("notesy", hash);
+
     if (hash.includes("@@")) {
 
-      console.log("notesy", hash);
-      
       hash = hash.slice(2);
 
       divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
@@ -27,7 +56,7 @@ function onHashChange() {
 
     console.log("img", hash);
 
-    divMainContent.innerHTML = `<img src="${COR.pathContent}${hash}" ></img>`;
+    divMainContent.innerHTML = `<img src="${COR.urlPathContent}${hash}" ></img>`;
 
   } else if (hash === "LICENSE") {
 
@@ -43,20 +72,18 @@ function onHashChange() {
 
   }
 
-  setFileVisible();
-
 }
 
 
-function getHTMLfromURL(hash = COR.hash) {
+function getHTMLfromURL(url = location.hash.slice(1)) {
 
-  //console.log("hash", COR.pathContent + COR.hash);
+  console.log("url", COR.urlPathContent + url);
 
   showdown.setFlavor("github");
   const options = { openLinksInNewWindow: false, excludeTrailingPunctuationFromURLs: true, ghMention: true, simplifiedAutoLink: true, simpleLineBreaks: true, emoji: true };
 
   const xhr = new XMLHttpRequest();
-  xhr.open("get", COR.pathContent + hash, true);
+  xhr.open("get", COR.pathContent + url, true);
   xhr.onload = () => {
     let txt = xhr.responseText;
     txt = txt.replace(/\<!--@@@/, " ).replace /\@@@-- >/, ");
@@ -65,7 +92,7 @@ function getHTMLfromURL(hash = COR.hash) {
   };
   xhr.send(null);
 
-  let title = hash.split("/").pop()
+  let title = url.split("/").pop()
     .split("-")
     .filter(x => x.length > 0)
     //.map((x) => (x.charAt(0).toUpperCase() + x.slice(1)))
