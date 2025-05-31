@@ -147,7 +147,7 @@
 
 		// [X]MLHTTPRequest [G]itHub [P]ush (COR)
 
-		//init();
+		init();
 
 		function init(hash = COR.defaultFileEdit ) {
 
@@ -187,13 +187,13 @@
 
 		function onHashChange(event) {
 
-			console.log( "onHashChange", location.hash.slice(1));
+			console.log( "onHashChange", parent.location.hash.slice(1));
 
 			//const hash = location.hash ? location.hash.slice(1) : COR.defaultFileEdit;
 			
 			//hash = parent.location.hash.slice(1);
 
-			COR.url = COR.urlBaseAPI + location.hash.slice(1);
+			COR.url = COR.urlBaseAPI + parent.location.hash.slice(3);
 			console.log("COR.url", COR.url);
 
 			COR.fileName = COR.url.split("/").pop();

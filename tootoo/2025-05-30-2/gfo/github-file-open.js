@@ -9,11 +9,11 @@ function onHashChange() {
     
     if (hash.includes("@@")) {
 
-      console.log("notesy", hash);
-      
       hash = hash.slice(2);
+      
+      console.log("notesy", hash);
 
-      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
+      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}getPutFile2GitHub.html"><iframe>`;
 
     } else {
 

@@ -112,11 +112,13 @@ async function fetchGitHubRepoContents(user, repo) {
 
 // Open parent details elements to make the file-container visible
 function setFileVisible() {
+
+  //hash = location.hash
   const fileContainers = document.querySelectorAll('.file-container');
   //console.log("fileContainers", fileContainers);
   for (const container of fileContainers) {
     const link = container.querySelector('a');
-    if (link && link.getAttribute('href') === '#' + hash) {
+    if (link && link.getAttribute('href') === '#' + location.hash.slice(1)) {
       let parentNode = container.parentNode;
       while (parentNode && parentNode.id !== "detNavMenu") {
         if (parentNode.tagName === 'DETAILS') {

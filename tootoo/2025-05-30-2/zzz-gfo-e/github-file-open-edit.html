@@ -101,6 +101,8 @@
 
     }
 
+    window.addEventListener("hashchange", onHashChange, false);
+
     location.hash = location.hash ? location.hash : COR.defaultFile;
 
 

@@ -260,13 +260,19 @@
 
       }
 
-        window.addEventListener("hashchange", onHashChange, false);
+      window.addEventListener("hashchange", onHashChange, false);
         
-      location.hash = location.hash ? location.hash : COR.defaultFileEdit;
+      //location.hash = location.hash ? location.hash : COR.defaultFileEdit;
         
-        onHashChange();
+      //onHashChange();
         
     }
+
+    // function onHashChange () {
+
+		//   ifr2.contentWindow.location.hash = location.hash.slice(3);
+
+		// }
 
     function toggleAllDetails() {
       const divNavTreeView = document.getElementById('divNavTreeView');
