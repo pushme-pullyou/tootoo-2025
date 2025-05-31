@@ -149,25 +149,24 @@
 
 		//init();
 
-		function init(url = COR.urlBaseAPI + COR.defaultFileEdit.slice(2)) {
+		function init(hash = COR.defaultFileEdit ) {
 
-			COR.url = url; // Set initial URL (can be overridden by hash)
+			hash = hash.replace( /@@/, ""); 
+
+			location.hash = location.hash ? location.hash : hash;
 			
-			console.log("COR.url", COR.url);
+			//console.log("hash", hash);
 			
 			aPath.title = document.head.querySelector("[ name=date ]").content;
 
 			githubAccessToken();
 
+			window.addEventListener("hashchange", onHashChange, false);
+			
 			window.addEventListener("beforeunload", checkForChange);
 
 			divContent.addEventListener('blur', requestSync); // Changed from onBlur -> getSha to requestSync
-			
-			window.addEventListener("hashchange", onHashChange, false);
-			
-			//location.hash = location.hash ? location.hash : COR.defaultFile;
-			
-			onHashChange();
+				
 		};
 
 
@@ -188,13 +187,14 @@
 
 		function onHashChange(event) {
 
-			//const hash = location.hash ? location.hash.slice(3) : COR.url;
-			const hash = parent.location.hash.slice(1);
+			console.log( "onHashChange", location.hash.slice(1));
 
-			console.log( "hash", hash );
+			//const hash = location.hash ? location.hash.slice(1) : COR.defaultFileEdit;
+			
+			//hash = parent.location.hash.slice(1);
 
-			COR.url = COR.urlBaseAPI + hash;
-			//console.log("COR.url", COR.url);
+			COR.url = COR.urlBaseAPI + location.hash.slice(1);
+			console.log("COR.url", COR.url);
 
 			COR.fileName = COR.url.split("/").pop();
 			//console.log("onHashChange", COR.fileName);	

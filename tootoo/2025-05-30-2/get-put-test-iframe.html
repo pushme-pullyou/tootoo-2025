@@ -106,7 +106,7 @@
 
 			ifr2.onload = () => { ifr2.contentWindow.init(); };
 
-			//window.addEventListener("hashchange", onHashChange, false);
+			window.addEventListener("hashchange", onHashChange, false);
 			
 			//location.hash = location.hash ? location.hash : COR.defaultFile;
 			
@@ -114,15 +114,15 @@
 
 		}
 
-		// function onHashChange () {
+		function onHashChange () {
 
-		// 	ifr2.contentWindow.init();
+			ifr2.contentWindow.location.hash = location.hash.slice(3);
 
-		// }
+		}
 
-		test1 = () => location.hash = COR.urlBaseAPI + "apps/notesy/README.md";
-		test2 = () => location.hash = COR.urlBaseAPI + "apps/notesy/test.md";
-		test3 = () => location.hash = COR.urlBaseAPI + "text-to-hack.md";
+		test1 = () => location.hash = "@@README.md";
+		test2 = () => location.hash = "@@test.md";
+		test3 = () => location.hash = "@@text-to-hack.md";
 		test4 = () => location.hash = COR.urlBaseAPI + "apps/notesy/original-agenda.md";
 
 		delSha = () => localStorage.setItem("githubAccessToken", "");
