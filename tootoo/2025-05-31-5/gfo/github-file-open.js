@@ -3,6 +3,21 @@ function onHashChange() {
 
   COR.hash = hash = location.hash.slice(1);
 
+  // Validate hash to prevent potential security issues
+  if (!hash || hash.trim() === '') {
+    hash = COR.defaultFile;
+    location.hash = hash;
+    return;
+  }
+
+  // Basic path traversal protection
+  if (hash.includes('../') || hash.includes('..\\')) {
+    console.warn('Invalid path detected:', hash);
+    hash = COR.defaultFile;
+    location.hash = hash;
+    return;
+  }
+
   //console.log("hash", hash, "url", COR.pathContent);
 
   if (/\.(md|txt|ini)$/i.test(hash)) {
@@ -58,10 +73,30 @@ function getHTMLfromURL(hash = COR.hash) {
   const xhr = new XMLHttpRequest();
   xhr.open("get", COR.pathContent + hash, true);
   xhr.onload = () => {
-    let txt = xhr.responseText;
-    txt = txt.replace(/\<!--@@@/, " ).replace /\@@@-- >/, ");
-    divMainContent.innerHTML = new showdown.Converter(options).makeHtml(txt);
-    window.scrollTo(0, 0);
+      let txt = xhr.responseText;
+      txt = txt.replace(/<!--@@@/g, "").replace(/@@@-->/g, "");
+      divMainContent.innerHTML = new showdown.Converter(options).makeHtml(txt);
+      window.scrollTo(0, 0);
+    } else {
+      divMainContent.innerHTML = `
+        <div style="padding: 20px; color: #d73a49; background: #ffeaea; border: 1px solid #d73a49; border-radius: 4px;">
+          <h3>Error Loading File</h3>
+          <p>Failed to load file: ${hash}</p>
+          <p>Status: ${xhr.status} ${xhr.statusText}</p>
+          <button onclick="onHashChange()" style="margin-top: 10px; padding: 5px 10px;">Retry</button>
+        </div>
+      `;
+    }
+  };
+  xhr.onerror = () => {
+    divMainContent.innerHTML = `
+      <div style="padding: 20px; color: #d73a49; background: #ffeaea; border: 1px solid #d73a49; border-radius: 4px;">
+        <h3>Network Error</h3>
+        <p>Failed to load file: ${hash}</p>
+        <p>Please check your internet connection and try again.</p>
+        <button onclick="onHashChange()" style="margin-top: 10px; padding: 5px 10px;">Retry</button>
+      </div>
+    `;
   };
   xhr.send(null);
 
