@@ -140,7 +140,7 @@ function setFileVisible() {
   //console.log("fileContainers", fileContainers);
   for (const container of fileContainers) {
     const link = container.querySelector('a');
-    if (link && link.getAttribute('href') === '#' + hash) {
+    if (link && link.getAttribute('href') === '#' + COR.hash ) {
       let parentNode = container.parentNode;
       while (parentNode && parentNode.id !== "detNavMenu") {
         if (parentNode.tagName === 'DETAILS') {
