@@ -1,30 +1,28 @@
-
 const COR = {
+  
+  version: "2025-06-01",
 
   // Used by GTV ~ github tree view
-  user: "pushme-pullyou",
-  repo: "tootoo-2025",
-  branch: "main",
-  version: "2025-05-27",
-
-  menuTitle: "TooToo 2025",
-  menuTitleEdit: "TooToo Edit",
+  user: CONFIG.user,
+  repo: CONFIG.repo, //"tootoo-2025",
+  branch: CONFIG.branch, //"main",
+  
+  menuTitle: CONFIG.menuTitle, //"TooToo 2025",
+  menuTitleEdit: CONFIG.menuTitleEdit, //"TooToo Edit",
 
   // Used by GFO ~ github file open
-  defaultFile: "README.md",
-  defaultFileEdit: "@@README.md",
+  defaultFile: CONFIG.defaultFile, //"README.md",
+  defaultFileEdit: CONFIG.defaultFileEdit, //"@@README.md",
+  
+  filterFolders: CONFIG.filterFolders, //[], //[ "tootoo"],
+  ignoreFiles: CONFIG.ignoreFiles, //[], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 
-  pathApps: "./",
-  pathContent: "../../",
+  urlBaseAPI: "https://api.github.com/repos/${ CONFIG.user}/${ CONFIG.repo}/contents/",
+  urlSource: "https://github.com/${ CONFIG.user}/${ CONFIG.repo}/tree/main/",
+  urlPathApps: "https://${ CONFIG.user}.github.io/${ CONFIG.repo}/tootoo/",
+  urlPathContent: "https://${ CONFIG.user}.github.io/${ CONFIG.repo}/",
+  urlPushPath: "https://${ CONFIG.user}.github.io/${ CONFIG.repo}/",
 
-  filterFolders: [], //[ "tootoo"],
-  ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
-
-  urlBaseAPI: "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/",
-  urlSource: "https://github.com/pushme-pullyou/tootoo-2025/tree/main/",
-  urlPathApps: "https://pushme-pullyou.github.io/tootoo-2025/tootoo/",
-  urlPathContent: "https://pushme-pullyou.github.io/tootoo-2025/",
-  urlPushPath: "https://pushme-pullyou.github.io/tootoo-2025/",
   iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
   iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
   iconInfo: `<img src="https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg">`,
@@ -38,7 +36,6 @@ if (location.protocol === "https:") {
 
   COR.pathApps = COR.urlPathApps + COR.version + "/";
   COR.pathContent = COR.urlPathContent;
-  //console.log( "COR.pathApps", COR.pathApps);
 
 } else {
 

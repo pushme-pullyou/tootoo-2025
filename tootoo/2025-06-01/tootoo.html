@@ -8,7 +8,7 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="Version 2025-05-30-5">
+  <meta name="version" content="Version 2025-06-01">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
@@ -98,11 +98,16 @@
 
   </main>
 
+  <script src="../config.js"></script>
   <script src="./main.js"></script>
   <script src="./gtv/github-tree-view.js"></script>
-  <script src="./gfo/github-file-open.js"></script>  <script>
+  <script src="./gfo/github-file-open.js"></script>  
+  
+  <script>
 
-    init();    function init() {
+    init();    
+    
+    function init() {
 
       // Load saved text scale
       loadTextScale();
@@ -149,5 +154,4 @@
   </script>
 
 </body>
-
 </html>
