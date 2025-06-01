@@ -51,6 +51,7 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
+* 2025-05-31 ~ toggle between edit and view mode
 * 2025-05-29 ~ date sorting folders are identified in COR{}
 * 2025-05-29 ~ Add new file
 * 2025-05-25 ~ omitting the date from the file name in the menu, and adding the date to the file title
@@ -70,6 +71,11 @@ _"Templates Read Me" in a resizable window_
 
 ## Change Log
 
+### 2025-05-31
+
+* Clean-up & refactor
+
+prompt: add a function that scales the text size larger and smaller of of all the item in the menu and body, including the tree view, using two buttons, one to increase the text size and one to decrease it.
 ### 2025-05-29
 
 * 2025-05-25 ~ sort folders with files staring with dates with newest at top

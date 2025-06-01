@@ -13,7 +13,8 @@ function onHashChange() {
       
       console.log("notesy", hash);
 
-      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}getPutFile2GitHub.html"><iframe>`;
+      divMainContent.innerHTML = 
+      `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}./ggpf/github-get-put-file.html"><iframe>`;
 
     } else {
 
@@ -43,7 +44,7 @@ function onHashChange() {
 
   }
 
-  setFileVisible();
+  //setFileVisible();
 
 }
 

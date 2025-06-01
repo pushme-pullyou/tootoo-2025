@@ -1,36 +1,7 @@
-initGFOE();
-
-function initGFOE() {
-
-  window.addEventListener("hashchange", onHashChange, false);
-
-  onHashChange();
-
-}
-
 
 function onHashChange() {
 
-  const hash = location.hash.slice(1);
-  
-  // Open parent details elements to make the file-container visible
-  const fileContainers = document.querySelectorAll('.file-container');
-  //console.log("fileContainers", fileContainers);
-  for (const container of fileContainers) {
-    const link = container.querySelector('a');
-    if (link && link.getAttribute('href') === '#' + hash) {
-      let parentNode = container.parentNode;
-      while (parentNode && parentNode.id !== "detNavMenu") {
-        if (parentNode.tagName === 'DETAILS') {
-          parentNode.open = true;
-        }
-        parentNode = parentNode.parentNode;
-      }
-      // Set focus to the link
-      link.focus();
-      break;
-    }
-  }
+  COR.hash = hash = location.hash.slice(1);
 
   //console.log("hash", hash, "url", COR.pathContent);
 
@@ -38,11 +9,12 @@ function onHashChange() {
     
     if (hash.includes("@@")) {
 
-      console.log("notesy", hash);
-      
       hash = hash.slice(2);
+      
+      console.log("notesy", hash);
 
-      divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}notesy.html" onload=ifr.contentWindow.location.hash="${hash}"><iframe>`;
+      divMainContent.innerHTML = 
+      `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}./ggpf/github-get-put-file.html"><iframe>`;
 
     } else {
 
@@ -56,7 +28,7 @@ function onHashChange() {
 
     console.log("img", hash);
 
-    divMainContent.innerHTML = `<img src="${COR.urlPathContent}${hash}" ></img>`;
+    divMainContent.innerHTML = `<img src="${COR.pathContent}${hash}" ></img>`;
 
   } else if (hash === "LICENSE") {
 
@@ -72,10 +44,12 @@ function onHashChange() {
 
   }
 
+  //setFileVisible();
+
 }
 
 
-function getHTMLfromURL(url = location.hash.slice(1)) {
+function getHTMLfromURL(hash = COR.hash) {
 
   //console.log("hash", COR.pathContent + COR.hash);
 
