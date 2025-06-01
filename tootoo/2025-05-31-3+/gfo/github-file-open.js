@@ -9,9 +9,9 @@ function onHashChange() {
     
     if (hash.includes("@@")) {
 
-      COR.hash = hash.slice(2);
+      hash = hash.slice(2);
       
-      console.log("notesy", COR.hash);
+      console.log("notesy", hash);
 
       divMainContent.innerHTML = 
       `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}./ggpf/github-get-put-file.html"><iframe>`;
@@ -41,9 +41,10 @@ function onHashChange() {
     console.log("else", COR.urlPathContent + hash);
 
     divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
+
   }
 
-  setFileVisible();
+  //setFileVisible();
 
 }
 

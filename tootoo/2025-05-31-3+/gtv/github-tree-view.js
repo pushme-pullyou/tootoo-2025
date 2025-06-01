@@ -129,8 +129,8 @@ async function fetchGitHubRepoContents(user, repo) {
   });
 
   div.appendChild(createTree(topLevelItems, ''));
+
   setFileVisible();
-  initKeyboardNavigation();
 
 }
 
@@ -140,7 +140,7 @@ function setFileVisible() {
   //console.log("fileContainers", fileContainers);
   for (const container of fileContainers) {
     const link = container.querySelector('a');
-    if (link && link.getAttribute('href') === '#' + COR.hash ) {
+    if (link && link.getAttribute('href') === '#' + hash) {
       let parentNode = container.parentNode;
       while (parentNode && parentNode.id !== "detNavMenu") {
         if (parentNode.tagName === 'DETAILS') {
@@ -272,112 +272,6 @@ function hideContextMenu() {
   if (contextMenu) {
     contextMenu.style.display = 'none';
   }
-}
-
-// Keyboard navigation functionality
-function initKeyboardNavigation() {
-  // Remove any existing keyboard event listeners
-  document.removeEventListener('keydown', handleTreeViewKeyNavigation);
-  
-  // Add keyboard event listener
-  document.addEventListener('keydown', handleTreeViewKeyNavigation);
-}
-
-function handleTreeViewKeyNavigation(event) {
-  // Only handle arrow keys when focus is within the tree view or no specific element is focused
-  const activeElement = document.activeElement;
-  const treeViewContainer = document.getElementById('divNavTreeView');
-  
-  if (!treeViewContainer) return;
-  
-  // Check if focus is within the tree view or body (no specific focus)
-  // Also allow navigation when focus is on main content area
-  const mainContent = document.getElementById('divMainContent');
-  const isInTreeView = treeViewContainer.contains(activeElement) || 
-                       activeElement === document.body ||
-                       (mainContent && mainContent.contains(activeElement));
-  
-  if (!isInTreeView) return;
-  
-  switch(event.key) {
-    case 'ArrowUp':
-      event.preventDefault();
-      navigateToFile('previous');
-      break;
-    case 'ArrowDown':
-      event.preventDefault();
-      navigateToFile('next');
-      break;
-  }
-}
-
-function navigateToFile(direction) {
-  const fileLinks = getAllFileLinks();
-  if (fileLinks.length === 0) return;
-  
-  let currentIndex = getCurrentFileIndex(fileLinks);
-  let nextIndex;
-  
-  if (direction === 'next') {
-    nextIndex = (currentIndex + 1) % fileLinks.length; // Wrap to beginning
-  } else {
-    nextIndex = currentIndex <= 0 ? fileLinks.length - 1 : currentIndex - 1; // Wrap to end
-  }
-  
-  const nextLink = fileLinks[nextIndex];
-  if (nextLink) {
-    // Ensure the parent folders are open so the link is visible
-    ensureLinkVisible(nextLink);
-    
-    // Update the hash to navigate to the file
-    const href = nextLink.getAttribute('href');
-    if (href && href.startsWith('#')) {
-      location.hash = href;
-      // Focus will be set automatically by setFileVisible() called from onHashChange
-    }
-  }
-}
-
-function ensureLinkVisible(link) {
-  // Open all parent details elements to make the link visible
-  let parentNode = link.closest('.file-container').parentNode;
-  while (parentNode && parentNode.id !== "divNavTreeView") {
-    if (parentNode.tagName === 'DETAILS') {
-      parentNode.open = true;
-    }
-    parentNode = parentNode.parentNode;
-  }
-}
-
-function getAllFileLinks() {
-  const treeViewContainer = document.getElementById('divNavTreeView');
-  if (!treeViewContainer) return [];
-  
-  // Get all file links (not folder links)
-  const fileContainers = treeViewContainer.querySelectorAll('.file-container');
-  const fileLinks = [];
-  
-  fileContainers.forEach(container => {
-    const link = container.querySelector('a[href^="#"]');
-    if (link) {
-      fileLinks.push(link);
-    }
-  });
-  
-  return fileLinks;
-}
-
-function getCurrentFileIndex(fileLinks) {
-  const currentHash = location.hash;
-  
-  for (let i = 0; i < fileLinks.length; i++) {
-    if (fileLinks[i].getAttribute('href') === currentHash) {
-      return i;
-    }
-  }
-  
-  // If no current file is found, return -1 so next navigation starts from 0
-  return -1;
 }
 
 fetchGitHubRepoContents(user, repo);

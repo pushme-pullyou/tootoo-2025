@@ -75,11 +75,11 @@ _"Templates Read Me" in a resizable window_
 
 * Clean-up & refactor
 
-##### prompt
+#### prompt
 
-Suggest furtherI improvements, retaining the notion that the proect is intended to be as simple as possible, and given that the project operates in a known and well-maintaine environment requirea only the minimum of error checking
+Suggest further improvements, retaining the notion that the project is intended to be as simple as possible, and given that the project operates in a known and well-maintained environment, it requires only the minimum of error checking, if any
 
-#### 
+#### Prompt
 
 On the tree view menu, add the capability to open and view the next or previous file in the menu using the cursor keys.
 
