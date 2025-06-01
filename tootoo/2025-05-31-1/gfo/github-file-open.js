@@ -3,7 +3,7 @@ function onHashChange() {
 
   COR.hash = hash = location.hash.slice(1);
 
-  //console.log("hash", hash, "url", COR.pathContent);
+  console.log("onHashChange called with hash:", hash, "url:", COR.pathContent);
 
   if (/\.(md|txt|ini)$/i.test(hash)) {
     
@@ -44,7 +44,7 @@ function onHashChange() {
 
   }
 
-  //setFileVisible();
+  setFileVisible();
 
 }
 
@@ -60,7 +60,7 @@ function getHTMLfromURL(hash = COR.hash) {
   xhr.open("get", COR.pathContent + hash, true);
   xhr.onload = () => {
     let txt = xhr.responseText;
-    txt = txt.replace(/\<!--@@@/, " ).replace /\@@@-- >/, ");
+    txt = txt.replace(/\<!--@@@/, "").replace(/\@@@-- >/, "");
     divMainContent.innerHTML = new showdown.Converter(options).makeHtml(txt);
     window.scrollTo(0, 0);
   };

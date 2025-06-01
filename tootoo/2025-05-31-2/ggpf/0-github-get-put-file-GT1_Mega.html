@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Test/title>
+	<title>Test</title>
 		<meta name="viewport" content="width=device-width,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0" />
 		<meta name="description" content="">
 		<meta name="version" content="Version 2025-05-30">
@@ -51,7 +51,7 @@
 </head>
 
 <body>
-	<script src="./main.js"></script>
+	<script src="../main.js"></script>
 	<nav>
 
 		<h1>
@@ -87,7 +87,7 @@
 
 		<div id="divMessage"></div>
 		<div id="divMainContent">
-			<iframe id=ifr src="getPutFile2GitHub.html"></iframe>
+			<iframe id=ifr src="github-get-put-file.html"></iframe>
 		</div>
 
 	</main>
@@ -100,9 +100,7 @@
 			document.title = COR.menuTitle;
 			spnTitle.innerText = COR.menuTitle;
 			document.getElementById("aSource").href = COR.urlSource;
-			//main.title = document.querySelector("[ name=version ]").content;
-
-			//spnVersion.innerHTML = document.head.querySelector("[ name=date ]").content;
+			main.title = document.querySelector("[ name=version ]").content;
 
 			window.addEventListener("hashchange", onHashChange, false);
 

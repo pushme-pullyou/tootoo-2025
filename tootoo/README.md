@@ -75,13 +75,20 @@ _"Templates Read Me" in a resizable window_
 
 * Clean-up & refactor
 
+##### prompt
+
+Suggest furtherI improvements, retaining the notion that the proect is intended to be as simple as possible, and given that the project operates in a known and well-maintaine environment requirea only the minimum of error checking
+#### 
+
+On the tree view menu, add the capability to open and view the next or previous file in the menu using the cursor keys.
+
 #### prompt
 
 currently there is a toggle to open or close all the details tags in the tree view. 
 
 Improve this by adding a right-click menu to toggle between opening and closing all the sub-folders of the currently selected details tag in the tree view.
 
-
+worked!
 
 #### prompt: 
 

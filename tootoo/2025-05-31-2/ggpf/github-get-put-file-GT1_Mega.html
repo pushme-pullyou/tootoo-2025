@@ -115,7 +115,7 @@
 </head>
 
 <body>
-  <script src="./main.js"></script>
+  <script src="../main.js"></script>
 	<main>
 
 		<div id="header">
@@ -194,7 +194,7 @@
 			//hash = parent.location.hash.slice(1);
 
 			COR.url = COR.urlBaseAPI + parent.location.hash.slice(3);
-			console.log("COR.url", COR.url);
+			//console.log("COR.url", COR.url);
 
 			COR.fileName = COR.url.split("/").pop();
 			//console.log("onHashChange", COR.fileName);	
@@ -266,7 +266,7 @@
 
 			aSource.href = xhr.target.response.html_url;
 
-      		console.log( "COR.url", COR.url );
+      		//console.log( "COR.url", COR.url );
 
 			aPath.href = COR.notesyURL + COR.url;
 

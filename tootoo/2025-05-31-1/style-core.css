@@ -346,3 +346,32 @@ div div>.folder-contents>details>summary:hover {
 .gmd-5 {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
+
+/* File selection and focus styling */
+.file-container a:focus {
+  outline: 2px solid var(--color-active);
+  outline-offset: 2px;
+  background-color: var(--color-3-background);
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+.file-container a.file-selected {
+  background-color: var(--color-2-background);
+  border-radius: 3px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+  font-weight: bold;
+}
+
+.file-container a.file-selected:focus {
+  outline: 2px solid var(--color-active);
+  outline-offset: 2px;
+}
+
+/* Tree view focus styling */
+#divNavTreeView:focus {
+  outline: 2px solid var(--color-active);
+  outline-offset: 2px;
+}

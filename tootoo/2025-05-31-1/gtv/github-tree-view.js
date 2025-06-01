@@ -83,15 +83,28 @@ async function fetchGitHubRepoContents(user, repo) {
           return fileNameA.localeCompare(fileNameB);
         });
       }
-    }
-
-    sortedBlobs.forEach(item => {
-
-      const fileName = item.path.replace(parentPath, '');
-
+    }    sortedBlobs.forEach(item => {      const fileName = item.path.replace(parentPath, '');
       const fileLink = document.createElement('a');
       fileLink.textContent = formatDisplayName(fileName);
-      fileLink.href = `#${item.path}`;
+      fileLink.setAttribute('data-file-path', item.path);
+      fileLink.setAttribute('tabindex', '0');
+      
+      // Set href and behavior based on file type
+      if (isViewableFile(item.path)) {
+        // For viewable files, use normal anchor behavior with hash
+        fileLink.href = `#${item.path}`;
+        // No click handler needed - let normal anchor behavior work
+      } else {
+        // For non-viewable files, prevent navigation and just highlight
+        fileLink.href = `javascript:void(0)`;
+        fileLink.addEventListener('click', (event) => {
+          event.preventDefault();
+          // Highlight non-viewable file
+          const fileLinks = document.querySelectorAll('.file-container a:first-child');
+          fileLinks.forEach(link => link.classList.remove('file-selected'));
+          event.target.classList.add('file-selected');
+        });
+      }
 
       const readmeLink = document.createElement('a');
       readmeLink.innerHTML = COR.iconExternalLink;
@@ -122,10 +135,10 @@ async function fetchGitHubRepoContents(user, repo) {
       return !filterFolders.includes(item.path);
     }
   });
-
   div.appendChild(createTree(topLevelItems, ''));
 
   setFileVisible();
+  setupKeyboardNavigation();
 
 }
 
@@ -135,7 +148,7 @@ function setFileVisible() {
   //console.log("fileContainers", fileContainers);
   for (const container of fileContainers) {
     const link = container.querySelector('a');
-    if (link && link.getAttribute('href') === '#' + hash) {
+    if (link && link.getAttribute('href') === '#' + parent.location.hash.slice(1)) {
       let parentNode = container.parentNode;
       while (parentNode && parentNode.id !== "detNavMenu") {
         if (parentNode.tagName === 'DETAILS') {
@@ -149,6 +162,85 @@ function setFileVisible() {
     }
   }
 
+}
+
+// Add keyboard navigation functionality
+function setupKeyboardNavigation() {
+  const navTreeView = document.getElementById('divNavTreeView');
+  if (!navTreeView) return;
+
+  // Make the tree view focusable
+  navTreeView.setAttribute('tabindex', '0');
+
+  navTreeView.addEventListener('keydown', (event) => {
+    const fileLinks = navTreeView.querySelectorAll('.file-container a:first-child');
+    if (fileLinks.length === 0) return;
+
+    const currentFocused = document.activeElement;
+    let currentIndex = -1;
+
+    // Find current focused file link
+    for (let i = 0; i < fileLinks.length; i++) {
+      if (fileLinks[i] === currentFocused) {
+        currentIndex = i;
+        break;
+      }
+    }
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        if (currentIndex < fileLinks.length - 1) {
+          fileLinks[currentIndex + 1].focus();
+        } else {
+          fileLinks[0].focus(); // Wrap to first
+        }
+        break;
+
+      case 'ArrowUp':
+        event.preventDefault();
+        if (currentIndex > 0) {
+          fileLinks[currentIndex - 1].focus();
+        } else {
+          fileLinks[fileLinks.length - 1].focus(); // Wrap to last
+        }
+        break;      case 'Enter':
+        event.preventDefault();
+        if (currentFocused && currentFocused.tagName === 'A') {
+          const filePath = currentFocused.getAttribute('data-file-path');
+          console.log("Enter key pressed for file:", filePath);
+          
+          if (filePath && isViewableFile(filePath)) {
+            // For viewable files, navigate normally
+            location.hash = filePath;
+          } else {
+            // For non-viewable files, just highlight
+            const fileLinks = document.querySelectorAll('.file-container a:first-child');
+            fileLinks.forEach(link => link.classList.remove('file-selected'));
+            currentFocused.classList.add('file-selected');
+          }
+        }
+        break;
+
+      case 'Home':
+        event.preventDefault();
+        fileLinks[0].focus();
+        break;
+
+      case 'End':
+        event.preventDefault();
+        fileLinks[fileLinks.length - 1].focus();
+        break;
+    }
+  });
+}
+
+// Add helper function to determine if a file is viewable
+function isViewableFile(fileName) {
+  // Check for viewable file extensions
+  return /\.(md|txt|ini|html|htm|json|css|js|xml|LICENSE)$/i.test(fileName) ||
+         /\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(fileName) ||
+         fileName === "LICENSE";
 }
 
 function formatDisplayName(fileName, isFolder = false) {
@@ -165,3 +257,4 @@ function formatDisplayName(fileName, isFolder = false) {
 }
 
 fetchGitHubRepoContents(user, repo);
+setupKeyboardNavigation();
