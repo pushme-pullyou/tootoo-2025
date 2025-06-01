@@ -52,11 +52,19 @@
 
           </header>
 
-        </div>        <div id=divNavExtras>
+        </div>
+
+        <div id=divNavExtras>
           Text size:&nbsp;
-          <button id="btnDecreaseText" onclick="adjustTextSize(-0.1)" style="font-size: 1.2rem;" title="Decrease text size">A-</button>
-          <button id="btnIncreaseText" onclick="adjustTextSize(0.1)" style="font-size: 1.2rem;" title="Increase text size">A+</button>
-          <button id="btnResetText" onclick="resetTextSize()" style="font-size: 1rem;" title="Reset text size">A</button>
+          <button
+            onclick="document.body.style.fontSize='80%'; sumNavMenu.style.width='10rem'; document.getElementById('imgGitHub').style.width='16px';"
+            style="font-size:80%;" title="Small text">A</button>
+          <button
+            onclick="document.body.style.fontSize='100%'; sumNavMenu.style.width='13rem'; document.getElementById('imgGitHub').style.width='20px';"
+            style="font-size:100%;" title="Medium text">A</button>
+          <button
+            onclick="document.body.style.fontSize='150%'; sumNavMenu.style.width='20rem'; document.getElementById('imgGitHub').style.width='30px';"
+            style="font-size:150%;" title="Large text">A</button>
           &nbsp;
           <button style="font-size: 1.5rem;" id="btnToggleAll" onclick="toggleAllDetails()" title="Toggle all folders open or close">
           ⇅  
@@ -103,12 +111,12 @@
 
   <script src="./main.js"></script>
   <script src="./gtv/github-tree-view.js"></script>
-  <script src="./gfo/github-file-open.js"></script>  <script>
+  <script src="./gfo/github-file-open.js"></script>
+  <script>
 
-    init();    function init() {
+    init();
 
-      // Load saved text scale
-      loadTextScale();
+    function init() {
 
       document.title = COR.menuTitle;
       spnTitle.innerText = COR.menuTitle;

@@ -75,7 +75,20 @@ _"Templates Read Me" in a resizable window_
 
 * Clean-up & refactor
 
-prompt: add a function that scales the text size larger and smaller of of all the item in the menu and body, including the tree view, using two buttons, one to increase the text size and one to decrease it.
+#### prompt
+
+currently there is a toggle to open or close all the details tags in the tree view. 
+
+Improve this by adding a right-click menu to toggle between opening and closing all the sub-folders of the currently selected details tag in the tree view.
+
+
+
+#### prompt: 
+
+Add a function that scales the text size larger and smaller of of all the item in the menu and body, including the tree view, using two buttons, one to increase the text size and one to decrease it.
+
+Worked!
+
 ### 2025-05-29
 
 * 2025-05-25 ~ sort folders with files staring with dates with newest at top
