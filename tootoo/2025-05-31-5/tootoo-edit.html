@@ -90,7 +90,9 @@
       padding: 0.5rem;
       resize: both;
       width: 100%;
-    }    /* Top level summary elements start at 16px */
+    }
+
+    /* Top level summary elements start at 16px */
     div div>.folder-contents>details>summary {
       background-color: #ccc;
       font-size: 16pt;
@@ -155,25 +157,29 @@
             <h1>
               <div class="title-link">
                 <a id=aSource href="" target="_top" title="Click to go to the source code on GitHub">
-                  <img id="imgGitHub"
-                    src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
-              <a href="" title="Click this title to reload this page">
-                <span id=spnTitle></span>
-                <span id=spnVersion></span>
-              </a>
+                  <img id="imgGitHub" src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
+                <a href="" title="Click this title to reload this page">
+                  <span id=spnTitle></span>
+                  <span id=spnVersion></span>
+                </a>
               </div>
             </h1>
 
           </header>
 
-        </div>        <div id=divNavExtras>
-          Text size:&nbsp;
-          <button id="btnDecreaseText" onclick="adjustTextSize(-0.1)" style="font-size: 1.2rem;" title="Decrease text size">A-</button>
-          <button id="btnIncreaseText" onclick="adjustTextSize(0.1)" style="font-size: 1.2rem;" title="Increase text size">A+</button>
-          <button id="btnResetText" onclick="resetTextSize()" style="font-size: 1rem;" title="Reset text size">A</button>
+        </div>
+        <div id=divNavExtras>
+          Text size:
+          <button id="btnDecreaseText" onclick="adjustTextSize(-0.1)" style="font-size: 1.2rem;"
+            title="Decrease text size">A-</button>
+          <button id="btnIncreaseText" onclick="adjustTextSize(0.1)" style="font-size: 1.2rem;"
+            title="Increase text size">A+</button>
+          <button id="btnResetText" onclick="resetTextSize()" style="font-size: 1rem;"
+            title="Reset text size">A</button>
           &nbsp;
-          <button style="font-size: 1.5rem;" id="btnToggleAll" onclick="toggleAllDetails()" title="Toggle all folders open or close">
-          ⇅  
+          <button style="font-size: 1.5rem;" id="btnToggleAll" onclick="toggleAllDetails()"
+            title="Toggle all folders open or close">
+            ⇅
           </button>
           <a style="display: none;font-size: 1.5rem;" id=pencil href="./tootoo-edit.html">✎</a>
 
@@ -217,127 +223,14 @@
 
   <script src="./main.js"></script>
   <script src="./gtv-e/github-tree-view-edit.js"></script>
-  <script src="./gfo/github-file-open.js"></script>  <script>
+  <script src="./gfo/github-file-open.js"></script>
 
-    // Text scaling functionality
-    let currentScale = 1.0;
-    const MIN_SCALE = 0.5;
-    const MAX_SCALE = 2.0;
+  <script>
 
-    function adjustTextSize(increment) {
-      currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale + increment));
-      applyTextScale();
-      saveTextScale();
-    }
 
-    function resetTextSize() {
-      currentScale = 1.0;
-      applyTextScale();
-      saveTextScale();
-    }
+    init();
 
-    function applyTextScale() {
-      // Apply scale to root font size
-      document.documentElement.style.fontSize = (currentScale * 100) + '%';
-      
-      // Scale the body font size
-      document.body.style.fontSize = (currentScale * 100) + '%';
-      
-      // Scale the navigation menu width proportionally
-      const baseMenuWidth = 29; // rem (different for edit version)
-      const scaledMenuWidth = baseMenuWidth * currentScale;
-      document.documentElement.style.setProperty('--mnu-width', scaledMenuWidth + 'rem');
-      
-      // Scale the GitHub image proportionally
-      const imgGitHub = document.getElementById('imgGitHub');
-      if (imgGitHub) {
-        const baseImageSize = 20; // px
-        imgGitHub.style.width = (baseImageSize * currentScale) + 'px';
-      }
-      
-      // Scale tree view elements
-      scaleTreeViewElements();
-      
-      // Update button styles to reflect current scale
-      updateButtonStyles();
-    }
-
-    function scaleTreeViewElements() {
-      const style = document.createElement('style');
-      style.id = 'dynamic-text-scaling';
-      
-      // Remove existing dynamic style if it exists
-      const existingStyle = document.getElementById('dynamic-text-scaling');
-      if (existingStyle) {
-        existingStyle.remove();
-      }
-      
-      // Base font sizes for tree view elements
-      const baseSizes = {
-        topLevel: 16,
-        firstLevel: 14,
-        secondLevel: 12,
-        thirdLevel: 11,
-        fourthLevel: 10
-      };
-      
-      style.innerHTML = `
-        /* Dynamic text scaling for tree view */
-        div div>.folder-contents>details>summary {
-          font-size: ${baseSizes.topLevel * currentScale}pt !important;
-        }
-        
-        .folder-contents>details>.folder-contents>details>summary {
-          font-size: ${baseSizes.firstLevel * currentScale}pt !important;
-        }
-        
-        .folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-          font-size: ${baseSizes.secondLevel * currentScale}pt !important;
-        }
-        
-        .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-          font-size: ${baseSizes.thirdLevel * currentScale}pt !important;
-        }
-        
-        .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-          font-size: ${baseSizes.fourthLevel * currentScale}pt !important;
-        }
-        
-        /* Scale other text elements */
-        .aDingbat {
-          font-size: ${2 * currentScale}rem !important;
-        }
-      `;
-      
-      document.head.appendChild(style);
-    }
-
-    function updateButtonStyles() {
-      const buttons = document.querySelectorAll('#divNavExtras button');
-      buttons.forEach(button => {
-        if (button.id === 'btnDecreaseText' || button.id === 'btnIncreaseText') {
-          button.style.fontSize = (1.2 * currentScale) + 'rem';
-        } else if (button.id === 'btnResetText') {
-          button.style.fontSize = (1.0 * currentScale) + 'rem';
-        }
-      });
-    }
-
-    function saveTextScale() {
-      localStorage.setItem('tootoo-text-scale', currentScale.toString());
-    }
-
-    function loadTextScale() {
-      const saved = localStorage.getItem('tootoo-text-scale');
-      if (saved) {
-        currentScale = parseFloat(saved);
-        // Ensure the loaded value is within bounds
-        currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale));
-        applyTextScale();
-      }
-    }
-
-    init();    function init() {
+    function init() {
 
       // Load saved text scale
       loadTextScale();
@@ -370,12 +263,12 @@
 
       }
 
-        window.addEventListener("hashchange", onHashChange, false);
-        
-        location.hash = location.hash ? location.hash : COR.defaultFile;
-        
-        onHashChange();
-        
+      window.addEventListener("hashchange", onHashChange, false);
+
+      location.hash = location.hash ? location.hash : COR.defaultFile;
+
+      onHashChange();
+
     }
 
     function toggleAllDetails() {

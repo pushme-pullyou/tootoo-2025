@@ -21,15 +21,15 @@ function onHashChange() {
   //console.log("hash", hash, "url", COR.pathContent);
 
   if (/\.(md|txt|ini)$/i.test(hash)) {
-    
+
     if (hash.includes("@@")) {
 
       COR.hash = hash.slice(2);
-      
+
       console.log("notesy", COR.hash);
 
-      divMainContent.innerHTML = 
-      `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}./ggpf/github-get-put-file.html"><iframe>`;
+      divMainContent.innerHTML =
+        `<iframe id=ifr class="iframe-resize" src="${COR.pathApps}./ggpf/github-get-put-file.html"><iframe>`;
 
     } else {
 
@@ -73,20 +73,10 @@ function getHTMLfromURL(hash = COR.hash) {
   const xhr = new XMLHttpRequest();
   xhr.open("get", COR.pathContent + hash, true);
   xhr.onload = () => {
-      let txt = xhr.responseText;
-      txt = txt.replace(/<!--@@@/g, "").replace(/@@@-->/g, "");
-      divMainContent.innerHTML = new showdown.Converter(options).makeHtml(txt);
-      window.scrollTo(0, 0);
-    } else {
-      divMainContent.innerHTML = `
-        <div style="padding: 20px; color: #d73a49; background: #ffeaea; border: 1px solid #d73a49; border-radius: 4px;">
-          <h3>Error Loading File</h3>
-          <p>Failed to load file: ${hash}</p>
-          <p>Status: ${xhr.status} ${xhr.statusText}</p>
-          <button onclick="onHashChange()" style="margin-top: 10px; padding: 5px 10px;">Retry</button>
-        </div>
-      `;
-    }
+    let txt = xhr.responseText;
+    txt = txt.replace(/<!--@@@/g, "").replace(/@@@-->/g, "");
+    divMainContent.innerHTML = new showdown.Converter(options).makeHtml(txt);
+    window.scrollTo(0, 0);
   };
   xhr.onerror = () => {
     divMainContent.innerHTML = `
