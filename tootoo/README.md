@@ -78,6 +78,7 @@ _"Templates Read Me" in a resizable window_
 ##### prompt
 
 Suggest furtherI improvements, retaining the notion that the proect is intended to be as simple as possible, and given that the project operates in a known and well-maintaine environment requirea only the minimum of error checking
+
 #### 
 
 On the tree view menu, add the capability to open and view the next or previous file in the menu using the cursor keys.

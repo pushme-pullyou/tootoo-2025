@@ -41,9 +41,10 @@ function onHashChange() {
     console.log("else", COR.urlPathContent + hash);
 
     divMainContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
+
   }
 
-  setFileVisible();
+  //setFileVisible();
 
 }
 
