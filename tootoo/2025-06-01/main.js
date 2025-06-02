@@ -19,7 +19,6 @@ const COR = {
   filterFolders: CONFIG.filterFolders, //[], //[ "tootoo"],
   ignoreFiles: CONFIG.ignoreFiles, //[], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 
-
   urlBaseAPI: `https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/contents/`,
   urlSource: `https://github.com/${CONFIG.user}/${CONFIG.repo}/tree/main/`,
   urlPathApps: `https://${CONFIG.user}.github.io/tootoo/`,
