@@ -27,7 +27,6 @@ const COR = {
   urlPathContent: `https://${CONFIG.user}.github.io/${folder}/`,
   urlPushPath: `https://${CONFIG.user}.github.io/${folder}/`,
 
-
   iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
   iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
   iconInfo: `<img src="https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg">`,
