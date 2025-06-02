@@ -1,4 +1,6 @@
-const folder = CONFIG.repo.includes( "github.io") ? "" : CONFIG.repo;
+      const folder = CONFIG.repo.includes( "github.io") ? "" : CONFIG.repo;
+
+
 
 const COR = {
   
@@ -24,6 +26,7 @@ const COR = {
   urlPathApps: `https://${CONFIG.user}.github.io/tootoo/`,
   urlPathContent: `https://${CONFIG.user}.github.io/${folder}/`,
   urlPushPath: `https://${CONFIG.user}.github.io/${folder}/`,
+
 
   iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
   iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
