@@ -17,11 +17,11 @@ const COR = {
   filterFolders: CONFIG.filterFolders, //[], //[ "tootoo"],
   ignoreFiles: CONFIG.ignoreFiles, //[], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 
-  urlBaseAPI: "https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/contents/",
-  urlSource: "https://github.com/${CONFIG.user}/${CONFIG.repo}/tree/main/",
-  urlPathApps: "https://${CONFIG.user}.github.io/${CONFIG.repo}/tootoo/",
-  urlPathContent: "https://${CONFIG.user}.github.io/${CONFIG.repo}/",
-  urlPushPath: "https://${CONFIG.user}.github.io/${CONFIG.repo}/",
+  urlBaseAPI: `https://api.github.com/repos/${CONFIG.user}/${CONFIG.repo}/contents/`,
+  urlSource: `https://github.com/${CONFIG.user}/${CONFIG.repo}/tree/main/`,
+  urlPathApps: `https://${CONFIG.user}.github.io/${CONFIG.repo}/tootoo/`,
+  urlPathContent: `https://${CONFIG.user}.github.io/${CONFIG.repo}/`,
+  urlPushPath: `https://${CONFIG.user}.github.io/${CONFIG.repo}/`,
 
   iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
   iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
