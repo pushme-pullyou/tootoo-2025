@@ -4,7 +4,7 @@
 
 :root {
   font-size: 100%;
-  --mnu-width: 39rem;
+  --mnu-width: 20rem;
   --main-hue: 10;
   /* 0 to 360 10=red 120=green 240=blue */
   --margin: 0.5rem;
@@ -193,25 +193,28 @@ div div>.folder-contents>details>summary:hover {
 
 /* First level of nesting */
 .folder-contents>details>.folder-contents>details>summary {
-  font-size: 14pt;
-  margin-left: 1px;
+  background-color: #ddd;
+  font-size: 16pt;
+  margin: 1px 0 1px 2px;
 }
 
 /* Second level of nesting */
 .folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-  font-size: 12pt;
-  margin-left: 10px;
+  background-color: #e8e8e8;
+  font-size: 15pt;
+  margin-left: 1px 0 1px 10px;
 }
 
 /* Third level of nesting */
 .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-  font-size: 11pt;
+  background-color: transparent;
+  font-size: 14pt;
   margin-left: 20px;
 }
 
 /* Fourth level of nesting and beyond */
 .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-  font-size: 10pt;
+  font-size: 12pt;
   margin-left: 30px;
 }
 

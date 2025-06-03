@@ -2,7 +2,7 @@ const folder = CONFIG.repo.includes( "github.io") ? "" : CONFIG.repo;
 
 const COR = {
   
-  version: "2025-06-01",
+  version: "2025-06-03",
 
   // Used by GTV ~ github tree view
   user: CONFIG.user,
@@ -51,6 +51,7 @@ let r = document.querySelector(':root');
 r.style.setProperty('--main-hue', '120');
 r.style.setProperty('--mnu-width', '17rem');
 
+// move to separate .js file?
 
 // Text scaling functionality
 let currentScale = 1.0;
@@ -108,10 +109,10 @@ function scaleTreeViewElements() {
   // Base font sizes for tree view elements
   const baseSizes = {
     topLevel: 16,
-    firstLevel: 14,
-    secondLevel: 12,
-    thirdLevel: 11,
-    fourthLevel: 10
+    firstLevel: 15,
+    secondLevel: 14,
+    thirdLevel: 13,
+    fourthLevel: 12
   };
 
   style.innerHTML = `
