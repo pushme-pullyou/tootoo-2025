@@ -64,14 +64,12 @@ header h1 {
 
 header h1 .title-link {
   /* display: flex; */
-  align-items: center;
   padding: 8px 12px;
-  background: linear-gradient(135deg, #fff5f5 0%, var(--color-2-text) 200%);
+  background-color: var(--color-2-background);
   border-left: 4px solid var(--color-2-text);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  border-left: 4px solid var(--color-2-text);
   /* width: calc(100% - 20px); */
   margin-top: 8px;
   margin-bottom: 12px;
@@ -179,7 +177,7 @@ img {
 div div>.folder-contents>details>summary {
   font-size: 16pt;
   margin: 0 0 10px 0px;
-  background: linear-gradient(135deg, #fff5f5 0%, var(--color-2-text) 200%);
+  background-color: var(--color-2-background);
   padding: 5px 10px;
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
