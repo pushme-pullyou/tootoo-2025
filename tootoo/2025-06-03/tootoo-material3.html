@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>TooToo Material 3</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
+  <meta name="description"
+    content="TooToo 2025 with Google Material 3 design system. Uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
+  <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS,Material Design 3">
+  <meta name="version" content="Version 2025-06-02 Material 3">
+  <meta name="author" content="Theo Armour">
+  <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
+
+  <!-- Copyright 2025 Theo Armour. MIT license -->
+
+  <link rel="stylesheet" href="./style-material3.css">
+
+</head>
+
+<body>
+
+  <!-- https://github.com/showdownjs/showdown -->
+  <!-- https://showdownjs.com/docs/available-options/ -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+
+  <div id="divShowHide">
+
+    <details id="detNavMenu" open>
+
+      <summary id="sumNavMenu" class="md3-surface-container" title="click to view or hide menu">
+        <button class="md3-icon-button">☰</button>
+        <span class="md3-label-large">Menu</span>
+      </summary>
+
+      <nav id="navMenu" class="md3-surface-container">
+
+        <div id="divNavHeader" class="md3-surface-variant">
+          <header>
+            <div class="md3-title-large" style="margin-bottom: var(--md3-space-sm);">
+              <div class="title-link">
+                <a id="aSource" href="" target="_top" title="Click to go to the source code on GitHub" 
+                   class="md3-button-text">
+                  <img id="imgGitHub" src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg" 
+                       style="width: 24px; height: 24px; margin-right: var(--md3-space-xs);">
+                </a>
+                <a href="" title="Click this title to reload this page" class="md3-button-text">
+                  <span id="spnTitle" class="md3-headline-medium"></span>
+                  <span id="spnVersion" class="md3-label-small"></span>
+                </a>
+              </div>
+            </div>
+          </header>
+        </div>
+
+        <div id="divNavExtras" class="md3-surface-variant" style="padding: var(--md3-space-md);">
+          <div class="md3-label-medium" style="margin-bottom: var(--md3-space-xs); color: var(--md3-sys-color-on-surface-variant);">
+            Text Size:
+          </div>
+          <div style="display: flex; gap: var(--md3-space-xs); align-items: center;">
+            <button id="btnDecreaseText" onclick="adjustTextSize(-0.1)" class="md3-button-outlined md3-button-small"
+              title="Decrease text size">A-</button>
+            <button id="btnIncreaseText" onclick="adjustTextSize(0.1)" class="md3-button-outlined md3-button-small"
+              title="Increase text size">A+</button>
+            <button id="btnResetText" onclick="resetTextSize()" class="md3-button-text md3-button-small"
+              title="Reset text size">Reset</button>
+          </div>
+          <a style="display: none;" id="pencil" href="./tootoo-edit.html" class="md3-fab" 
+             title="Edit mode" style="position: fixed; bottom: var(--md3-space-lg); right: var(--md3-space-lg);">
+            ✎
+          </a>
+        </div>
+
+        <hr style="border: none; height: 1px; background-color: var(--md3-sys-color-outline-variant); margin: var(--md3-space-md) 0;">
+
+        <div id="divNavTreeView" style="padding: var(--md3-space-md);"></div>
+
+        <div id="divNavFooter" class="md3-surface-variant" style="margin-top: auto; padding: var(--md3-space-md);">
+          <footer>
+            <div id="divLog" class="md3-body-small" style="color: var(--md3-sys-color-on-surface-variant);"></div>
+            <hr style="border: none; height: 1px; background-color: var(--md3-sys-color-outline-variant); margin: var(--md3-space-md) 0;">
+            <center>
+              <a id="aIcon" class="md3-icon-button" href="javascript:spnTitle.scrollIntoView();" 
+                 title="Scroll to top" style="color: var(--md3-sys-color-primary);">
+                ❦
+              </a>
+            </center>
+          </footer>
+        </div>
+
+      </nav>
+
+    </details>
+
+  </div>
+
+  <main id="main" class="md3-surface">
+
+    <div id="divMessage" class="md3-surface-container" 
+         style="padding: var(--md3-space-md); margin-bottom: var(--md3-space-md); border-radius: var(--md3-shape-corner-medium);">
+      <span class="md3-body-medium" style="color: var(--md3-sys-color-on-surface-variant);">
+        TooToo Material 3 - GitHub Content Manager
+      </span>
+    </div>
+
+    <div id="divMainContent" class="md3-surface-container" 
+         style="padding: var(--md3-space-lg); border-radius: var(--md3-shape-corner-medium); min-height: 400px;">
+      <!-- Main content will be loaded here -->
+    </div>
+
+  </main>
+
+  <!-- Floating Action Button for quick actions -->
+  <div id="fabContainer" style="position: fixed; bottom: var(--md3-space-lg); right: var(--md3-space-lg); display: flex; flex-direction: column; gap: var(--md3-space-sm);">
+    <button id="fabScrollTop" class="md3-fab" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" 
+            title="Scroll to top" style="display: none;">
+      ↑
+    </button>
+  </div>
+
+  <!-- Snackbar for notifications -->
+  <div id="snackbar" class="md3-snackbar" style="display: none;">
+    <div class="md3-snackbar-content">
+      <span id="snackbarMessage" class="md3-body-medium"></span>
+      <button id="snackbarAction" class="md3-button-text" style="margin-left: auto;">
+        ✕
+      </button>
+    </div>
+  </div>
+
+  <script src="../config.js"></script>
+  <script src="./main.js"></script>
+  <script src="./gtv/github-tree-view.js"></script>
+  <script src="./gfo/github-file-open.js"></script>
+
+  <script>
+
+    init();
+
+    function init() {
+
+      // Load saved text scale
+      loadTextScale();
+
+      // Set up pencil edit link
+      pencil.href = COR.pathApps + "tootoo-edit.html";
+
+      // Set document properties
+      document.title = COR.menuTitle + " Material 3";
+      spnTitle.innerText = COR.menuTitle;
+      spnVersion.innerText = document.querySelector("[ name=version ]").content;
+      document.getElementById("aSource").href = COR.urlSource;
+      main.title = document.querySelector("[ name=version ]").content;
+
+      // Handle URL routing
+      if (location.protocol === "https:") {
+        window.history.pushState("", "", COR.urlPushPath + location.hash);
+      }
+
+      // Set up authentication
+      COR.accessToken = localStorage.getItem("githubAccessToken") || "";
+      if (COR.accessToken) { 
+        pencil.style.display = "flex"; 
+        showSnackbar("Edit mode available", "Dismiss");
+      }
+
+      // Handle responsive layout
+      handleResponsiveLayout();
+
+      // Set up event listeners
+      setupEventListeners();
+
+      // Initialize routing
+      window.addEventListener("hashchange", onHashChange, false);
+      location.hash = location.hash ? location.hash : COR.defaultFile;
+      onHashChange();
+
+    }
+
+    function handleResponsiveLayout() {
+      if (window.innerWidth < 800 || window.innerHeight < 500) {
+        // Mobile layout
+        sumNavMenu.hidden = false;
+        detNavMenu.open = false;
+        main.style.left = "0";
+        main.style.width = "100%";
+        main.style.padding = "var(--md3-space-md)";
+      } else {
+        // Desktop layout
+        const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width');
+        detNavMenu.style.width = value;
+        detNavMenu.style.maxWidth = "50%";
+        detNavMenu.open = true;
+        sumNavMenu.hidden = true;
+        main.style.left = "calc(var(--mnu-width) + var(--md3-space-md))";
+        main.style.width = "calc(100vw - var(--mnu-width) - var(--md3-space-lg))";
+      }
+    }
+
+    function setupEventListeners() {
+      // Window resize handler
+      window.addEventListener('resize', handleResponsiveLayout);
+
+      // Scroll handler for FAB
+      window.addEventListener('scroll', function() {
+        const fabScrollTop = document.getElementById('fabScrollTop');
+        if (window.scrollY > 200) {
+          fabScrollTop.style.display = 'flex';
+        } else {
+          fabScrollTop.style.display = 'none';
+        }
+      });
+
+      // Snackbar dismiss
+      document.getElementById('snackbarAction').addEventListener('click', hideSnackbar);
+
+      // Keyboard navigation
+      document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+          switch(e.key) {
+            case 'k': // Ctrl+K for search (if implemented)
+              e.preventDefault();
+              // Future: implement search functionality
+              break;
+            case 'e': // Ctrl+E for edit mode
+              if (COR.accessToken && pencil.style.display !== 'none') {
+                e.preventDefault();
+                window.location.href = pencil.href;
+              }
+              break;
+          }
+        }
+      });
+
+      // Menu toggle enhancement
+      sumNavMenu.addEventListener('click', function() {
+        // Add ripple effect
+        addRippleEffect(this);
+      });
+    }
+
+    // Material 3 Snackbar functionality
+    function showSnackbar(message, actionText = null) {
+      const snackbar = document.getElementById('snackbar');
+      const messageEl = document.getElementById('snackbarMessage');
+      const actionEl = document.getElementById('snackbarAction');
+      
+      messageEl.textContent = message;
+      if (actionText) {
+        actionEl.textContent = actionText;
+        actionEl.style.display = 'block';
+      } else {
+        actionEl.style.display = 'none';
+      }
+      
+      snackbar.style.display = 'flex';
+      snackbar.classList.add('md3-snackbar-show');
+      
+      // Auto-hide after 4 seconds
+      setTimeout(() => {
+        hideSnackbar();
+      }, 4000);
+    }
+
+    function hideSnackbar() {
+      const snackbar = document.getElementById('snackbar');
+      snackbar.classList.remove('md3-snackbar-show');
+      setTimeout(() => {
+        snackbar.style.display = 'none';
+      }, 300);
+    }
+
+    // Material 3 Ripple effect
+    function addRippleEffect(element) {
+      const ripple = document.createElement('span');
+      const rect = element.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = event.clientX - rect.left - size / 2;
+      const y = event.clientY - rect.top - size / 2;
+      
+      ripple.style.width = ripple.style.height = size + 'px';
+      ripple.style.left = x + 'px';
+      ripple.style.top = y + 'px';
+      ripple.classList.add('ripple');
+      
+      element.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    }
+
+    // Enhanced text scaling with Material 3 transitions
+    function adjustTextSize(delta) {
+      const currentScale = parseFloat(localStorage.getItem('textScale') || '1');
+      const newScale = Math.max(0.5, Math.min(2, currentScale + delta));
+      localStorage.setItem('textScale', newScale.toString());
+      applyTextScale(newScale);
+      
+      showSnackbar(`Text size: ${Math.round(newScale * 100)}%`);
+    }
+
+    function resetTextSize() {
+      localStorage.setItem('textScale', '1');
+      applyTextScale(1);
+      showSnackbar('Text size reset to 100%');
+    }
+
+    function loadTextScale() {
+      const scale = parseFloat(localStorage.getItem('textScale') || '1');
+      applyTextScale(scale);
+    }
+
+    function applyTextScale(scale) {
+      document.body.style.transform = `scale(${scale})`;
+      document.body.style.transformOrigin = 'top left';
+      document.body.style.transition = 'transform 0.2s ease';
+      
+      // Adjust navigation width for scaling
+      if (scale !== 1) {
+        const navMenu = document.getElementById('navMenu');
+        if (navMenu) {
+          navMenu.style.width = `${280 * scale}px`;
+        }
+      }
+    }
+
+    // Override the original onHashChange function to add Material 3 loading states
+    function onHashChange() {
+      // Show loading state
+      const mainContent = document.getElementById('divMainContent');
+      mainContent.innerHTML = `
+        <div class="md3-loading-container" style="text-align: center; padding: var(--md3-space-xl);">
+          <div class="md3-loading-spinner" style="margin-bottom: var(--md3-space-md);"></div>
+          <div class="md3-body-large">Loading content...</div>
+        </div>
+      `;
+      
+      // Call the original hash change handler
+      if (typeof window.originalOnHashChange === 'function') {
+        window.originalOnHashChange();
+      } else if (typeof GFO !== 'undefined' && typeof GFO.onHashChange === 'function') {
+        GFO.onHashChange();
+      }
+    }
+
+  </script>
+
+  <style>
+    /* Material 3 Snackbar styles */
+    .md3-snackbar {
+      position: fixed;
+      bottom: var(--md3-space-lg);
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background-color: var(--md3-sys-color-inverse-surface);
+      color: var(--md3-sys-color-inverse-on-surface);
+      border-radius: var(--md3-shape-corner-small);
+      box-shadow: var(--md3-elevation-3);
+      z-index: 1000;
+      transition: transform 0.3s ease;
+      min-width: 300px;
+      max-width: 600px;
+    }
+    
+    .md3-snackbar.md3-snackbar-show {
+      transform: translateX(-50%) translateY(0);
+    }
+    
+    .md3-snackbar-content {
+      display: flex;
+      align-items: center;
+      padding: var(--md3-space-md) var(--md3-space-lg);
+      gap: var(--md3-space-md);
+    }
+    
+    /* Loading spinner */
+    .md3-loading-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--md3-sys-color-outline-variant);
+      border-top: 3px solid var(--md3-sys-color-primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Ripple effect */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+    
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+    
+    /* Enhanced navigation styling */
+    #navMenu {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    
+    #divNavTreeView {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    /* Improved responsive behavior */
+    @media (max-width: 800px) {
+      #fabContainer {
+        bottom: var(--md3-space-md);
+        right: var(--md3-space-md);
+      }
+      
+      .md3-snackbar {
+        left: var(--md3-space-md);
+        right: var(--md3-space-md);
+        transform: translateY(100px);
+        max-width: none;
+      }
+      
+      .md3-snackbar.md3-snackbar-show {
+        transform: translateY(0);
+      }
+    }
+  </style>
+
+</body>
+
+</html>
