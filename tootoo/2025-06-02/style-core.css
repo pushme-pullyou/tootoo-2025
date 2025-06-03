@@ -4,7 +4,7 @@
 
 :root {
   font-size: 100%;
-  --mnu-width: 19rem;
+  --mnu-width: 39rem;
   --main-hue: 10;
   /* 0 to 360 10=red 120=green 240=blue */
   --margin: 0.5rem;
@@ -31,8 +31,6 @@
   box-sizing: border-box;
   font-family: "Lato", sans-serif;
   scroll-behavior: smooth;
-  /* margin: 0; */
-  /* padding: 0; */
 }
 
 /* html tags in abc order */
@@ -43,7 +41,6 @@ body {
   margin: 0;
   /* overflow: hidden; */
 }
-
 
 a {
   color: var(--color-2-text);
@@ -66,7 +63,7 @@ header h1 {
 }
 
 header h1 .title-link {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   padding: 8px 12px;
   background: linear-gradient(135deg, #fff5f5 0%, var(--color-2-text) 200%);
@@ -75,7 +72,7 @@ header h1 .title-link {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
   border-left: 4px solid var(--color-2-text);
-  width: calc(100% - 20px);
+  /* width: calc(100% - 20px); */
   margin-top: 8px;
   margin-bottom: 12px;
   text-decoration: none;
@@ -110,22 +107,96 @@ img {
   text-decoration: none;
 }
 
-.iframe-resize {
-  height: 95vh;
-  overflow: hidden;
-  padding: 0.5rem;
-  resize: both;
-  width: 100%;
+
+/* IDs in alphabetical order */
+
+#imgGitHub {
+  /* GitHub icon vertical alignment */
+  vertical-align: middle;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 2px;
+  margin-right: 8px;
 }
 
 
-/* Tree View Mene Specials */
+/* Navigation from top to bottom */
+
+#detNavMenu {
+  z-index: 1;
+}
+
+#sumNavMenu {
+  font-size: 120%;
+  padding: var(--margin);
+  /* display: none; */
+  background-color: var(--color-1-background);
+  border: 1px solid #8a8;
+  color: var(--color-3-text);
+  border-radius: var(--margin);
+  cursor: pointer;
+  left: var(--margin);
+  outline: none;
+  /* padding: var( --margin); */
+  padding: 0 0.5rem 0 0.2rem;
+  position: fixed;
+  top: 0;
+  z-index: 2;
+}
+
+#navMenu {
+  background-color: var(--color-1-background);
+  border: 1px solid #8a8;
+  border-radius: var(--margin);
+  left: 0.25rem;
+  max-height: calc(100vh - 2rem);
+  padding: var(--margin);
+  position: fixed;
+  top: 0.5rem;
+  overflow: auto;
+  resize: both;
+  width: var(--mnu-width);
+  z-index: 1;
+}
+
+
+/* Tree View Menu Specials */
+
+#divNavTreeView a:focus {
+  /* Specific styling for focused navigation links */
+  background-color: var(--color-active) !important;
+  color: var(--color-2-text) !important;
+  text-decoration: underline !important;
+  outline: 2px solid var(--color-active);
+  outline-offset: 2px;
+}
+
+/* Top level summary elements start at 16pt */
+div div>.folder-contents>details>summary {
+  font-size: 16pt;
+  margin: 0 0 10px 0px;
+  background: linear-gradient(135deg, #fff5f5 0%, var(--color-2-text) 200%);
+  padding: 5px 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--color-2-text);
+}
+
+div div>.folder-contents>details>summary:hover {
+  background: linear-gradient(135deg, #ffe0e0 0%, var(--color-2-text) 300%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
 /* First level of nesting */
 .folder-contents>details>.folder-contents>details>summary {
   font-size: 14pt;
   margin-left: 1px;
-
 }
 
 /* Second level of nesting */
@@ -150,103 +221,12 @@ img {
   margin: 0 0 6px 0;
 }
 
-/* Top level summary elements start at 16pt */
-div div>.folder-contents>details>summary {
-  font-size: 16pt;
-  margin: 0 0 10px 0px;
-  background: linear-gradient(135deg, #fff5f5 0%, var(--color-2-text) 200%);
-  padding: 5px 10px;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  border-left: 4px solid var(--color-2-text);
-}
-
-div div>.folder-contents>details>summary:hover {
-  background: linear-gradient(135deg, #ffe0e0 0%, var(--color-2-text) 300%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-
-/* IDs in alphabetical order */
-
-#imgGitHub {
-  /* GitHub icon vertical alignment */
-  vertical-align: middle;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-  background-color: white;
-  padding: 2px;
-  margin-right: 8px;
-}
-
-#spnTitle {
-  font-size: 1.1em;
-  font-weight: bold;
-  margin-left: 5px;
-}
-
-/* Navigation from top to bottom */
-
-#detNavMenu {
-  z-index: 1;
-}
-
-#sumNavMenu {
-  /* display: none; */
-  background-color: var(--color-1-background);
-  border: 1px solid #8a8;
-  color: var(--color-3-text);
-  border-radius: var(--margin);
-  cursor: pointer;
-  left: var(--margin);
-  outline: none;
-  /* padding: var( --margin); */
-  padding: 0 0.5rem 0 0.2rem;
-  position: fixed;
-  top: 0
-    /* var(--margin)*/
-  ;
-
-  z-index: 2;
-}
-
-#navMenu {
-  /* padding: 0 var( --margin); */
-  /* width */
-  background-color: var(--color-1-background);
-  border: 1px solid #8a8;
-  border-radius: var(--margin);
-  left: 0.25rem;
-  max-height: calc(100vh - 2rem);
-  padding: var(--margin);
-  position: fixed;
-  top: 0.5rem;
-  overflow: auto;
-  resize: both;
-  width: var(--mnu-width);
-  z-index: 1;
-}
-
-#divNavTreeView a:focus {
-  /* Specific styling for focused navigation links */
-  background-color: var(--color-active) !important;
-  color: var(--color-2-text) !important;
-  text-decoration: underline !important;
-  outline: 2px solid var(--color-active);
-  outline-offset: 2px;
-}
-
 /* Content */
 
 #main {
   border: 0px solid red;
   /* height: 100vh; */
-  left: calc(var(--mnu-width) + 5rem);
+  left: calc(var(--mnu-width) + 10rem);
   max-width: 30rem;
   position: absolute;
   top: 0;
@@ -320,55 +300,35 @@ body::-webkit-scrollbar-thumb,
 /* Mobile */
 
 @media all and (max-width: 800px) {
-  
+
   #main {
     left: 0;
     padding: var(--margin);
-    width: 100%;
+    /* width: 100%; */
   }
-
-  #detNavMenu {}
-
-  #divHeader {}
 
   #navMenu {
-    margin-top: 1.5rem;
     display: block;
+    margin-top: 1.5rem;
   }
 
-  #spnMenuHelp {
-    display: none;
-  }
-
-  #sumNavMenu {
-    font-size: 120%;
-    padding: var(--margin);
-    width: 3.5rem;
-  }
 }
 
 @media all and (max-height: 500px) {
+
   #main {
     left: 0;
     padding: var(--margin);
-    width: 100%;
+    /* width: 100%; */
+  }
+
+  #navMenu {
+    display: block;
+    margin-top: 1.5rem;
   }
 
   header h1 {
     margin-top: 1.5rem;
   }
 
-  /* #navMenu {
-		display: block;
-	} */
-  #spnMenuHelp {
-    display: none;
-  }
-
-  #sumNavMenu {
-    font-size: 120%;
-    padding: var(--margin);
-    width: 4rem;
-  }
 }
-

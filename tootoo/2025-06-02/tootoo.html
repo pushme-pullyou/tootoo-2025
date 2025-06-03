@@ -16,6 +16,8 @@
 
   <link id=CORstyle rel="stylesheet" href="style-core.css">
 
+  <!-- <link rel="stylesheet" href="./style-material3.css"> -->
+
 </head>
 
 <body>
@@ -27,13 +29,13 @@
 
   <div id=divShowHide>
 
-    <details id=detNavMenu class="gmd-4" open >
+    <details id=detNavMenu open>
 
-      <summary id=sumNavMenu class="summary-nav gmd-1" title="click to view or hide menu">
+      <summary id=sumNavMenu title="click to view or hide menu">
         ☰
       </summary>
 
-      <nav id="navMenu" class="gmd-4">
+      <nav id="navMenu">
 
         <div id=divNavHeader>
 
@@ -131,22 +133,21 @@
       COR.accessToken = localStorage.getItem("githubAccessToken") || "";
       if (COR.accessToken) { pencil.style.display = "block"; }
 
-      const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width');
-      console.log("value", value);
-
       if (window.innerWidth < 800 || window.innerHeight < 500) {
 
         sumNavMenu.hidden = false;
         detNavMenu.open = false;
-        main.style.left = "0";
-
+        
       } else {
 
+        const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width');
+        //console.log( "value", value );
         detNavMenu.style.width = value;
         detNavMenu.style.maxWidth = "50%";
         detNavMenu.open = true;
         //navMenu.hidden = false;
         sumNavMenu.hidden = true;
+        main.style.left = "22rem";
 
       }
 

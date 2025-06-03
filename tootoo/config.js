@@ -6,6 +6,7 @@ const CONFIG = {
 
     menuTitle: "TooToo 2025",
     menuTitleEdit: "TooToo Edit",
+    baseMenuWidth: "15",
 
     defaultFile: "README.md",
     defaultFileEdit: "@@README.md",

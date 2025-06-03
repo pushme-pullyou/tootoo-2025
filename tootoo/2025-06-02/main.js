@@ -77,7 +77,7 @@ function applyTextScale() {
   document.body.style.fontSize = (currentScale * 100) + '%';
 
   // Scale the navigation menu width proportionally
-  const baseMenuWidth = 19; // rem
+  const baseMenuWidth = COR.baseMenuWidth; // rem
   const scaledMenuWidth = baseMenuWidth * currentScale;
   document.documentElement.style.setProperty('--mnu-width', scaledMenuWidth + 'rem');
 
