@@ -133,7 +133,6 @@ img {
 
 #detNavMenu {
   z-index: 1;
-  max-width: var(--mnu-width);
 }
 
 #sumNavMenu {
