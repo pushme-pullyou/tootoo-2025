@@ -4,14 +4,17 @@ const CONFIG = {
     repo: "tootoo-2025",
     branch: "main",
 
-    menuTitle: "TooToo 2025",
-    menuTitleEdit: "TooToo Edit",
-    baseMenuWidth: "15",
+    filterFolders: [], //[ "tootoo"],
+    ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
 
     defaultFile: "README.md",
     defaultFileEdit: "@@README.md",
 
-    filterFolders: [], //[ "tootoo"],
-    ignoreFiles: [], //[ "404.html", "favicon.ico", "index.html", "LICENSE", "readme.html" ],
+    menuTitle: "TooToo 2025",
+    menuTitleEdit: "TooToo Edit",
+
+    /* 0 to 360 10=red 120=green 240=blue */
+    mainHue: 10,
+    baseMenuWidth: 15,
 
 }
