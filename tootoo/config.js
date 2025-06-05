@@ -14,7 +14,7 @@ const CONFIG = {
     menuTitleEdit: "TooToo Edit",
 
     /* 0 to 360 10=red 120=green 240=blue */
-    mainHue: 10,
+    mainHue: 120,
     baseMenuWidth: 15,
 
 }
