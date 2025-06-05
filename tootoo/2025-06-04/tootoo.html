@@ -8,7 +8,7 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="Version 2025-06-03">
+  <meta name="version" content="Version 2025-06-04">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
@@ -16,7 +16,7 @@
 
   <link id=CORstyle rel="stylesheet" href="style-core.css">
 
-  <!-- <link rel="stylesheet" href="./style-material3.css"> -->
+
 
 </head>
 
@@ -26,6 +26,10 @@
   <!-- https://showdownjs.com/docs/available-options/ -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+  <script src="../config.js"></script>
+  <script src="./main.js"></script>
+  <script src="./gtv/github-tree-view.js"></script>
+  <script src="./gfo/github-file-open.js"></script>
 
   <div id=divShowHide>
 
@@ -98,15 +102,10 @@
 
   <main id=main>
 
-    <div id="divMessage">Version: 2025-06-03</div>
+    <div id="divMessage">Version: 2025-06-04</div>
     <div id="divMainContent"></div>
 
   </main>
-
-  <script src="../config.js"></script>
-  <script src="./main.js"></script>
-  <script src="./gtv/github-tree-view.js"></script>
-  <script src="./gfo/github-file-open.js"></script>
 
   <script>
 
@@ -115,7 +114,7 @@
     function init() {
 
       // Load saved text scale
-      loadTextScale();
+      loadTextScale(); //main.js
 
       pencil.href = COR.pathApps + "tootoo-edit.html";
 
@@ -124,40 +123,34 @@
       document.getElementById("aSource").href = COR.urlSource;
       main.title = document.querySelector("[ name=version ]").content;
 
+      COR.accessToken = localStorage.getItem("githubAccessToken") || "";
+      if (COR.accessToken) { pencil.style.display = "block"; }
+
+      if (window.innerWidth < 800 || window.innerHeight < 500) {
+
+        detNavMenu.open = false;
+        sumNavMenu.hidden = false;
+
+      } else {
+
+        detNavMenu.open = true;
+        sumNavMenu.hidden = true;
+
+      }
+
       if (location.protocol === "https:") {
 
         window.history.pushState("", "", COR.urlPushPath + location.hash);
 
       }
 
-      COR.accessToken = localStorage.getItem("githubAccessToken") || "";
-      if (COR.accessToken) { pencil.style.display = "block"; }
-
-      if (window.innerWidth < 800 || window.innerHeight < 500) {
-
-        sumNavMenu.hidden = false;
-        detNavMenu.open = false;
-        main.style.width = "100%";
-        
-      } else {
-
-        const value = window.getComputedStyle(document.documentElement).getPropertyValue('--mnu-width');
-        //console.log( "value", value );
-        detNavMenu.style.width = value;
-        detNavMenu.style.maxWidth = "50%";
-        detNavMenu.open = true;
-        //navMenu.hidden = false;
-        sumNavMenu.hidden = true;
-        main.style.left = "22rem";
-
-
-      }
+      // onHashChange > github-file-open.js
 
       window.addEventListener("hashchange", onHashChange, false);
 
       location.hash = location.hash ? location.hash : COR.defaultFile;
 
-      onHashChange();
+      onHashChange()
 
     }
 

@@ -4,9 +4,10 @@
 
 :root {
   font-size: 100%;
-  --mnu-width: 20rem;
+  /* updated at run time ~ see config.sys */
+  --mnu-width: 20rem; 
+  /*  updated at run time ~ 0 to 360 10=red 120=green 240=blue */
   --main-hue: 10;
-  /* 0 to 360 10=red 120=green 240=blue */
   --margin: 0.5rem;
   --saturation: 89%;
   --lightness0: 1%;
@@ -36,10 +37,9 @@
 /* html tags in abc order */
 
 body {
-  background-color: var(--color-0-background);
+  /* background-color: var(--color-0-background); */
   color: var(--color-1-text);
-  margin: 0;
-  /* overflow: hidden; */
+  /* margin: 0; */
 }
 
 a {
@@ -63,16 +63,14 @@ header h1 {
 }
 
 header h1 .title-link {
-  /* display: flex; */
   background-color: var(--color-2-background);
   border-left: 4px solid var(--color-2-text);
   border-radius: 6px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  /* width: calc(100% - 20px); */
   cursor: pointer;
   margin-top: 8px;
   margin-bottom: 12px;
-  padding: 8px 12px;
+  padding: 8px 12px; 
   text-decoration: none;
   transition: all 0.3s ease;
 }
@@ -83,10 +81,10 @@ header h1 .title-link a {
 }
 
 header h1 .title-link:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   background: linear-gradient(135deg, #ffe0e0 0%, var(--color-2-text) 200%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   text-decoration: none;
+  transform: translateY(-2px);
 }
 
 img {
@@ -116,16 +114,15 @@ img {
 /* IDs in alphabetical order */
 
 #imgGitHub {
-  /* GitHub icon vertical alignment */
-  vertical-align: middle;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
   background-color: white;
-  padding: 2px;
+  border-radius: 50%;
+  /* box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); */
+  height: 25px;
   margin-right: 8px;
+  padding: 2px;
+  /* position: relative; */
+  vertical-align: middle;
+  width: 25px;
 }
 
 
@@ -157,7 +154,7 @@ img {
   border-radius: var(--margin);
   left: var(--margin);
   max-height: calc(100vh - 2rem);
-  max-width: 30%;
+  /* max-width: 35%; */
   padding: var(--margin);
   overflow: auto;
   position: fixed;
@@ -233,8 +230,8 @@ div div>.folder-contents>details>summary:hover {
 #main {
   border: 0px solid red;
   /* height: 100vh; */
-  left: calc(var(--mnu-width) + 10rem);
-  /* max-width: 30rem; */
+  left: calc(var(--mnu-width) + 5rem);
+  /*max-width: 30rem;*/
   position: absolute;
   top: 0;
   /* width: calc(100% - var(--mnu-width) - 2rem); */
@@ -318,6 +315,7 @@ body::-webkit-scrollbar-thumb,
     display: block;
     margin-top: 1.5rem;
     max-width: 75%;
+    width: var(--mnu-width);
   }
 
 }
@@ -334,6 +332,7 @@ body::-webkit-scrollbar-thumb,
     display: block;
     margin-top: 1.5rem;
     max-width: 75%;
+    width: var(--mnu-width);
   }
 
 }

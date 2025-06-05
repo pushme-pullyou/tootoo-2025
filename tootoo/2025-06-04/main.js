@@ -2,7 +2,7 @@ const folder = CONFIG.repo.includes( "github.io") ? "" : CONFIG.repo;
 
 const COR = {
   
-  version: "2025-06-03",
+  version: "2025-06-04",
 
   // Used by GTV ~ github tree view
   user: CONFIG.user,
@@ -26,11 +26,11 @@ const COR = {
   urlPushPath: `https://${CONFIG.user}.github.io/${folder}/`,
 
   iconExternalLink: "<img src='https://pushme-pullyou.github.io/assets/svg/icon-external-link.svg' width=16 >",
-  iconGitHub: `<img src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg">`,
-  iconInfo: `<img src="https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg">`,
-  iconOpenClose: `<img src="https://pushme-pullyou.github.io/assets/svg/open-close-toggle.svg">`,
-  iconPencil: `<img src="https://pushme-pullyou.github.io/assets/svg/https://pushme-pullyou.github.io/assets/svg/mark-github.svg" >`,
-  iconRepo: `<img src=https://pushme-pullyou.github.io/assets/svg/dingbat.svg">`,
+  iconGitHub: "https://pushme-pullyou.github.io/assets/svg/mark-github.svg",
+  iconInfo: "https://pushme-pullyou.github.io/assets/svg/noun_Information_585560.svg",
+  iconOpenClose: "https://pushme-pullyou.github.io/assets/svg/open-close-toggle.svg",
+  iconPencil: "https://pushme-pullyou.github.io/assets/svg/noun_pencil_803320.svg",
+  iconRepo: "https://pushme-pullyou.github.io/assets/svg/dingbat.svg"
 
 }
 
@@ -49,14 +49,24 @@ if (location.protocol === "https:") {
 /* 0 to 360 10=red 120=green 240=blue */
 let r = document.querySelector(':root');
 r.style.setProperty('--main-hue', CONFIG.mainHue);
-r.style.setProperty('--mnu-width', CONFIG.baseMenuWidth);
+r.style.setProperty('--mnu-width', CONFIG.baseMenuWidth + 'rem' );
 
-// move to separate .js file?
+// move below to separate .js file?
 
 // Text scaling functionality
 let currentScale = 1.0;
 const MIN_SCALE = 0.5;
 const MAX_SCALE = 2.0;
+
+function loadTextScale() {
+  const saved = localStorage.getItem('tootoo-text-scale');
+  if (saved) {
+    currentScale = parseFloat(saved);
+    // Ensure the loaded value is within bounds
+    currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale));
+    applyTextScale();
+  }
+}
 
 function adjustTextSize(increment) {
   currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale + increment));
@@ -78,7 +88,7 @@ function applyTextScale() {
   document.body.style.fontSize = (currentScale * 100) + '%';
 
   // Scale the navigation menu width proportionally
-  const baseMenuWidth = COR.baseMenuWidth; // rem
+  const baseMenuWidth = CONFIG.baseMenuWidth; // rem
   const scaledMenuWidth = baseMenuWidth * currentScale;
   document.documentElement.style.setProperty('--mnu-width', scaledMenuWidth + 'rem');
 
@@ -161,12 +171,4 @@ function saveTextScale() {
   localStorage.setItem('tootoo-text-scale', currentScale.toString());
 }
 
-function loadTextScale() {
-  const saved = localStorage.getItem('tootoo-text-scale');
-  if (saved) {
-    currentScale = parseFloat(saved);
-    // Ensure the loaded value is within bounds
-    currentScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, currentScale));
-    applyTextScale();
-  }
-}
+
