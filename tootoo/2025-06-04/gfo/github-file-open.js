@@ -1,4 +1,3 @@
-
 function onHashChange() {
 
   COR.hash = hash = location.hash.slice(1);
@@ -16,6 +15,11 @@ function onHashChange() {
     hash = COR.defaultFile;
     location.hash = hash;
     return;
+  }
+
+  // Update breadcrumb navigation
+  if (typeof updateBreadcrumb === 'function') {
+    updateBreadcrumb(hash);
   }
 
   //console.log("hash", hash, "url", COR.pathContent);
