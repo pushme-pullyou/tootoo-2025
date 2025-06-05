@@ -9,7 +9,21 @@ const baseUrl = 'https://api.github.com';
 
 async function fetchGitHubRepoContents(user, repo) {
 
-  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`);  //{ headers }
+  // Get GitHub access token for authorization
+  const accessToken = localStorage.getItem("githubAccessToken") || COR.accessToken;
+  
+  const headers = {};
+  if (accessToken) {
+    headers['Authorization'] = `token ${accessToken}`;
+  }
+
+  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`, { headers });
+  
+  if (!response.ok) {
+    console.error(`GitHub API request failed: ${response.status} ${response.statusText}`);
+    throw new Error(`Failed to fetch repository contents: ${response.status}`);
+  }
+  
   const { tree } = await response.json();
   const div = document.getElementById('divNavTreeView');
 
@@ -119,6 +133,7 @@ async function fetchGitHubRepoContents(user, repo) {
     });
 
     return folderContents;
+
   };
 
   let topLevelItems = tree.filter(item => {
