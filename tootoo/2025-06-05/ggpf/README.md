@@ -17,6 +17,7 @@
 
 ## Reminders
 
+* Notesy expects the full URL
 * Runs on its own and in an iframe
 * Inits if it's on top; waits if it's in an iframe
 * Its location.hash is all it needs
