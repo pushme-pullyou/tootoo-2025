@@ -135,13 +135,9 @@
 
 		// [X]MLHTTPRequest [G]itHub [P]ush (COR)
 
-		if (window.self === window.top) {
+		init();
 
-			init();
-
-		}
-
-		function init(hash = COR.urlBaseAPI + COR.defaultFileEdit) {
+		function init(hash = COR.defaultFileEdit) {
 
 			aPath.title = document.head.querySelector("[ name=date ]").content;
 
@@ -172,11 +168,11 @@
 			}
 		}
 
-		function onHashChange() {
+		function onHashChange(event) {
 
-			console.log("location.hash ", location.hash);
+			console.log("parent.location.hash ", parent.location.hash);
 
-			let hash = location.hash ? location.hash.slice(1) : COR.defaultFileEdit;
+			let hash = parent.location.hash ? parent.location.hash.slice(1) : COR.defaultFileEdit;
 
 			hash = hash.replace(/@@/, "");
 
@@ -195,8 +191,8 @@
 
 		function checkForChange(event) {
 
-			console.log("Content", divContent.innerText.length, "COR", COR.githubContent.length);
-
+			console.log( "Content", divContent.innerText.length,"COR", COR.githubContent.length );
+		
 			if (divContent.innerText === COR.githubContent) { return; } // Compare with githubContent
 
 			//if (!COR.url.endsWith("md")) return;

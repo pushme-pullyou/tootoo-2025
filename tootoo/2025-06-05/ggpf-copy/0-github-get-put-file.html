@@ -70,7 +70,7 @@
 
 	<main id=main>
 
-		<div id="divMessage">2025-06-04</div>
+		<div id="divMessage">2025-06-03</div>
 		<div id="divMainContent">
 			<iframe id=ifr src="github-get-put-file.html"></iframe>
 		</div>
@@ -89,7 +89,7 @@
 
 			window.addEventListener("hashchange", onHashChange, false);
 
-			location.hash = location.hash ? location.hash : COR.urlBaseAPI + COR.defaultFileEdit;
+			location.hash = location.hash ? location.hash : COR.defaultFileEdit;
 
 			onHashChange();
 
@@ -97,11 +97,8 @@
 
 		function onHashChange() {
 
-			ifr.onload = () => { ifr.contentWindow.init( "https://api.github.com/repos/theo-armour/pages/contents/README.md" ); };
+			ifr.contentWindow.location.hash = location.hash.slice(1);
 
-			//ifr.onLoad( ifr.contentWindow.init() );
-			//ifr.contentWindow.location.hash = location.hash.slice(1);
-console.log( "hash", ifr.contentWindow.location.hash );
 		}
 
 		test1 = () => location.hash = "@@README.md";
