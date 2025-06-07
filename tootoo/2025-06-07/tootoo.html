@@ -109,6 +109,8 @@
 
     function init() {
 
+      COR.divContent = divIframe1;
+
       document.title = COR.menuTitle;
       aTitle.innerText = COR.menuTitle;
       document.getElementById("aSource").href = COR.urlSource;
@@ -165,6 +167,8 @@
       
       location.hash = location.hash ? location.hash : COR.defaultFile;
       
+      COR.divContent = divMainContent;
+
       onHashChange();
 
     }
