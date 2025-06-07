@@ -195,9 +195,9 @@
 		
 			if (divContent.innerText === COR.githubContent) { return; } // Compare with githubContent
 
-			//if (!COR.url.endsWith("md")) return;
-
-			console.log("checkForChange", COR.fileName);
+			//if (!(/\.(md|txt|ini)$/i.test(hash))) return;
+			// /\.(md|txt|ini)$/i.test(hash)
+			//console.log("checkForChange", COR.fileName);
 
 			event.preventDefault();
 
