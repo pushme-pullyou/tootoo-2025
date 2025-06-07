@@ -100,10 +100,6 @@
 
 		}
 
-		/* #divMessage {
-
-			right: 0;
-		} */
 	</style>
 
 </head>
@@ -148,16 +144,6 @@
 
 		let saveTimeout;
 
-		// Global sync status functions
-		function isAnySyncing() {
-			const globalSync = localStorage.getItem('global_sync_status');
-			return globalSync === 'true' || COR.isSyncing;
-		}
-
-		function setGlobalSync(syncing) {
-			localStorage.setItem('global_sync_status', syncing.toString());
-			COR.isSyncing = syncing;
-		}
 
 		function init(hash = COR.urlBaseAPI + COR.defaultFileEdit) {
 
@@ -208,7 +194,7 @@
 
 			hash = hash.replace(/@@/, "");
 
-			//console.log("onHashChange", hash);
+			console.log("onHashChange", hash);
 
 			COR.myUrl = hash;
 			//console.log("COR.myUrl", COR.myUrl);
@@ -417,6 +403,18 @@
 
 			putXhr.send(body);
 		}
+
+		// Global sync status functions
+		function isAnySyncing() {
+			const globalSync = localStorage.getItem('global_sync_status');
+			return globalSync === 'true' || COR.isSyncing;
+		}
+
+		function setGlobalSync(syncing) {
+			localStorage.setItem('global_sync_status', syncing.toString());
+			COR.isSyncing = syncing;
+		}
+
 
 	</script>
 

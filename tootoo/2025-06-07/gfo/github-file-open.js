@@ -28,15 +28,13 @@ function onHashChange() {
 
     if (hash.includes("@@")) {
 
-      COR.hash = hash.slice(2);
-
       console.log("notesy", COR.hash);
+
+      //COR.hash = hash.replace("@@", "");
 
       divMainContent.innerHTML =
 
-        `<iframe id=ifr class="iframe-resize" onload=onLoad() src="${COR.pathApps}./ggpf/github-get-put-file.html"><iframe>`;
-
-      //        ifr.onload = () => ifr.contentWindow.init(COR.urlBaseAPI + COR.hash);
+        `<iframe id=ifr class="iframe-resize" onload=onLoad() src="${COR.pathApps}/ggpf/github-get-put-file.html"><iframe>`;
 
     } else {
 
@@ -78,6 +76,25 @@ function onLoad() {
 
 
 }
+
+// function onLoad() {
+//     console.log("COR.urlBaseAPI + COR.hash", COR.urlBaseAPI + COR.hash);
+    
+//     // Wait for iframe to fully load
+//     if (ifr && ifr.contentWindow && ifr.contentWindow.init) {
+//         try {
+//             ifr.contentWindow.init();
+//             ifr.contentWindow.location.hash = COR.urlBaseAPI + COR.hash;
+//         } catch (e) {
+//             console.error("Error communicating with iframe:", e);
+//             // Fallback: reload iframe with hash
+//             ifr.src = `${COR.pathApps}./ggpf/github-get-put-file.html#${COR.urlBaseAPI + COR.hash}`;
+//         }
+//     } else {
+//         // Retry after a short delay
+//         setTimeout(onLoad, 100);
+//     }
+// }
 
 
 

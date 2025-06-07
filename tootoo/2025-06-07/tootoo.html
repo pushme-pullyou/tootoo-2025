@@ -116,7 +116,7 @@
       
       loadTextScale(); //main.js
 
-      updateBreadcrumb('');
+      updateBreadcrumb(''); //main.js
 
       if (window.innerWidth < 800 || window.innerHeight < 500) {
 
@@ -160,9 +160,9 @@
       
       }
       
+      // onHashChange > github-file-open.js
       window.addEventListener("hashchange", onHashChange, false);
       
-      // onHashChange > github-file-open.js
       location.hash = location.hash ? location.hash : COR.defaultFile;
       
       onHashChange();

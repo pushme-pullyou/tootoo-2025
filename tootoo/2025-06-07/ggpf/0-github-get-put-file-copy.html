@@ -70,7 +70,9 @@
 	<main id=main>
 
 		<div id="divMessage">2025-06-07</div>
-		<div id="divMainContent"></div>
+		<div id="divMainContent">
+			<iframe id=ifr src="github-get-put-file.html"></iframe>
+		</div>
 
 	</main>
 	<script>
@@ -83,8 +85,6 @@
 			spnTitle.innerText = COR.menuTitle;
 			aGitHubSource.href = COR.urlSource;
 			aGitHubSource.title = document.querySelector("[ name=version ]").content;
-
-			divMainContent.innerHTML = `<iframe id=ifr src="github-get-put-file.html"></iframe>`;
 
 			ifr.onload = () => ifr.contentWindow.init(COR.urlBaseAPI + COR.defaultFileEdit);
 			//ifr.onLoad = () => { ifr.contentWindow.init() };
