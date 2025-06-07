@@ -33,10 +33,9 @@ Try
 ## Change Log
 
 
-### 2025-06-06
+### 2025-06-07
 
-
-ffff 13
+* Refactor 404.html ~ Add entered URL & search
 
 ### 2025-05-15
 
