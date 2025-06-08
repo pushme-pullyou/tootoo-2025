@@ -8,7 +8,7 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="2025-06-07">
+  <meta name="version" content="2025-05-27">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
@@ -103,7 +103,7 @@
     #main {
       border: 1px solid red;
       left: 25rem;
-      position: absolute;
+      position:absolute;
       top: 10rem;
     }
 
@@ -119,9 +119,8 @@
 
 <body>
 
-  <script src="../../config.js"></script>
   <script src="../main.js"></script>
-  <script src="./github-tree-view.js"></script>
+  <script src="./github-tree-view-edit.js"></script>
 
   <nav id="navMenu">
 
@@ -134,10 +133,10 @@
     <div id="divMainContent">location.hash</div>
 
     <br>
-
+    
     <div>
 
-      <button onclick=location.hash="">Clear location.hash </button>
+      <button onclick=location.hash="" >Clear location.hash </button>
 
     </div>
 
@@ -145,18 +144,16 @@
 
   <script>
 
-    COR.pathApps = "../";
-
     window.addEventListener("hashchange", onHashChange, false);
 
     onHashChange();
+    
 
     function onHashChange() {
 
       divMainContent.innerHTML = "location.hash = " + location.hash
 
     }
-    
   </script>
 </body>
 

@@ -55,6 +55,7 @@
 
         </div>
         <div id=divNavExtras>
+
           Text size:
           <button id="btnDecreaseText" onclick="adjustTextSize(-0.1)" style="font-size: 1.2rem;"
             title="Decrease text size">A-</button>
@@ -62,8 +63,7 @@
             title="Increase text size">A+</button>
           <button id="btnResetText" onclick="resetTextSize()" style="font-size: 1rem;"
             title="Reset text size">A</button>
-          &nbsp;
-          <a style="display: none;font-size: 1.5rem;" id=pencil href="./tootoo-edit.html">✎</a>
+          <button style="display: none;" onclick=onButton() id=pencil>✎</button>
 
         </div>
 
@@ -109,13 +109,11 @@
 
     function init() {
 
-      COR.divContent = divIframe1;
-
       document.title = COR.menuTitle;
       aTitle.innerText = COR.menuTitle;
       document.getElementById("aSource").href = COR.urlSource;
       divMessage.title = document.querySelector("[ name=version ]").content;
-      
+
       loadTextScale(); //main.js
 
       updateBreadcrumb(''); //main.js
@@ -139,40 +137,55 @@
       }
 
       // Click outside menu to close
-      document.addEventListener('click', function(event) {
+      document.addEventListener('click', function (event) {
         const navMenu = document.getElementById('navMenu');
         const detNavMenu = document.getElementById('detNavMenu');
         const sumNavMenu = document.getElementById('sumNavMenu');
-        
+
         // Only close menu if hamburger is visible and menu is open
-        if (!sumNavMenu.hidden && 
-            detNavMenu.open && 
-            !navMenu.contains(event.target) && 
-            !sumNavMenu.contains(event.target)) {
+        if (!sumNavMenu.hidden &&
+          detNavMenu.open &&
+          !navMenu.contains(event.target) &&
+          !sumNavMenu.contains(event.target)) {
           detNavMenu.open = false;
         }
       });
 
-      
+
       COR.accessToken = localStorage.getItem("githubAccessToken") || "";
-      if (COR.accessToken) { 
-        
-        pencil.href = COR.pathApps + "tootoo-edit.html";
-        pencil.style.display = "block"; 
-      
+
+      if (COR.accessToken) {
+
+        pencil.style.display = "block";
+
       }
-      
+
       // onHashChange > github-file-open.js
       window.addEventListener("hashchange", onHashChange, false);
-      
+
       location.hash = location.hash ? location.hash : COR.defaultFile;
-      
+
       COR.divContent = divMainContent;
 
       onHashChange();
 
     }
 
+    function onButton() {
+      pencil.style.display = "block";
+
+      if (COR.accessToken) {
+        console.log("", 23);
+        divNavTreeView.innerHTML = "";
+        COR.accessToken = null;
+        fetchGitHubRepoContents(user, repo);
+
+      } else {
+        COR.accessToken = localStorage.getItem("githubAccessToken") || "";
+        divNavTreeView.innerHTML = "";
+        fetchGitHubRepoContents(user, repo);
+      }
+    }
   </script>
 
 </body>

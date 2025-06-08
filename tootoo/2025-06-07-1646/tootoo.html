@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>TooToo Edit</title>
+  <title>TooToo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
@@ -14,126 +14,7 @@
 
   <!-- Copyright 2025 Theo Armour. MIT license -->
 
-  <!-- <link id=CORstyle rel="stylesheet" href="../style-core.css"> -->
-
-  <style>
-    :root {
-      font: 100% monospace;
-      --mnu-width: 20;
-      --main-hue: 10;
-      /* 0 to 360 10=red 120=green 240=blue */
-      --margin: 0.5rem;
-      --saturation: 89%;
-      --lightness0: 1%;
-      --lightness1: 20%;
-      --lightness2: 30%;
-      --lightness3: 50%;
-      --lightness4: 80%;
-      --lightness5: 99.9%;
-      --color-active: #ff0;
-      --color-0-background: #fff;
-      --color-1-text: hsl(var(--main-hue), var(--saturation), 1%);
-      --color-1-background: hsl(var(--main-hue), var(--saturation), 99.9%);
-      --color-2-text: hsl(var(--main-hue), var(--saturation), 30%);
-      --color-2-background: hsl(var(--main-hue), var(--saturation), 90%);
-      --color-3-text: hsl(var(--main-hue), var(--saturation), 40%);
-      --color-3-background: hsl(var(--main-hue), var(--saturation), 95%);
-      --color-4-text: hsl(var(--main-hue), var(--saturation), 40%);
-      --color-4-background: hsl(var(--main-hue), var(--saturation), 98%);
-    }
-
-    * {
-      box-sizing: border-box;
-      scroll-behavior: smooth;
-      /* margin: 0; */
-      /* padding: 0; */
-    }
-
-    img {
-      max-width: 100%;
-    }
-
-    #navMenu {
-      /* padding: 0 var( --margin); */
-      /* width */
-      background-color: var(--color-1-background);
-      border: 8px solid var(--color-2-text);
-      border-radius: var(--margin);
-      left: 0.25rem;
-      height: calc(100vh - 2rem);
-      padding: var(--margin);
-      position: fixed;
-      top: 0.5rem;
-      overflow: auto;
-      resize: both;
-      width: var(--mnu-width);
-      z-index: 1;
-    }
-
-    #divNavTreeView {
-      border: 2px solid --color-2-text;
-    }
-
-    #main {
-      left: calc(var(--mnu-width) + 2rem);
-      position: absolute;
-      top: 1rem;
-      width: calc(100% - var(--mnu-width) - 2rem);
-    }
-
-    #divMainContent {
-      border: 1px solid #888;
-      padding: 1rem;
-    }
-
-    .iframe-resize {
-      border: 2px solid green;
-      height: 95vh;
-      overflow: hidden;
-      padding: 0.5rem;
-      resize: both;
-      width: 100%;
-    }
-
-    /* Top level summary elements start at 16px */
-    div div>.folder-contents>details>summary {
-      background-color: #ccc;
-      font-size: 16pt;
-      margin: 0 0 5px 0px;
-      padding: 0px 0px;
-    }
-
-    div div>.folder-contents>details>summary:hover {
-      background-color: #bbb;
-    }
-
-    /* First level of nesting */
-    .folder-contents>details>.folder-contents>details>summary {
-      background-color: #ddd;
-      font-size: 14pt;
-      margin-left: 10px;
-
-    }
-
-    /* Second level of nesting */
-    .folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-      background-color: #eee;
-      font-size: 12pt;
-      margin-left: 20px;
-    }
-
-    /* Third level of nesting */
-    .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-      font-size: 11pt;
-      margin-left: 30px;
-    }
-
-    /* Fourth level of nesting and beyond */
-    .folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>.folder-contents>details>summary {
-      font-size: 10pt;
-      margin-left: 40px;
-    }
-  </style>
+  <link id=CORstyle rel="stylesheet" href="style-core.css">
 
 </head>
 
@@ -145,7 +26,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
   <script src="../config.js"></script>
   <script src="./main.js"></script>
-  <script src="./gtv-e/github-tree-view-edit.js"></script>
+  <script src="./gtv/github-tree-view.js"></script>
   <script src="./gfo/github-file-open.js"></script>
 
   <div id=divShowHide>
@@ -274,7 +155,7 @@
       COR.accessToken = localStorage.getItem("githubAccessToken") || "";
       if (COR.accessToken) { 
         
-        pencil.href = COR.pathApps + "tootoo.html";
+        pencil.href = COR.pathApps + "tootoo-edit.html";
         pencil.style.display = "block"; 
       
       }

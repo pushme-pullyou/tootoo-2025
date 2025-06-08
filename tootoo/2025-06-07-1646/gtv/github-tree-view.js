@@ -2,6 +2,11 @@ const user = COR.user;
 const repo = COR.repo;
 const branch = COR.branch;
 
+if (COR.accessToken) { 
+  COR.filterFolders = [];
+  COR.ignoreFiles = [];
+}
+
 const filterFolders = COR.filterFolders;
 const ignoreFiles = COR.ignoreFiles;
 
@@ -11,19 +16,19 @@ async function fetchGitHubRepoContents(user, repo) {
 
   // Get GitHub access token for authorization
   const accessToken = localStorage.getItem("githubAccessToken") || COR.accessToken;
-
+  
   const headers = {};
   if (accessToken) {
     headers['Authorization'] = `token ${accessToken}`;
   }
 
   const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`, { headers });
-
+  
   if (!response.ok) {
     console.error(`GitHub API request failed: ${response.status} ${response.statusText}`);
     throw new Error(`Failed to fetch repository contents: ${response.status}`);
   }
-
+  
   const { tree } = await response.json();
   const div = document.getElementById('divNavTreeView');
 
@@ -113,23 +118,6 @@ async function fetchGitHubRepoContents(user, repo) {
 
     sortedBlobs.forEach(item => {
 
-      //if (COR.accessToken) {
-
-        const fileSource = document.createElement('a');
-        fileSource.innerHTML = COR.iconGitHub;
-        fileSource.href = COR.urlSource + item.path;
-        fileSource.title = "Source code on GitHub"
-        fileSource.target = "_blank"
-        //console.log( "fileSource", fileSource );
-
-        const editmeLink = document.createElement('a');
-        if (/\.(md|txt|ini)$/i.test(item.path)) {
-          editmeLink.textContent = "✎";
-          editmeLink.href = `#@@${item.path}`;
-        }
-
-      //}
-
       const fileName = item.path.replace(parentPath, '');
 
       const fileLink = document.createElement('a');
@@ -142,14 +130,6 @@ async function fetchGitHubRepoContents(user, repo) {
       readmeLink.target = '_blank';
 
       const fileContainer = document.createElement('p');
-
-      if (COR.accessToken) {
-        fileContainer.appendChild(fileSource);
-        fileContainer.appendChild(document.createTextNode(" "));
-        fileContainer.appendChild(editmeLink);
-        fileContainer.appendChild(document.createTextNode(" "));
-      }
-
       fileContainer.appendChild(fileLink);
       fileContainer.appendChild(document.createTextNode(" "));
       fileContainer.appendChild(readmeLink);
@@ -187,7 +167,7 @@ function setFileVisible() {
   //console.log("fileContainers", fileContainers);
   for (const container of fileContainers) {
     const link = container.querySelector('a');
-    if (link && link.getAttribute('href') === '#' + COR.hash) {
+    if (link && link.getAttribute('href') === '#' + COR.hash ) {
       let parentNode = container.parentNode;
       while (parentNode && parentNode.id !== "detNavMenu") {
         if (parentNode.tagName === 'DETAILS') {
@@ -221,7 +201,7 @@ let contextMenu = null;
 
 function createContextMenu() {
   if (contextMenu) return contextMenu;
-
+  
   contextMenu = document.createElement('div');
   contextMenu.className = 'context-menu';
   contextMenu.innerHTML = `
@@ -229,30 +209,30 @@ function createContextMenu() {
     <div class="context-menu-item" data-action="open-all">Open All Sub-folders</div>
     <div class="context-menu-item" data-action="close-all">Close All Sub-folders</div>
   `;
-
+  
   document.body.appendChild(contextMenu);
   return contextMenu;
 }
 
 function showContextMenu(event, detailsElement) {
   const menu = createContextMenu();
-
+  
   // Count sub-folders to determine if menu items should be enabled
   const subFolders = detailsElement.querySelectorAll('details');
   const openSubFolders = detailsElement.querySelectorAll('details[open]');
-
+  
   // Update menu items based on current state
   const toggleSelfItem = menu.querySelector('[data-action="toggle-self"]');
   const openAllItem = menu.querySelector('[data-action="open-all"]');
   const closeAllItem = menu.querySelector('[data-action="close-all"]');
-
+  
   // Update toggle self text
   if (detailsElement.hasAttribute('open')) {
     toggleSelfItem.textContent = 'Close This Folder';
   } else {
     toggleSelfItem.textContent = 'Open This Folder';
   }
-
+  
   // Enable/disable sub-folder options based on availability
   if (subFolders.length === 0) {
     openAllItem.style.opacity = '0.5';
@@ -264,19 +244,19 @@ function showContextMenu(event, detailsElement) {
     openAllItem.style.pointerEvents = 'auto';
     closeAllItem.style.opacity = '1';
     closeAllItem.style.pointerEvents = 'auto';
-
+    
     // Update text to show count
     openAllItem.textContent = `Open All Sub-folders (${subFolders.length})`;
     closeAllItem.textContent = `Close All Sub-folders (${subFolders.length})`;
   }
-
+  
   // Remove existing event listeners and add new ones
   const menuItems = menu.querySelectorAll('.context-menu-item');
   menuItems.forEach(item => {
     const newItem = item.cloneNode(true);
     item.parentNode.replaceChild(newItem, item);
   });
-
+  
   // Add event listeners to new items
   menu.querySelector('[data-action="toggle-self"]').addEventListener('click', () => {
     if (detailsElement.hasAttribute('open')) {
@@ -286,7 +266,7 @@ function showContextMenu(event, detailsElement) {
     }
     hideContextMenu();
   });
-
+  
   menu.querySelector('[data-action="open-all"]').addEventListener('click', () => {
     const subFolders = detailsElement.querySelectorAll('details');
     subFolders.forEach(folder => {
@@ -294,7 +274,7 @@ function showContextMenu(event, detailsElement) {
     });
     hideContextMenu();
   });
-
+  
   menu.querySelector('[data-action="close-all"]').addEventListener('click', () => {
     const subFolders = detailsElement.querySelectorAll('details');
     subFolders.forEach(folder => {
@@ -302,12 +282,12 @@ function showContextMenu(event, detailsElement) {
     });
     hideContextMenu();
   });
-
+  
   // Position and show menu
   menu.style.left = event.pageX + 'px';
   menu.style.top = event.pageY + 'px';
   menu.style.display = 'block';
-
+  
   // Hide menu when clicking elsewhere
   setTimeout(() => {
     document.addEventListener('click', hideContextMenu, { once: true });
@@ -325,7 +305,7 @@ function hideContextMenu() {
 function initKeyboardNavigation() {
   // Remove any existing keyboard event listeners
   document.removeEventListener('keydown', handleTreeViewKeyNavigation);
-
+  
   // Add keyboard event listener
   document.addEventListener('keydown', handleTreeViewKeyNavigation);
 }
@@ -334,19 +314,19 @@ function handleTreeViewKeyNavigation(event) {
   // Only handle arrow keys when focus is within the tree view or no specific element is focused
   const activeElement = document.activeElement;
   const treeViewContainer = document.getElementById('divNavTreeView');
-
+  
   if (!treeViewContainer) return;
-
+  
   // Check if focus is within the tree view or body (no specific focus)
   // Also allow navigation when focus is on main content area
   const mainContent = document.getElementById('divMainContent');
-  const isInTreeView = treeViewContainer.contains(activeElement) ||
-    activeElement === document.body ||
-    (mainContent && mainContent.contains(activeElement));
-
+  const isInTreeView = treeViewContainer.contains(activeElement) || 
+                       activeElement === document.body ||
+                       (mainContent && mainContent.contains(activeElement));
+  
   if (!isInTreeView) return;
-
-  switch (event.key) {
+  
+  switch(event.key) {
     case 'ArrowUp':
       event.preventDefault();
       navigateToFile('previous');
@@ -361,21 +341,21 @@ function handleTreeViewKeyNavigation(event) {
 function navigateToFile(direction) {
   const fileLinks = getAllFileLinks();
   if (fileLinks.length === 0) return;
-
+  
   let currentIndex = getCurrentFileIndex(fileLinks);
   let nextIndex;
-
+  
   if (direction === 'next') {
     nextIndex = (currentIndex + 1) % fileLinks.length; // Wrap to beginning
   } else {
     nextIndex = currentIndex <= 0 ? fileLinks.length - 1 : currentIndex - 1; // Wrap to end
   }
-
+  
   const nextLink = fileLinks[nextIndex];
   if (nextLink) {
     // Ensure the parent folders are open so the link is visible
     ensureLinkVisible(nextLink);
-
+    
     // Update the hash to navigate to the file
     const href = nextLink.getAttribute('href');
     if (href && href.startsWith('#')) {
@@ -399,30 +379,30 @@ function ensureLinkVisible(link) {
 function getAllFileLinks() {
   const treeViewContainer = document.getElementById('divNavTreeView');
   if (!treeViewContainer) return [];
-
+  
   // Get all file links (not folder links)
   const fileContainers = treeViewContainer.querySelectorAll('.file-container');
   const fileLinks = [];
-
+  
   fileContainers.forEach(container => {
     const link = container.querySelector('a[href^="#"]');
     if (link) {
       fileLinks.push(link);
     }
   });
-
+  
   return fileLinks;
 }
 
 function getCurrentFileIndex(fileLinks) {
   const currentHash = location.hash;
-
+  
   for (let i = 0; i < fileLinks.length; i++) {
     if (fileLinks[i].getAttribute('href') === currentHash) {
       return i;
     }
   }
-
+  
   // If no current file is found, return -1 so next navigation starts from 0
   return -1;
 }

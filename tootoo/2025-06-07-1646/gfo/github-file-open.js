@@ -6,7 +6,7 @@ function onHashChange() {
   
   divContent = COR.divContent;
 
-  //console.log( "div", divContent );
+  console.log( "div", divContent );
 
   // Validate hash to prevent potential security issues
   if (!hash || hash.trim() === '') {
@@ -74,15 +74,37 @@ function onHashChange() {
 
 function onLoad() {
 
-  //console.log( "COR.urlBaseAPI + COR.hash", COR.urlBaseAPI + COR.hash );
+  console.log( "COR.urlBaseAPI + COR.hash", COR.urlBaseAPI + COR.hash );
   ifr.contentWindow.init();
   ifr.contentWindow.location.hash = COR.urlBaseAPI + COR.hash;
 
+
 }
+
+// function onLoad() {
+//     console.log("COR.urlBaseAPI + COR.hash", COR.urlBaseAPI + COR.hash);
+    
+//     // Wait for iframe to fully load
+//     if (ifr && ifr.contentWindow && ifr.contentWindow.init) {
+//         try {
+//             ifr.contentWindow.init();
+//             ifr.contentWindow.location.hash = COR.urlBaseAPI + COR.hash;
+//         } catch (e) {
+//             console.error("Error communicating with iframe:", e);
+//             // Fallback: reload iframe with hash
+//             ifr.src = `${COR.pathApps}./ggpf/github-get-put-file.html#${COR.urlBaseAPI + COR.hash}`;
+//         }
+//     } else {
+//         // Retry after a short delay
+//         setTimeout(onLoad, 100);
+//     }
+// }
+
+
 
 function getHTMLfromURL(hash = COR.hash) {
 
-  //console.log("hash", COR.pathContent + COR.hash);
+  console.log("hash", COR.pathContent + COR.hash);
 
   showdown.setFlavor("github");
   const options = { openLinksInNewWindow: false, excludeTrailingPunctuationFromURLs: true, ghMention: true, simplifiedAutoLink: true, simpleLineBreaks: true, emoji: true };

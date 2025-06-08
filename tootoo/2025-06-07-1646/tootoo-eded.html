@@ -8,7 +8,7 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="Version 2025-06-07">
+  <meta name="version" content="Version 2025-06-06">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
@@ -53,6 +53,30 @@
       max-width: 100%;
     }
 
+    iframe {
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    #divContainer {
+      border: 0px solid maroon;
+      height: 95vh;
+      overflow: auto;
+      width: 100%;
+      resize: both;
+    }
+
+    .child {
+      border: 1px solid green;
+      float: left;
+      height: 100%;
+      width: 33%;
+      overflow: hidden;
+      resize: both;
+    }
+
     #navMenu {
       /* padding: 0 var( --margin); */
       /* width */
@@ -83,7 +107,8 @@
 
     #divMainContent {
       border: 1px solid #888;
-      padding: 1rem;
+      height: 90vh;
+      padding: 0rem;
     }
 
     .iframe-resize {
@@ -164,8 +189,10 @@
             <h1>
               <div class="title-link">
                 <a id=aSource href="" target="_top" title="Click to go to the source code on GitHub">
-                  <img id=imgGitHub src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
-                <a href="" id=aTitle title="Click this title to reload this page">
+                  <img id="imgGitHub" src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
+                <a href="" title="Click this title to reload this page">
+                  <span id=spnTitle></span>
+                  <span id=spnVersion></span>
                 </a>
               </div>
             </h1>
@@ -217,25 +244,71 @@
 
   <main id=main>
 
-    <div id="divMessage"></div>
-    <div id="divMainContent"></div>
+    <div id="divMessage">Version: 2025-06-04</div>
 
+    <div id="" title="date for journal">
+
+      <select id=selIfr size="1">
+        <option>ifr 1</option>
+        <option>ifr 2</option>
+        <option selected>ifr 3</option>
+
+      </select>
+
+      //<button onclick="getYesterday();">yesterday</button>
+
+      //<input type=date oninput=getDate(this);>
+
+      <div id="divMainContent">
+
+        <div class="child" id=divIframe1></div>
+
+        <div class="child" id=divIframe2></div>
+
+        <div class="child" id=divIframe3></div>
+
+      </div>
+
+    </div>
   </main>
 
   <script>
+    const baseA = "https://api.github.com/repos/pushme-pullyou/tootoo-2025/contents/";
+
+    const baseQ = "https://api.github.com/repos/theo-armour/qdata/contents/";
 
     init();
 
-    function init() {
+    async function init() {
 
-      document.title = COR.menuTitle;
-      aTitle.innerText = COR.menuTitle;
-      document.getElementById("aSource").href = COR.urlSource;
-      divMessage.title = document.querySelector("[ name=version ]").content;
-      
+
+
+      // const aDate = new Date();
+      // const month = (1 + aDate.getMonth()).toString().padStart(2, "0");
+      // const today = aDate.getDate().toString().padStart(2, "0");
+      // //console.log( "today", today );
+      // const path = `${month}/${month}${today}.md`;
+      // console.log("path", path);
+
+      // ifr2.onload = () => ifr2.contentWindow.location.hash = baseQ + "journal/days-of-year/" + path;
+
+      // ifr3.onload = () => ifr3.contentWindow.location.hash = baseA + "text-to-hack.md";
+
+      // Load saved text scale
       loadTextScale(); //main.js
 
-      updateBreadcrumb(''); //main.js
+      pencil.href = COR.pathApps + "tootoo.html";
+
+      document.title = COR.menuTitle;
+      spnTitle.innerText = COR.menuTitle;
+      document.getElementById("aSource").href = COR.urlSource;
+      main.title = document.querySelector("[ name=version ]").content;
+
+      COR.accessToken = localStorage.getItem("githubAccessToken") || "";
+      if (COR.accessToken) { pencil.style.display = "block"; }
+
+      // Initialize breadcrumb
+      updateBreadcrumb('');
 
       if (window.innerWidth < 800 || window.innerHeight < 500) {
 
@@ -249,47 +322,70 @@
 
       }
 
-      if (location.protocol === "https:") {
+      selIfr.addEventListener("change", onChange, false);
 
-        window.history.pushState("", "", COR.urlPushPath + location.hash);
-
-      }
-
-      // Click outside menu to close
-      document.addEventListener('click', function(event) {
-        const navMenu = document.getElementById('navMenu');
-        const detNavMenu = document.getElementById('detNavMenu');
-        const sumNavMenu = document.getElementById('sumNavMenu');
-        
-        // Only close menu if hamburger is visible and menu is open
-        if (!sumNavMenu.hidden && 
-            detNavMenu.open && 
-            !navMenu.contains(event.target) && 
-            !sumNavMenu.contains(event.target)) {
-          detNavMenu.open = false;
-        }
-      });
-
-      
-      COR.accessToken = localStorage.getItem("githubAccessToken") || "";
-      if (COR.accessToken) { 
-        
-        pencil.href = COR.pathApps + "tootoo.html";
-        pencil.style.display = "block"; 
-      
-      }
-      
-      // onHashChange > github-file-open.js
       window.addEventListener("hashchange", onHashChange, false);
-      
-      location.hash = location.hash ? location.hash : COR.defaultFile;
-      
-      COR.divContent = divMainContent;
 
-      onHashChange();
+      // COR.divContent = divIframe1;
+
+      // location.hash = "test.md";
+
+      // onHashChange();
+
+      // COR.divContent = divIframe2;
+
+      // location.hash = "text-to-hack.md"
+
+      // onHashChange();
+
+      // COR.divContent = divIframe3;
+
+      // location.hash = "tootoo-copilot-prompts.md";
+
+      // onHashChange();
+
+      // Load files sequentially
+      await loadFileSequentially();
+
+      async function loadFileSequentially() {
+        const files = [
+          { div: divIframe1, file: "test.md" },
+          { div: divIframe2, file: "text-to-hack.md" },
+          { div: divIframe3, file: "tootoo-copilot-prompts.md" }
+        ];
+
+        for (const item of files) {
+          COR.divContent = item.div;
+          location.hash = item.file;
+
+          // Wait for the file to load completely
+          await waitForFileLoad();
+        }
+      }
+
+      function waitForFileLoad() {
+        return new Promise((resolve) => {
+          // Wait for the onHashChange to complete and content to be loaded
+          setTimeout(() => {
+            // You might need to adjust this timeout or use a more sophisticated
+            // method to detect when the content is fully loaded
+            resolve();
+          }, 50); // Adjust timeout as needed
+        });
+      }
 
     }
 
+    function onChange() {
+
+      const arr = [divIframe1, divIframe2, divIframe3];
+
+      ifrUpdate = arr[selIfr.selectedIndex];
+      console.log("selIfr.selectedIndex", selIfr.selectedIndex);
+      COR.divContent = ifrUpdate;
+      //onHashChange();
+
+    }
   </script>
 
 </body>
