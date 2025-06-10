@@ -43,7 +43,7 @@ _"Templates Read Me" in a resizable window_
 
 * Click the three bars('hamburger menu icon' ) to slide the menu in and out
 * Click the GitHub Octocat icon to view or edit the source code on GitHub
-* Click on title to reload te page
+* Click on title to reload the page
 * Press Control-U/Command-Option-U to view the source code
 * Press Control-Shift-J/Command-Option-J to see if the JavaScript console reports any errors
 
@@ -52,6 +52,8 @@ _"Templates Read Me" in a resizable window_
 ## To Do / Wish List
 
 * 2025-06-09 ~ Ignore all index.html files
+* 2025-06-04 ~ start tips & tricks page
+* 2025-06-04 ~ Add sort files by two numbers at front of filename
 * 2025-06-09 ~ GitHub icon links to actual file not just repo 
 * 2025-05-29 ~ date sorting folders are identified in COR{}
 * 2025-05-29 ~ Add new file
@@ -73,6 +75,12 @@ _"Templates Read Me" in a resizable window_
 
 ### 2025-06-09
 
+Done
+
+* Styles cleaned up and refactored
+* Pencil toggles between edit and view apps
+* Right click toggle folders open and closed
+* Breadcrumbs added
 * 2025-06-04 ~ click anywhere to toggle the menu visibility
 * 2025-05-31 ~ toggle between edit and view mode
 
