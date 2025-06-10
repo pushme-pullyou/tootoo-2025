@@ -190,6 +190,15 @@ function onButton() {
 
 function delgat() { localStorage.setItem("githubAccessToken", "");}
 
+function setgat() {
+
+				COR.accessToken = prompt("Enter GitHub Personal Access Token");
+
+				localStorage.setItem("githubAccessToken", COR.accessToken);
+
+}
+
+
 // Breadcrumb Navigation Functions
 function updateBreadcrumb(filePath) {
   const divMessage = document.getElementById('divMessage');
