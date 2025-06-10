@@ -2,7 +2,8 @@ let divContent;
 
 function onHashChange() {
 
-  COR.hash = hash = location.hash.slice(1);
+  let hash = location.hash.slice(1);
+  COR.hash = hash;
   
   divContent = COR.divContent;
 
