@@ -24,3 +24,24 @@ Here are some examples of what you can do with the editor:
 - Remember to get a GitHub token with appropriate permissions
 - Files are autosaved every 15 seconds when changes are detected
 - You can manually save at any time by clicking the Save button
+
+## Usage Examples
+
+Here are some examples of what you can do with the editor:
+
+1. Edit markdown files with proper formatting
+2. Create new files in your repository
+3. Browse the repository file structure
+4. Use multiple panels to edit different files simultaneously
+
+## Notes
+
+- Remember to get a GitHub token with appropriate permissions
+- Files are autosaved every 15 seconds when changes are detected
+- You can manually save at any time by clicking the Save button
+
+2025-06-09
+
+hhhhhh nnnn iiiii
+
+vvvv
