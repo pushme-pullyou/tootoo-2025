@@ -9,3 +9,5 @@ This is a sample file that you can edit through the GitHub File Editor app.
 - Simple and clean interface
 
 Feel free to make changes to this file to test the editor functionality!
+
+.
