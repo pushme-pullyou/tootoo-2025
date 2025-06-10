@@ -8,3 +8,5 @@ user: pushme-pullyou
 repo: tootoo-2025
 folder and file: sandbox/2025-06-09-vibe/test.md
 GitHub token: upon demand
+
+https://pushme-pullyou.github.io/tootoo-2025/sandbox/2025-06-09-vibe/

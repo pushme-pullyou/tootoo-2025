@@ -14,71 +14,144 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 0;
+            padding: 10px;
             background-color: var(--bg-color);
             color: var(--text-color);
-            line-height: 1.5;
+            line-height: 1.4;
+            height: 100vh;
+            box-sizing: border-box;
+            overflow: hidden;
         }
 
         h1 {
+            font-size: 1.2rem;
+            margin: 0 0 8px 0;
+            padding-bottom: 5px;
             border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px;
         }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .main-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 8px;
+            height: calc(100vh - 20px);
         }
 
-        .auth-panel, .file-panel, .editor-panel {
-            background: white;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-
-        .auth-panel {
+        .header {
+            grid-column: 1 / 3;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        .sidebar {
+            grid-column: 1;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .editor-container {
+            grid-column: 2;
+            grid-row: 2;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .panel {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px;
+            margin-bottom: 8px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .panel-header h3 {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .panel-content {
+            overflow: hidden;
+            transition: max-height 0.2s ease;
+        }
+
+        .collapsed .panel-content {
+            max-height: 0;
+            padding: 0;
+        }
+
         .input-group {
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
         }
 
         label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             font-weight: 600;
+            font-size: 0.8rem;
         }
 
-        input[type="text"], input[type="password"], textarea {
+        input[type="text"], input[type="password"] {
             width: 100%;
+            padding: 4px;
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+        }
+
+        .editor-textarea {
+            width: 100%;
+            height: 100%;
+            flex-grow: 1;
             padding: 8px;
             border: 1px solid var(--border-color);
             border-radius: 4px;
             box-sizing: border-box;
+            font-family: monospace;
+            resize: none;
         }
 
-        textarea#editor {
-            min-height: 400px;
-            font-family: monospace;
-            resize: vertical;
+        .btn-group {
+            display: flex;
+            gap: 6px;
+            margin-top: 5px;
         }
 
         button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            border-radius: 4px;
-            padding: 8px 16px;
+            border-radius: 3px;
+            padding: 5px 10px;
             cursor: pointer;
             font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        button.small {
+            padding: 3px 6px;
+            font-size: 0.75rem;
         }
 
         button:hover {
@@ -91,9 +164,10 @@
         }
 
         .status {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 5px 8px;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            border-radius: 3px;
         }
 
         .status.success {
@@ -119,53 +193,307 @@
         .hidden {
             display: none;
         }
+
+        /* Tab styles for multiple files */
+        .tabs-container {
+            display: flex;
+            margin-bottom: 8px;
+            overflow-x: auto;
+            height: 32px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .tab {
+            padding: 4px 8px;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            border-bottom: none;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            margin-right: 2px;
+            background-color: #f1f8ff;
+            position: relative;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+            margin-bottom: -1px;
+            font-weight: 600;
+        }
+
+        .tab-close {
+            margin-left: 6px;
+            font-size: 14px;
+            color: #586069;
+            cursor: pointer;
+        }
+
+        .tab-close:hover {
+            color: #cb2431;
+        }
+
+        .new-tab-button {
+            padding: 4px 8px;
+            cursor: pointer;
+            border: 1px dashed var(--border-color);
+            border-bottom: none;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            margin-right: 2px;
+            background-color: white;
+        }
+
+        .file-browser {
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 5px;
+        }
+
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .file-list-item {
+            padding: 4px 8px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+        }
+
+        .file-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .file-list-item:hover {
+            background-color: #f1f8ff;
+        }
+
+        .editor-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .commit-message {
+            flex-grow: 1;
+            margin-right: 8px;
+        }
+
+        .auth-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+        }
+
+        /* Split view styles */
+        .split-view-container {
+            display: flex;
+            flex-direction: row;
+            height: calc(100% - 40px);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .split-panel {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            height: 100%;
+            position: relative;
+            min-width: 50px;
+        }
+
+        .split-panel + .split-panel {
+            margin-left: 6px;
+        }
+
+        .split-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px;
+            background-color: #f1f8ff;
+            border: 1px solid var(--border-color);
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            margin-bottom: -1px;
+        }
+
+        .split-header-title {
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+        .split-header-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .split-header-btn {
+            border: none;
+            background: none;
+            color: #586069;
+            font-size: 10px;
+            padding: 0;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            border-radius: 2px;
+        }
+
+        .split-header-btn:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+
+        .resizer {
+            width: 6px;
+            background-color: var(--bg-color);
+            position: absolute;
+            right: -3px;
+            top: 0;
+            bottom: 0;
+            cursor: col-resize;
+            z-index: 10;
+        }
+
+        .resizer:hover {
+            background-color: var(--primary-color);
+            opacity: 0.2;
+        }
+
+        .split-controls {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+
+        @media (max-height: 600px) {
+            .panel {
+                padding: 5px;
+                margin-bottom: 5px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>GitHub File Editor</h1>
-    
-    <div class="container">
-        <div class="auth-panel">
-            <div>
+    <div class="main-container">
+        <div class="header">
+            <h1>GitHub File Editor</h1>
+            <div class="auth-info">
                 <span id="auth-status">Not authenticated</span>
-            </div>
-            <div>
-                <button id="auth-toggle" onclick="toggleAuthPanel()">Login</button>
+                <button id="auth-toggle" onclick="toggleAuthPanel()" class="small">Login</button>
             </div>
         </div>
         
-        <div id="auth-details" class="auth-panel hidden">
-            <div class="input-group">
-                <label for="token">GitHub Token:</label>
-                <input type="password" id="token" placeholder="Enter your GitHub token">
+        <div class="sidebar">
+            <div class="panel" id="auth-panel">
+                <div class="panel-header" onclick="togglePanel('auth-panel')">
+                    <h3>Authentication</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="panel-content">
+                    <div id="auth-details" class="hidden">
+                        <div class="input-group">
+                            <label for="token">GitHub Token:</label>
+                            <input type="password" id="token" placeholder="Enter token">
+                        </div>
+                        <button id="save-token" onclick="saveToken()" class="small">Save Token</button>
+                    </div>
+                </div>
             </div>
-            <button id="save-token" onclick="saveToken()">Save Token</button>
-        </div>
-        
-        <div class="file-panel">
-            <div class="input-group">
-                <label for="user">Username:</label>
-                <input type="text" id="user" value="pushme-pullyou" disabled>
+            
+            <div class="panel" id="repo-panel">
+                <div class="panel-header" onclick="togglePanel('repo-panel')">
+                    <h3>Repository</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="panel-content">
+                    <div class="input-group">
+                        <label for="user">Username:</label>
+                        <input type="text" id="user" value="pushme-pullyou">
+                    </div>
+                    <div class="input-group">
+                        <label for="repo">Repository:</label>
+                        <input type="text" id="repo" value="tootoo-2025">
+                    </div>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="repo">Repository:</label>
-                <input type="text" id="repo" value="tooroo-2025" disabled>
+            
+            <div class="panel" id="file-panel">
+                <div class="panel-header" onclick="togglePanel('file-panel')">
+                    <h3>Files</h3>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="panel-content">
+                    <div class="input-group">
+                        <label for="path">File Path:</label>
+                        <input type="text" id="path" value="sandbox/2025-06-09-vibe/test.md">
+                    </div>
+                    <div class="btn-group">
+                        <button id="load-file" onclick="loadFile()" class="small">Load</button>
+                        <button id="browse-files" onclick="browseFiles()" class="small">Browse</button>
+                    </div>
+                    
+                    <div id="file-browser" class="file-browser hidden">
+                        <div class="input-group">
+                            <label for="browse-path">Browse Path:</label>
+                            <input type="text" id="browse-path" value="">
+                        </div>
+                        <ul id="file-list" class="file-list"></ul>
+                        <div class="btn-group">
+                            <button id="browse-up" onclick="browseUp()" class="small">Up</button>
+                            <button id="browse-refresh" onclick="browseFiles()" class="small">Refresh</button>
+                            <button id="browse-close" onclick="closeBrowser()" class="small">Close</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="path">File Path:</label>
-                <input type="text" id="path" value="sandbox/2025-06-09-vibe/test.md" disabled>
-            </div>
-            <button id="load-file" onclick="loadFile()">Load File</button>
-        </div>
-        
-        <div class="editor-panel">
-            <textarea id="editor" placeholder="File content will appear here"></textarea>
-            <div class="input-group">
-                <label for="commit-message">Commit Message:</label>
-                <input type="text" id="commit-message" value="Update from GitHub File Editor">
-            </div>
-            <button id="save-file" onclick="saveFile()" disabled>Save Changes</button>
+            
             <div id="status" class="status hidden"></div>
+        </div>
+        
+        <div class="editor-container">
+            <div class="tabs-container">
+                <div class="tabs" id="tabs">
+                    <div class="new-tab-button" onclick="openNewFileDialog()">+</div>
+                </div>
+            </div>
+            
+            <div class="split-controls">
+                <button onclick="addSplitPanel()" class="small">Add Panel</button>
+                <button onclick="toggleSingleView()" class="small" id="toggle-view-btn">Single View</button>
+                <button onclick="resetSplitView()" class="small">Reset Layout</button>
+            </div>
+            
+            <div class="split-view-container" id="split-container">
+                <!-- Split panels will be added here dynamically -->
+            </div>
+            
+            <div class="editor-footer">
+                <div class="commit-message input-group">
+                    <label for="commit-message">Commit:</label>
+                    <input type="text" id="commit-message" value="Update from GitHub Editor">
+                </div>
+                <button id="save-file" onclick="saveFile()" disabled>Save</button>
+            </div>
         </div>
     </div>
 
@@ -177,19 +505,23 @@
         const AUTOSAVE_DELAY = 15000; // 15 seconds
         
         // Variables
-        let fileContent = "";
-        let fileSha = "";
+        let activeFileId = null;
+        let openFiles = [];
         let isAuthenticated = false;
         let lastSaveTime = 0;
         let autosaveTimeout = null;
-        let isDirty = false;
+        let splitPanels = [];
+        let isSingleView = false;
+        let resizerActive = false;
+        let resizerPanel = null;
+        let resizerStartX = 0;
+        let resizerStartWidth = 0;
         
         // Elements
         const tokenInput = document.getElementById('token');
         const userInput = document.getElementById('user');
         const repoInput = document.getElementById('repo');
         const pathInput = document.getElementById('path');
-        const editorElement = document.getElementById('editor');
         const commitMessageInput = document.getElementById('commit-message');
         const saveButton = document.getElementById('save-file');
         const loadButton = document.getElementById('load-file');
@@ -197,6 +529,12 @@
         const authStatus = document.getElementById('auth-status');
         const authDetails = document.getElementById('auth-details');
         const statusDiv = document.getElementById('status');
+        const tabsContainer = document.getElementById('tabs');
+        const fileBrowser = document.getElementById('file-browser');
+        const browsePathInput = document.getElementById('browse-path');
+        const fileList = document.getElementById('file-list');
+        const splitContainer = document.getElementById('split-container');
+        const toggleViewBtn = document.getElementById('toggle-view-btn');
         
         // Initialize the application
         function init() {
@@ -209,24 +547,31 @@
                 authToggle.textContent = "Logout";
             }
             
-            // Set up the editor change listener
-            editorElement.addEventListener('input', function() {
-                isDirty = true;
-                saveButton.disabled = false;
-                
-                // Clear any existing timeout
-                if (autosaveTimeout) {
-                    clearTimeout(autosaveTimeout);
-                }
-                
-                // Set up autosave
-                const currentTime = Date.now();
-                if (currentTime - lastSaveTime >= AUTOSAVE_DELAY) {
-                    autosaveTimeout = setTimeout(saveFile, 500); // Small delay for typing completion
+            // Initialize panels
+            document.querySelectorAll('.panel').forEach(panel => {
+                if (!panel.id.includes('auth-panel')) {
+                    // Start with all panels except auth expanded
+                    panel.classList.remove('collapsed');
                 } else {
-                    autosaveTimeout = setTimeout(saveFile, AUTOSAVE_DELAY - (currentTime - lastSaveTime));
+                    panel.classList.add('collapsed');
                 }
             });
+            
+            // Initialize split view with one panel
+            addSplitPanel();
+            
+            // Set up resize handler
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            document.addEventListener('mouseleave', handleMouseUp);
+        }
+        
+        // Toggle panel collapse
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            panel.classList.toggle('collapsed');
+            const icon = panel.querySelector('.toggle-icon');
+            icon.textContent = panel.classList.contains('collapsed') ? '►' : '▼';
         }
         
         // Toggle authentication panel
@@ -242,6 +587,10 @@
             } else {
                 // Show auth panel
                 authDetails.classList.toggle('hidden');
+                const authPanel = document.getElementById('auth-panel');
+                if (authPanel.classList.contains('collapsed')) {
+                    togglePanel('auth-panel');
+                }
             }
         }
         
@@ -277,21 +626,237 @@
             });
         }
         
-        // Load file from GitHub
-        function loadFile() {
-            const token = localStorage.getItem('github_token');
-            const user = userInput.value.trim();
-            const repo = repoInput.value.trim();
-            const path = pathInput.value.trim();
+        // Helper function to find a file by ID
+        function findFileById(id) {
+            return openFiles.find(file => file.id === id);
+        }
+        
+        // Update tab appearance based on state
+        function updateTabState(id) {
+            const tabElement = document.getElementById(`tab-${id}`);
+            const file = findFileById(id);
             
-            if (!token) {
-                showStatus("Please authenticate first", "warning");
+            if (tabElement && file) {
+                const tabTextElement = tabElement.querySelector('.tab-text');
+                tabTextElement.textContent = file.path.split('/').pop() + (file.isDirty ? '*' : '');
+            }
+        }
+        
+        // Create a new tab
+        function createTab(file) {
+            const tabElement = document.createElement('div');
+            tabElement.id = `tab-${file.id}`;
+            tabElement.className = 'tab';
+            tabElement.dataset.fileId = file.id;
+            
+            const tabTextElement = document.createElement('span');
+            tabTextElement.className = 'tab-text';
+            tabTextElement.textContent = file.path.split('/').pop();
+            
+            const closeButton = document.createElement('span');
+            closeButton.className = 'tab-close';
+            closeButton.textContent = '×';
+            closeButton.onclick = (e) => {
+                e.stopPropagation();
+                closeFile(file.id);
+            };
+            
+            tabElement.appendChild(tabTextElement);
+            tabElement.appendChild(closeButton);
+            
+            tabElement.onclick = () => switchToFile(file.id);
+            
+            // Insert before the "+" button
+            tabsContainer.insertBefore(tabElement, document.querySelector('.new-tab-button'));
+            
+            return tabElement;
+        }
+        
+        // Switch to a file
+        function switchToFile(id) {
+            const previousFileId = activeFileId;
+            activeFileId = id;
+            const file = findFileById(id);
+            
+            // Update tab states
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            const tab = document.getElementById(`tab-${id}`);
+            if (tab) {
+                tab.classList.add('active');
+            }
+            
+            // Update path input
+            pathInput.value = file ? file.path : '';
+            
+            // Update save button state
+            saveButton.disabled = !file || !file.isDirty;
+            
+            // Update split panels - if in single view, update the first panel
+            if (isSingleView) {
+                if (splitPanels.length > 0 && file) {
+                    const panel = splitPanels[0];
+                    updatePanelContent(panel, file);
+                }
+            } else {
+                // Get the active panel to load the file into
+                const panelToUpdate = getActivePanel();
+                
+                // If we have a panel and a file, update its content
+                if (panelToUpdate && file) {
+                    updatePanelContent(panelToUpdate, file);
+                }
+            }
+        }
+        
+        // Update panel with file content
+        function updatePanelContent(panel, file) {
+            const editor = panel.querySelector('.editor-textarea');
+            const titleSpan = panel.querySelector('.split-header-title');
+            
+            if (editor && titleSpan && file) {
+                editor.value = file.content;
+                titleSpan.textContent = file.path.split('/').pop();
+                panel.fileId = file.id;
+                
+                // Remove previous listeners
+                const newEditor = editor.cloneNode(true);
+                editor.parentNode.replaceChild(newEditor, editor);
+                
+                // Add input listener
+                newEditor.addEventListener('input', function() {
+                    handleEditorInput(panel.fileId, newEditor.value);
+                });
+            }
+        }
+        
+        // Handle editor input changes
+        function handleEditorInput(fileId, content) {
+            if (fileId) {
+                const file = findFileById(fileId);
+                if (file) {
+                    file.isDirty = true;
+                    file.content = content;
+                    updateTabState(fileId);
+                    
+                    // Update save button if this is the active file
+                    if (activeFileId === fileId) {
+                        saveButton.disabled = false;
+                    }
+                    
+                    // Set up autosave
+                    if (autosaveTimeout) {
+                        clearTimeout(autosaveTimeout);
+                    }
+                    
+                    const currentTime = Date.now();
+                    if (currentTime - lastSaveTime >= AUTOSAVE_DELAY) {
+                        autosaveTimeout = setTimeout(() => saveFile(fileId), 500);
+                    } else {
+                        autosaveTimeout = setTimeout(() => saveFile(fileId), AUTOSAVE_DELAY - (currentTime - lastSaveTime));
+                    }
+                }
+            }
+        }
+        
+        // Open a file and create a tab for it
+        function openFile(path) {
+            // Check if file is already open
+            const existingFile = openFiles.find(file => file.path === path);
+            if (existingFile) {
+                switchToFile(existingFile.id);
                 return;
             }
             
-            showStatus("Loading file...", "info");
+            // Load file content
+            loadFileContent(path).then(data => {
+                const file = {
+                    id: Date.now().toString(),
+                    path: path,
+                    content: data.content,
+                    sha: data.sha,
+                    isDirty: false
+                };
+                
+                openFiles.push(file);
+                createTab(file);
+                switchToFile(file.id);
+            }).catch(err => {
+                console.error('Error loading file:', err);
+            });
+        }
+        
+        // Close a file
+        function closeFile(id) {
+            const fileIndex = openFiles.findIndex(file => file.id === id);
+            if (fileIndex !== -1) {
+                const file = openFiles[fileIndex];
+                
+                // Confirm if there are unsaved changes
+                if (file.isDirty) {
+                    if (!confirm(`The file "${file.path}" has unsaved changes. Close anyway?`)) {
+                        return;
+                    }
+                }
+                
+                // Remove the tab
+                const tab = document.getElementById(`tab-${id}`);
+                if (tab) {
+                    tab.remove();
+                }
+                
+                // Update panels that show this file
+                splitPanels.forEach(panel => {
+                    if (panel.fileId === id) {
+                        panel.fileId = null;
+                        const titleSpan = panel.querySelector('.split-header-title');
+                        const editor = panel.querySelector('.editor-textarea');
+                        if (titleSpan) titleSpan.textContent = 'No file';
+                        if (editor) editor.value = '';
+                    }
+                });
+                
+                // Remove from open files
+                openFiles.splice(fileIndex, 1);
+                
+                // If this was the active file, switch to another file
+                if (activeFileId === id) {
+                    if (openFiles.length > 0) {
+                        switchToFile(openFiles[openFiles.length - 1].id);
+                    } else {
+                        activeFileId = null;
+                        saveButton.disabled = true;
+                    }
+                }
+            }
+        }
+        
+        // Load a file from GitHub
+        function loadFile() {
+            const path = pathInput.value.trim();
+            if (!path) {
+                showStatus("Please enter a file path", "error");
+                return;
+            }
+            openFile(path);
+        }
+        
+        // Load file content from GitHub
+        function loadFileContent(path) {
+            const token = localStorage.getItem('github_token');
+            const user = userInput.value.trim();
+            const repo = repoInput.value.trim();
             
-            fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
+            if (!token) {
+                showStatus("Please authenticate first", "warning");
+                return Promise.reject("Authentication required");
+            }
+            
+            showStatus(`Loading ${path}...`, "info");
+            
+            return fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Accept': 'application/vnd.github.v3+json'
@@ -304,26 +869,65 @@
                 throw new Error(`Failed to load file: ${response.status} ${response.statusText}`);
             })
             .then(data => {
-                fileSha = data.sha;
                 const content = atob(data.content);
-                fileContent = content;
-                editorElement.value = content;
-                saveButton.disabled = true;
-                isDirty = false;
-                showStatus("File loaded successfully", "success");
+                showStatus(`${path} loaded successfully`, "success");
+                return {
+                    content,
+                    sha: data.sha
+                };
             })
             .catch(error => {
                 showStatus(error.message, "error");
+                throw error;
             });
         }
         
+        // Find the current active panel
+        function getActivePanel() {
+            // If there's only one panel or we're in single view mode, return the first panel
+            if (splitPanels.length === 1 || isSingleView) {
+                return splitPanels[0];
+            }
+            
+            // Try to find a panel that has focus
+            const activeElement = document.activeElement;
+            if (activeElement && activeElement.classList.contains('editor-textarea')) {
+                // Find which panel contains this editor
+                for (const panel of splitPanels) {
+                    if (panel.contains(activeElement)) {
+                        return panel;
+                    }
+                }
+            }
+            
+            // Otherwise, find the first panel that doesn't have a file or has the active file
+            for (const panel of splitPanels) {
+                if (!panel.fileId || panel.fileId === activeFileId) {
+                    return panel;
+                }
+            }
+            
+            // Default to the last panel if none of the above conditions are met
+            return splitPanels[splitPanels.length - 1];
+        }
+        
         // Save file back to GitHub
-        function saveFile() {
+        function saveFile(fileId = activeFileId) {
+            if (!fileId) {
+                showStatus("No active file to save", "warning");
+                return;
+            }
+            
+            const file = findFileById(fileId);
+            if (!file) {
+                showStatus("File not found", "error");
+                return;
+            }
+            
             const token = localStorage.getItem('github_token');
             const user = userInput.value.trim();
             const repo = repoInput.value.trim();
-            const path = pathInput.value.trim();
-            const content = editorElement.value;
+            const content = file.content;
             const commitMessage = commitMessageInput.value.trim();
             
             if (!token) {
@@ -331,7 +935,7 @@
                 return;
             }
             
-            if (!isDirty) {
+            if (!file.isDirty) {
                 showStatus("No changes to save", "info");
                 return;
             }
@@ -342,15 +946,15 @@
                 autosaveTimeout = null;
             }
             
-            showStatus("Saving file...", "info");
+            showStatus(`Saving ${file.path}...`, "info");
             
             const payload = {
                 message: commitMessage,
-                content: btoa(content),
-                sha: fileSha
+                content: btoa(unescape(encodeURIComponent(content))),
+                sha: file.sha
             };
             
-            fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
+            fetch(`https://api.github.com/repos/${user}/${repo}/contents/${file.path}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `token ${token}`,
@@ -366,20 +970,312 @@
                 throw new Error(`Failed to save file: ${response.status} ${response.statusText}`);
             })
             .then(data => {
-                fileSha = data.content.sha;
-                fileContent = content;
-                isDirty = false;
+                file.sha = data.content.sha;
+                file.isDirty = false;
                 saveButton.disabled = true;
                 lastSaveTime = Date.now();
-                showStatus("File saved successfully", "success");
+                updateTabState(fileId);
+                showStatus(`${file.path} saved successfully`, "success");
             })
             .catch(error => {
                 showStatus(error.message, "error");
                 // Try to re-initialize autosave
-                if (isDirty) {
-                    autosaveTimeout = setTimeout(saveFile, AUTOSAVE_DELAY);
+                if (file.isDirty) {
+                    autosaveTimeout = setTimeout(() => saveFile(fileId), AUTOSAVE_DELAY);
                 }
             });
+        }
+        
+        // Browse files in the repository
+        function browseFiles() {
+            const token = localStorage.getItem('github_token');
+            const user = userInput.value.trim();
+            const repo = repoInput.value.trim();
+            const path = browsePathInput.value.trim();
+            
+            if (!token) {
+                showStatus("Please authenticate first", "warning");
+                return;
+            }
+            
+            fileBrowser.classList.remove('hidden');
+            showStatus("Browsing files...", "info");
+            
+            fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(`Failed to browse files: ${response.status} ${response.statusText}`);
+            })
+            .then(data => {
+                // Clear existing list
+                fileList.innerHTML = '';
+                
+                // Sort directories first, then files
+                const sorted = Array.isArray(data) 
+                    ? data.sort((a, b) => {
+                        if (a.type !== b.type) {
+                            return a.type === 'dir' ? -1 : 1;
+                        }
+                        return a.name.localeCompare(b.name);
+                    }) 
+                    : [data];
+                
+                // Create list items
+                sorted.forEach(item => {
+                    const li = document.createElement('li');
+                    li.className = 'file-list-item';
+                    li.textContent = item.type === 'dir' ? `📁 ${item.name}` : `📄 ${item.name}`;
+                    
+                    li.onclick = () => {
+                        if (item.type === 'dir') {
+                            browsePathInput.value = item.path;
+                            browseFiles();
+                        } else {
+                            // When selecting a file from the browser, load it directly
+                            // so it goes into the currently active panel
+                            openFile(item.path);
+                            closeBrowser();
+                        }
+                    };
+                    
+                    fileList.appendChild(li);
+                });
+                
+                showStatus("Files loaded", "success");
+            })
+            .catch(error => {
+                showStatus(error.message, "error");
+            });
+        }
+        
+        // Navigate up in the file browser
+        function browseUp() {
+            const path = browsePathInput.value.trim();
+            const parts = path.split('/').filter(Boolean);
+            
+            if (parts.length > 0) {
+                parts.pop();
+                browsePathInput.value = parts.join('/');
+                browseFiles();
+            } else {
+                browsePathInput.value = '';
+                browseFiles();
+            }
+        }
+        
+        // Add a new split panel
+        function addSplitPanel() {
+            // Create panel container
+            const panel = document.createElement('div');
+            panel.className = 'split-panel';
+            panel.id = `panel-${Date.now()}`;
+            panel.fileId = null;
+            
+            // Create panel header
+            const header = document.createElement('div');
+            header.className = 'split-header';
+            
+            const title = document.createElement('div');
+            title.className = 'split-header-title';
+            title.textContent = 'No file';
+            
+            const actions = document.createElement('div');
+            actions.className = 'split-header-actions';
+            
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'split-header-btn';
+            closeBtn.innerHTML = '×';
+            closeBtn.title = 'Close panel';
+            closeBtn.onclick = () => removePanel(panel.id);
+            
+            actions.appendChild(closeBtn);
+            header.appendChild(title);
+            header.appendChild(actions);
+            
+            // Create editor textarea
+            const editor = document.createElement('textarea');
+            editor.className = 'editor-textarea';
+            editor.placeholder = 'Select a file to edit';
+            editor.readOnly = true;
+            
+            // Add to panel
+            panel.appendChild(header);
+            panel.appendChild(editor);
+            
+            // Add resizer if not the first panel
+            if (splitPanels.length > 0) {
+                const resizer = document.createElement('div');
+                resizer.className = 'resizer';
+                resizer.addEventListener('mousedown', (e) => {
+                    resizerActive = true;
+                    resizerPanel = panel;
+                    resizerStartX = e.clientX;
+                    resizerStartWidth = panel.offsetWidth;
+                    document.body.style.cursor = 'col-resize';
+                    e.preventDefault();
+                });
+                
+                panel.appendChild(resizer);
+            }
+            
+            // Add to container and track
+            splitContainer.appendChild(panel);
+            splitPanels.push(panel);
+            
+            // If we have an active file, display it in the new panel
+            if (activeFileId) {
+                const file = findFileById(activeFileId);
+                if (file) {
+                    updatePanelContent(panel, file);
+                }
+            }
+            
+            // Update UI state
+            if (isSingleView) {
+                toggleSingleView();
+            }
+            
+            return panel;
+        }
+        
+        // Remove a split panel
+        function removePanel(panelId) {
+            if (splitPanels.length <= 1) {
+                showStatus("Cannot remove the last panel", "warning");
+                return;
+            }
+            
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.remove();
+                splitPanels = splitPanels.filter(p => p.id !== panelId);
+            }
+        }
+        
+        // Toggle between single view and split view
+        function toggleSingleView() {
+            isSingleView = !isSingleView;
+            toggleViewBtn.textContent = isSingleView ? "Split View" : "Single View";
+            
+            if (isSingleView) {
+                // Hide all panels except the first one
+                splitPanels.forEach((panel, index) => {
+                    if (index === 0) {
+                        panel.style.display = 'flex';
+                        panel.style.width = '100%';
+                    } else {
+                        panel.style.display = 'none';
+                    }
+                });
+                
+                // If active file exists, show it in the visible panel
+                if (activeFileId && splitPanels.length > 0) {
+                    const file = findFileById(activeFileId);
+                    if (file) {
+                        updatePanelContent(splitPanels[0], file);
+                    }
+                }
+            } else {
+                // Show all panels
+                const width = 100 / splitPanels.length;
+                splitPanels.forEach(panel => {
+                    panel.style.display = 'flex';
+                    panel.style.width = `${width}%`;
+                });
+            }
+        }
+        
+        // Reset split view
+        function resetSplitView() {
+            // Remove all but the first panel
+            const panelsToRemove = [...splitPanels];
+            panelsToRemove.shift(); // Keep the first one
+            
+            panelsToRemove.forEach(panel => {
+                panel.remove();
+            });
+            
+            splitPanels = splitPanels.slice(0, 1);
+            
+            // Reset the first panel
+            if (splitPanels.length > 0) {
+                splitPanels[0].style.width = '100%';
+            }
+            
+            // Add a new panel
+            addSplitPanel();
+            
+            // Make sure we're in split view
+            if (isSingleView) {
+                toggleSingleView();
+            }
+        }
+        
+        // Handle resizer mouse move
+        function handleMouseMove(e) {
+            if (!resizerActive || !resizerPanel) return;
+            
+            const deltaX = e.clientX - resizerStartX;
+            const newWidth = Math.max(50, resizerStartWidth + deltaX);
+            
+            // Calculate percentage based on container width
+            const containerWidth = splitContainer.offsetWidth;
+            const percentage = (newWidth / containerWidth) * 100;
+            
+            // Apply the new width
+            resizerPanel.style.width = `${percentage}%`;
+            
+            // Adjust other panels to maintain total width
+            const totalPanels = splitPanels.length;
+            const remainingPercentage = 100 - percentage;
+            const otherPanels = splitPanels.filter(p => p !== resizerPanel);
+            
+            if (otherPanels.length > 0) {
+                const perPanelPercentage = remainingPercentage / otherPanels.length;
+                otherPanels.forEach(panel => {
+                    panel.style.width = `${perPanelPercentage}%`;
+                });
+            }
+        }
+        
+        // Handle resizer mouse up
+        function handleMouseUp() {
+            resizerActive = false;
+            resizerPanel = null;
+            document.body.style.cursor = '';
+        }
+        
+        // Close the file browser
+        function closeBrowser() {
+            fileBrowser.classList.add('hidden');
+        }
+        
+        // Open dialog to create a new file
+        function openNewFileDialog() {
+            const newFilePath = prompt("Enter path for the new file:", "");
+            
+            if (newFilePath) {
+                // Create a new empty file object
+                const file = {
+                    id: Date.now().toString(),
+                    path: newFilePath,
+                    content: "",
+                    sha: "",  // New file has no SHA yet
+                    isDirty: true  // New file is dirty by default
+                };
+                
+                openFiles.push(file);
+                createTab(file);
+                switchToFile(file.id);
+                showStatus("New file created. Remember to save it!", "info");
+            }
         }
         
         // Show status message
@@ -388,14 +1284,14 @@
             statusDiv.className = `status ${type}`;
             statusDiv.classList.remove('hidden');
             
-            // Auto hide status message after 5 seconds
+            // Auto hide status message after 3 seconds
             setTimeout(() => {
                 statusDiv.classList.add('hidden');
-            }, 5000);
+            }, 3000);
         }
         
         // Initialize the application when the page loads
         window.addEventListener('load', init);
     </script>
-</body>
+</body>    statusDiv.classList.add('hidden');
 </html>
