@@ -2,7 +2,7 @@ const folder = CONFIG.repo.includes("github.io") ? "" : CONFIG.repo + "/";
 
 const COR = {
 
-  version: "2025-06-07",
+  version: "2025-06-09",
 
   // Used by GTV ~ github tree view
   user: CONFIG.user,
