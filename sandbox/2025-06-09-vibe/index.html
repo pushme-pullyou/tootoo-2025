@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub File Editor</title>
+    <style>
+        :root {
+            --primary-color: #0366d6;
+            --bg-color: #f6f8fa;
+            --text-color: #24292e;
+            --border-color: #e1e4e8;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.5;
+        }
+
+        h1 {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .auth-panel, .file-panel, .editor-panel {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .auth-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-group {
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"], input[type="password"], textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea#editor {
+            min-height: 400px;
+            font-family: monospace;
+            resize: vertical;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .status.success {
+            background-color: #e6ffed;
+            color: #22863a;
+        }
+
+        .status.error {
+            background-color: #ffeef0;
+            color: #cb2431;
+        }
+
+        .status.info {
+            background-color: #f1f8ff;
+            color: #0366d6;
+        }
+
+        .status.warning {
+            background-color: #fff5b1;
+            color: #735c0f;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>GitHub File Editor</h1>
+    
+    <div class="container">
+        <div class="auth-panel">
+            <div>
+                <span id="auth-status">Not authenticated</span>
+            </div>
+            <div>
+                <button id="auth-toggle" onclick="toggleAuthPanel()">Login</button>
+            </div>
+        </div>
+        
+        <div id="auth-details" class="auth-panel hidden">
+            <div class="input-group">
+                <label for="token">GitHub Token:</label>
+                <input type="password" id="token" placeholder="Enter your GitHub token">
+            </div>
+            <button id="save-token" onclick="saveToken()">Save Token</button>
+        </div>
+        
+        <div class="file-panel">
+            <div class="input-group">
+                <label for="user">Username:</label>
+                <input type="text" id="user" value="pushme-pullyou" disabled>
+            </div>
+            <div class="input-group">
+                <label for="repo">Repository:</label>
+                <input type="text" id="repo" value="tooroo-2025" disabled>
+            </div>
+            <div class="input-group">
+                <label for="path">File Path:</label>
+                <input type="text" id="path" value="sandbox/2025-06-09-vibe/test.md" disabled>
+            </div>
+            <button id="load-file" onclick="loadFile()">Load File</button>
+        </div>
+        
+        <div class="editor-panel">
+            <textarea id="editor" placeholder="File content will appear here"></textarea>
+            <div class="input-group">
+                <label for="commit-message">Commit Message:</label>
+                <input type="text" id="commit-message" value="Update from GitHub File Editor">
+            </div>
+            <button id="save-file" onclick="saveFile()" disabled>Save Changes</button>
+            <div id="status" class="status hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const DEFAULT_USER = "pushme-pullyou";
+        const DEFAULT_REPO = "tootoo-2025";
+        const DEFAULT_PATH = "sandbox/2025-06-09-vibe/test.md";
+        const AUTOSAVE_DELAY = 15000; // 15 seconds
+        
+        // Variables
+        let fileContent = "";
+        let fileSha = "";
+        let isAuthenticated = false;
+        let lastSaveTime = 0;
+        let autosaveTimeout = null;
+        let isDirty = false;
+        
+        // Elements
+        const tokenInput = document.getElementById('token');
+        const userInput = document.getElementById('user');
+        const repoInput = document.getElementById('repo');
+        const pathInput = document.getElementById('path');
+        const editorElement = document.getElementById('editor');
+        const commitMessageInput = document.getElementById('commit-message');
+        const saveButton = document.getElementById('save-file');
+        const loadButton = document.getElementById('load-file');
+        const authToggle = document.getElementById('auth-toggle');
+        const authStatus = document.getElementById('auth-status');
+        const authDetails = document.getElementById('auth-details');
+        const statusDiv = document.getElementById('status');
+        
+        // Initialize the application
+        function init() {
+            // Check if token exists in localStorage
+            const token = localStorage.getItem('github_token');
+            if (token) {
+                tokenInput.value = token;
+                isAuthenticated = true;
+                authStatus.textContent = "Authenticated";
+                authToggle.textContent = "Logout";
+            }
+            
+            // Set up the editor change listener
+            editorElement.addEventListener('input', function() {
+                isDirty = true;
+                saveButton.disabled = false;
+                
+                // Clear any existing timeout
+                if (autosaveTimeout) {
+                    clearTimeout(autosaveTimeout);
+                }
+                
+                // Set up autosave
+                const currentTime = Date.now();
+                if (currentTime - lastSaveTime >= AUTOSAVE_DELAY) {
+                    autosaveTimeout = setTimeout(saveFile, 500); // Small delay for typing completion
+                } else {
+                    autosaveTimeout = setTimeout(saveFile, AUTOSAVE_DELAY - (currentTime - lastSaveTime));
+                }
+            });
+        }
+        
+        // Toggle authentication panel
+        function toggleAuthPanel() {
+            if (isAuthenticated) {
+                // Logout
+                localStorage.removeItem('github_token');
+                tokenInput.value = '';
+                isAuthenticated = false;
+                authStatus.textContent = "Not authenticated";
+                authToggle.textContent = "Login";
+                showStatus("Logged out successfully", "info");
+            } else {
+                // Show auth panel
+                authDetails.classList.toggle('hidden');
+            }
+        }
+        
+        // Save GitHub token
+        function saveToken() {
+            const token = tokenInput.value.trim();
+            
+            if (!token) {
+                showStatus("Please enter a valid GitHub token", "error");
+                return;
+            }
+            
+            // Test the token by making a request to GitHub API
+            fetch('https://api.github.com/user', {
+                headers: {
+                    'Authorization': `token ${token}`
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    localStorage.setItem('github_token', token);
+                    isAuthenticated = true;
+                    authStatus.textContent = "Authenticated";
+                    authToggle.textContent = "Logout";
+                    authDetails.classList.add('hidden');
+                    showStatus("Authentication successful", "success");
+                } else {
+                    throw new Error("Invalid token");
+                }
+            })
+            .catch(error => {
+                showStatus("Authentication failed: " + error.message, "error");
+            });
+        }
+        
+        // Load file from GitHub
+        function loadFile() {
+            const token = localStorage.getItem('github_token');
+            const user = userInput.value.trim();
+            const repo = repoInput.value.trim();
+            const path = pathInput.value.trim();
+            
+            if (!token) {
+                showStatus("Please authenticate first", "warning");
+                return;
+            }
+            
+            showStatus("Loading file...", "info");
+            
+            fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(`Failed to load file: ${response.status} ${response.statusText}`);
+            })
+            .then(data => {
+                fileSha = data.sha;
+                const content = atob(data.content);
+                fileContent = content;
+                editorElement.value = content;
+                saveButton.disabled = true;
+                isDirty = false;
+                showStatus("File loaded successfully", "success");
+            })
+            .catch(error => {
+                showStatus(error.message, "error");
+            });
+        }
+        
+        // Save file back to GitHub
+        function saveFile() {
+            const token = localStorage.getItem('github_token');
+            const user = userInput.value.trim();
+            const repo = repoInput.value.trim();
+            const path = pathInput.value.trim();
+            const content = editorElement.value;
+            const commitMessage = commitMessageInput.value.trim();
+            
+            if (!token) {
+                showStatus("Please authenticate first", "warning");
+                return;
+            }
+            
+            if (!isDirty) {
+                showStatus("No changes to save", "info");
+                return;
+            }
+            
+            // Clear any existing autosave timeout
+            if (autosaveTimeout) {
+                clearTimeout(autosaveTimeout);
+                autosaveTimeout = null;
+            }
+            
+            showStatus("Saving file...", "info");
+            
+            const payload = {
+                message: commitMessage,
+                content: btoa(content),
+                sha: fileSha
+            };
+            
+            fetch(`https://api.github.com/repos/${user}/${repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error(`Failed to save file: ${response.status} ${response.statusText}`);
+            })
+            .then(data => {
+                fileSha = data.content.sha;
+                fileContent = content;
+                isDirty = false;
+                saveButton.disabled = true;
+                lastSaveTime = Date.now();
+                showStatus("File saved successfully", "success");
+            })
+            .catch(error => {
+                showStatus(error.message, "error");
+                // Try to re-initialize autosave
+                if (isDirty) {
+                    autosaveTimeout = setTimeout(saveFile, AUTOSAVE_DELAY);
+                }
+            });
+        }
+        
+        // Show status message
+        function showStatus(message, type) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.classList.remove('hidden');
+            
+            // Auto hide status message after 5 seconds
+            setTimeout(() => {
+                statusDiv.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Initialize the application when the page loads
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
