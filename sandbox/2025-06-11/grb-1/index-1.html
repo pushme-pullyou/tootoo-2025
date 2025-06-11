@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repository Browser</title>
+    <style>
+        :root {
+            --sidebar-width: 20rem;
+            --primary-color: #0366d6;
+            --border-color: #e1e4e8;
+            --text-color: #24292e;
+            --bg-color: #ffffff;
+            --hover-bg: #f6f8fa;
+            --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text-color);
+            background: var(--bg-color);
+            overflow: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .file-tree-sidebar {
+            width: var(--sidebar-width);
+            min-width: 200px;
+            max-width: 50vw;
+            border-right: 1px solid var(--border-color);
+            background: var(--bg-color);
+            display: flex;
+            flex-direction: column;
+            resize: horizontal;
+            overflow: hidden;
+        }
+
+        .repo-input {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .repo-input input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .search-box {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .file-tree {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        /* Content Area Styles */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .breadcrumb {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 14px;
+            background: var(--hover-bg);
+        }
+
+        .breadcrumb a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .file-content {
+            flex: 1;
+            padding: 1rem;
+            overflow: auto;
+            background: var(--bg-color);
+        }
+
+        /* Tree Item Styles */
+        .tree-item {
+            display: block;
+            padding: 0.25rem 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            margin: 1px 0;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .tree-item:hover {
+            background: var(--hover-bg);
+        }
+
+        .tree-item.selected {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tree-folder {
+            font-weight: 500;
+        }
+
+        .tree-item-icon {
+            margin-right: 0.5rem;
+            width: 16px;
+            display: inline-block;
+        }
+
+        details {
+            margin-left: 1rem;
+        }
+
+        details > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 0.25rem 0;
+        }
+
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+
+        details > summary::before {
+            content: '▶';
+            margin-right: 0.5rem;
+            transition: transform 0.2s;
+        }
+
+        details[open] > summary::before {
+            transform: rotate(90deg);
+        }
+
+        /* File Content Styles */
+        .file-viewer {
+            background: #f8f8f8;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .file-header {
+            background: var(--hover-bg);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-weight: 500;
+        }
+
+        .file-body {
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            overflow: auto;
+            max-height: 70vh;
+        }
+
+        .markdown-content {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+        }
+
+        .markdown-content h1, .markdown-content h2, .markdown-content h3 {
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .markdown-content p {
+            margin: 0.5rem 0;
+        }
+
+        .markdown-content code {
+            background: #f3f4f6;
+            padding: 0.125rem 0.25rem;
+            border-radius: 3px;
+            font-family: var(--font-mono);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .error {
+            color: #d73a49;
+            background: #ffeef0;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+        }
+
+        /* Image preview */
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+
+        /* PDF viewer */
+        .pdf-viewer {
+            width: 100%;
+            height: 70vh;
+            border: none;
+        }
+
+        /* Quick search overlay */
+        .quick-search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+        }
+
+        .quick-search-modal {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            min-width: 400px;
+            max-width: 80vw;
+        }
+
+        .quick-search-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .quick-search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 0.5rem;
+        }
+
+        .quick-search-item {
+            padding: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .quick-search-item:hover,
+        .quick-search-item.selected {
+            background: var(--hover-bg);
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .file-tree-sidebar {
+                width: 100%;
+                max-height: 40vh;
+                resize: vertical;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="file-tree-sidebar">
+            <div class="repo-input">
+                <input type="text" id="repoInput" placeholder="owner/repository (e.g., facebook/react)" />
+                <button onclick="loadRepository()">Load Repository</button>
+            </div>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search files..." oninput="filterFiles()" />
+            </div>
+            <div class="file-tree" id="fileTree">
+                <div class="loading">Enter a repository above to browse files</div>
+            </div>
+        </aside>
+        <main class="content-area">
+            <div class="breadcrumb" id="breadcrumb">
+                Select a file to view its contents
+            </div>
+            <div class="file-content" id="fileContent">
+                <div style="text-align: center; padding: 2rem; color: #666;">
+                    <h3>GitHub Repository Browser</h3>
+                    <p>Enter a repository name in the format "owner/repository" to get started.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Quick Search Overlay -->
+    <div class="quick-search-overlay" id="quickSearchOverlay">
+        <div class="quick-search-modal">
+            <input type="text" class="quick-search-input" id="quickSearchInput" placeholder="Go to file..." />
+            <div class="quick-search-results" id="quickSearchResults"></div>
+        </div>
+    </div>
+
+    <script>
+        class GitHubBrowser {
+            constructor() {
+                this.apiBase = 'https://api.github.com';
+                this.currentRepo = '';
+                this.repoData = new Map(); // Store all repository data
+                this.allFiles = [];
+                this.expandedFolders = new Set();
+                this.selectedItem = null;
+                
+                this.initializeEventListeners();
+                this.loadFromHash();
+            }
+
+            initializeEventListeners() {
+                // Keyboard shortcuts
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'p') {
+                        e.preventDefault();
+                        this.showQuickSearch();
+                    }
+                    if (e.key === 'Escape') {
+                        this.hideQuickSearch();
+                    }
+                });
+
+                // Hash change for routing
+                window.addEventListener('hashchange', () => this.loadFromHash());
+
+                // Quick search functionality
+                document.getElementById('quickSearchInput').addEventListener('input', (e) => {
+                    this.handleQuickSearch(e.target.value);
+                });
+
+                document.getElementById('quickSearchInput').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        this.selectQuickSearchItem();
+                    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        this.navigateQuickSearch(e.key === 'ArrowDown' ? 1 : -1);
+                    }
+                });
+
+                // Repository input
+                document.getElementById('repoInput').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        this.loadRepository();
+                    }
+                });
+            }
+
+            async loadRepository() {
+                const repo = document.getElementById('repoInput').value.trim();
+                if (!repo) return;
+
+                this.currentRepo = repo;
+                this.repoData.clear();
+                this.allFiles = [];
+                
+                const fileTree = document.getElementById('fileTree');
+                fileTree.innerHTML = '<div class="loading">Loading repository...</div>';
+
+                try {
+                    // Load the entire repository structure in one go
+                    await this.loadEntireRepository();
+                    this.renderFileTree();
+                    this.updateUrl();
+                } catch (error) {
+                    fileTree.innerHTML = `<div class="error">Error loading repository: ${error.message}</div>`;
+                }
+            }
+
+            async loadEntireRepository() {
+                if (!this.currentRepo) return;
+
+                // Get repository tree using Git Trees API to fetch everything at once
+                const url = `${this.apiBase}/repos/${this.currentRepo}/git/trees/HEAD?recursive=1`;
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                // Process all items and create a file structure
+                data.tree.forEach(item => {
+                    const pathParts = item.path.split('/');
+                    
+                    // Store in our data structure
+                    this.repoData.set(item.path, {
+                        path: item.path,
+                        name: pathParts[pathParts.length - 1],
+                        type: item.type === 'tree' ? 'dir' : 'file',
+                        sha: item.sha,
+                        size: item.size,
+                        url: item.type === 'blob' ? `https://raw.githubusercontent.com/${this.currentRepo}/HEAD/${item.path}` : null
+                    });
+
+                    // Add to files list for search
+                    if (item.type === 'blob') {
+                        this.allFiles.push({
+                            path: item.path,
+                            name: pathParts[pathParts.length - 1],
+                            type: 'file',
+                            url: `https://raw.githubusercontent.com/${this.currentRepo}/HEAD/${item.path}`
+                        });
+                    }
+                });
+            }
+
+            renderFileTree() {
+                const container = document.getElementById('fileTree');
+                container.innerHTML = '';
+                
+                // Build a hierarchical structure from flat data
+                const tree = this.buildTreeStructure();
+                this.renderTreeLevel(tree, container, '');
+            }
+
+            buildTreeStructure() {
+                const tree = {};
+                
+                // Sort paths and build structure
+                const sortedPaths = Array.from(this.repoData.keys()).sort();
+                
+                sortedPaths.forEach(path => {
+                    const parts = path.split('/');
+                    let current = tree;
+                    
+                    parts.forEach((part, index) => {
+                        if (!current[part]) {
+                            current[part] = {
+                                name: part,
+                                path: parts.slice(0, index + 1).join('/'),
+                                isFile: index === parts.length - 1 && this.repoData.get(path).type === 'file',
+                                children: {}
+                            };
+                        }
+                        current = current[part].children;
+                    });
+                });
+                
+                return tree;
+            }
+
+            renderTreeLevel(tree, container, parentPath) {
+                // Sort: folders first, then files
+                const entries = Object.entries(tree).sort(([a, aData], [b, bData]) => {
+                    if (aData.isFile !== bData.isFile) {
+                        return aData.isFile ? 1 : -1;
+                    }
+                    return a.localeCompare(b);
+                });
+                
+                entries.forEach(([name, data]) => {
+                    const element = this.createTreeItem(data);
+                    container.appendChild(element);
+                });
+            }
+
+            createTreeItem(data) {
+                if (data.isFile) {
+                    const link = document.createElement('a');
+                    link.href = '#';
+                    link.className = 'tree-item';
+                    link.innerHTML = `<span class="tree-item-icon">${this.getFileIcon(data.name)}</span>${data.name}`;
+                    
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const fileData = this.repoData.get(data.path);
+                        this.selectFile(fileData);
+                    });
+                    
+                    return link;
+                } else {
+                    const details = document.createElement('details');
+                    const summary = document.createElement('summary');
+                    summary.className = 'tree-item tree-folder';
+                    summary.innerHTML = `<span class="tree-item-icon">📁</span>${data.name}`;
+                    
+                    details.appendChild(summary);
+                    
+                    // Create container for children
+                    const childContainer = document.createElement('div');
+                    details.appendChild(childContainer);
+                    
+                    // Render children immediately since we have all data
+                    this.renderTreeLevel(data.children, childContainer, data.path);
+                    
+                    details.addEventListener('toggle', () => {
+                        if (details.open) {
+                            this.expandedFolders.add(data.path);
+                        } else {
+                            this.expandedFolders.delete(data.path);
+                        }
+                    });
+                    
+                    return details;
+                }
+            }
+
+            getFileIcon(filename) {
+                const ext = filename.split('.').pop().toLowerCase();
+                const icons = {
+                    'js': '📜',
+                    'html': '🌐',
+                    'css': '🎨',
+                    'md': '📝',
+                    'json': '📋',
+                    'png': '🖼️',
+                    'jpg': '🖼️',
+                    'jpeg': '🖼️',
+                    'gif': '🖼️',
+                    'svg': '🖼️',
+                    'pdf': '📄',
+                    'txt': '📄',
+                    'py': '🐍',
+                    'java': '☕',
+                    'cpp': '⚙️',
+                    'c': '⚙️',
+                    'php': '🐘',
+                    'rb': '💎',
+                    'go': '🐹',
+                    'rs': '🦀',
+                    'ts': '📘',
+                    'xml': '📋',
+                    'yml': '📋',
+                    'yaml': '📋'
+                };
+                return icons[ext] || '📄';
+            }
+
+            async selectFile(item) {
+                // Update selection
+                document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected'));
+                event.target.classList.add('selected');
+                
+                this.selectedItem = item;
+                this.updateBreadcrumb(item.path);
+                this.updateUrl(item.path);
+                
+                await this.displayFileContent(item);
+            }
+
+            async displayFileContent(item) {
+                const contentArea = document.getElementById('fileContent');
+                contentArea.innerHTML = '<div class="loading">Loading file content...</div>';
+
+                try {
+                    // Fetch content from raw GitHub URL (not API)
+                    const response = await fetch(item.url);
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const content = await response.text();
+                    const viewer = this.createFileViewer(item, content);
+                    contentArea.innerHTML = '';
+                    contentArea.appendChild(viewer);
+
+                } catch (error) {
+                    contentArea.innerHTML = `<div class="error">Error loading file: ${error.message}</div>`;
+                }
+            }
+
+            createFileViewer(item, content) {
+                const viewer = document.createElement('div');
+                viewer.className = 'file-viewer';
+
+                const header = document.createElement('div');
+                header.className = 'file-header';
+                header.innerHTML = `
+                    📄 ${item.name}
+                    <button onclick="window.open('${item.url}', '_blank')" style="float: right; margin-left: 10px;">Raw</button>
+                    <button onclick="navigator.clipboard.writeText('${item.url}')" style="float: right;">Copy URL</button>
+                `;
+
+                const body = document.createElement('div');
+                body.className = 'file-body';
+
+                const ext = item.name.split('.').pop().toLowerCase();
+
+                if (['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'].includes(ext)) {
+                    body.innerHTML = `<img src="${item.url}" alt="${item.name}" class="image-preview" />`;
+                } else if (ext === 'pdf') {
+                    body.innerHTML = `<iframe src="${item.url}" class="pdf-viewer"></iframe>`;
+                } else if (ext === 'md') {
+                    body.className = 'file-body markdown-content';
+                    body.innerHTML = this.renderMarkdown(content);
+                } else {
+                    body.textContent = content;
+                }
+
+                viewer.appendChild(header);
+                viewer.appendChild(body);
+                return viewer;
+            }
+
+            getGitHubPagesUrl(path) {
+                const [owner, repo] = this.currentRepo.split('/');
+                
+                // If repo name includes "github.io", use simplified URL format
+                if (repo.includes('github.io')) {
+                    return `https://${repo}/${path}`;
+                } else {
+                    // Standard GitHub Pages format
+                    return `https://${owner}.github.io/${repo}/${path}`;
+                }
+            }
+
+            renderMarkdown(markdown) {
+                // Enhanced markdown renderer with proper image and link support
+                let html = markdown;
+                
+                // First, escape HTML to prevent conflicts
+                html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                
+                // Images: ![alt text](url) or ![alt text](url "title")
+                html = html.replace(/!\[([^\]]*)\]\(([^)]+?)(?:\s+"([^"]*)")?\)/g, (match, alt, url, title) => {
+                    // Handle relative URLs - make them absolute to the repository using GitHub Pages
+                    // Don't modify URLs that already start with https/http or data: or root paths
+                    if (!url.startsWith('https://') && 
+                        !url.startsWith('http://') && 
+                        !url.startsWith('data:') && 
+                        !url.startsWith('/') &&
+                        !url.startsWith('//')) {
+                        
+                        const [owner, repo] = this.currentRepo.split('/');
+                        // Remove leading ./ if present
+                        url = url.replace(/^\.\//, '');
+                        
+                        // If repo name includes "github.io", use simplified URL format
+                        if (repo.includes('github.io')) {
+                            url = `https://${repo}/${url}`;
+                        } else {
+                            url = `https://${owner}.github.io/${repo}/${url}`;
+                        }
+                    }
+                    const titleAttr = title ? ` title="${title}"` : '';
+                    return `<img src="${url}" alt="${alt}"${titleAttr} class="markdown-image" />`;
+                });
+                
+                // Links: [text](url) or [text](url "title") 
+                html = html.replace(/\[([^\]]+)\]\(([^)]+?)(?:\s+"([^"]*)")?\)/g, (match, text, url, title) => {
+                    // Don't modify external URLs, but handle relative links
+                    if (!url.startsWith('https://') && 
+                        !url.startsWith('http://') && 
+                        !url.startsWith('mailto:') && 
+                        !url.startsWith('#') &&
+                        !url.startsWith('/') &&
+                        !url.startsWith('//')) {
+                        
+                        const [owner, repo] = this.currentRepo.split('/');
+                        // Remove leading ./ if present
+                        url = url.replace(/^\.\//, '');
+                        
+                        // If repo name includes "github.io", use simplified URL format
+                        if (repo.includes('github.io')) {
+                            url = `https://${repo}/${url}`;
+                        } else {
+                            url = `https://${owner}.github.io/${repo}/${url}`;
+                        }
+                    }
+                    
+                    const titleAttr = title ? ` title="${title}"` : '';
+                    const target = (url.startsWith('http') || url.startsWith('//')) ? ' target="_blank"' : '';
+                    return `<a href="${url}"${titleAttr}${target}>${text}</a>`;
+                });
+                
+                // Code blocks: ```language\ncode\n``` (before other processing)
+                html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, '<pre><code class="language-$1">$2</code></pre>');
+                
+                // Inline code: `code` (before other processing)
+                html = html.replace(/`([^`\n]+)`/g, '<code>$1</code>');
+                
+                // Headers (must be at start of line)
+                html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
+                html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
+                html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
+                html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+                
+                // Bold: **text**
+                html = html.replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>');
+                
+                // Italic: *text* (but not if it's part of **)
+                html = html.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>');
+                
+                // Lists: - item or * item
+                html = html.replace(/^[\s]*[-*]\s+(.+)$/gm, '<li>$1</li>');
+                html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+                
+                // Line breaks: double newlines become paragraph breaks
+                html = html.replace(/\n\s*\n/g, '</p><p>');
+                
+                // Wrap in paragraphs
+                html = '<p>' + html + '</p>';
+                
+                // Clean up empty paragraphs and fix nested elements
+                html = html.replace(/<p>\s*<\/p>/g, '');
+                html = html.replace(/<p>(\s*<(?:h[1-6]|ul|ol|pre|blockquote)[^>]*>)/g, '$1');
+                html = html.replace(/(<\/(?:h[1-6]|ul|ol|pre|blockquote)>)\s*<\/p>/g, '$1');
+                
+                return html;
+            }
+
+            updateBreadcrumb(path) {
+                const breadcrumb = document.getElementById('breadcrumb');
+                if (!path) {
+                    breadcrumb.textContent = this.currentRepo;
+                    return;
+                }
+
+                const parts = path.split('/');
+                let currentPath = '';
+                let html = `<a href="#${this.currentRepo}">${this.currentRepo}</a>`;
+
+                parts.forEach((part, index) => {
+                    currentPath += (index > 0 ? '/' : '') + part;
+                    if (index === parts.length - 1) {
+                        html += ` / ${part}`;
+                    } else {
+                        html += ` / <a href="#${this.currentRepo}/${currentPath}">${part}</a>`;
+                    }
+                });
+
+                breadcrumb.innerHTML = html;
+            }
+
+            filterFiles() {
+                const query = document.getElementById('searchInput').value.toLowerCase();
+                const items = document.querySelectorAll('.tree-item');
+                
+                items.forEach(item => {
+                    const text = item.textContent.toLowerCase();
+                    const shouldShow = text.includes(query);
+                    item.style.display = shouldShow ? 'block' : 'none';
+                    
+                    // Show parent folders if child matches
+                    if (shouldShow) {
+                        let parent = item.closest('details');
+                        while (parent) {
+                            parent.style.display = 'block';
+                            parent = parent.parentElement.closest('details');
+                        }
+                    }
+                });
+            }
+
+            showQuickSearch() {
+                document.getElementById('quickSearchOverlay').style.display = 'block';
+                document.getElementById('quickSearchInput').focus();
+            }
+
+            hideQuickSearch() {
+                document.getElementById('quickSearchOverlay').style.display = 'none';
+                document.getElementById('quickSearchInput').value = '';
+                document.getElementById('quickSearchResults').innerHTML = '';
+            }
+
+            handleQuickSearch(query) {
+                const results = document.getElementById('quickSearchResults');
+                if (!query) {
+                    results.innerHTML = '';
+                    return;
+                }
+
+                const filtered = this.allFiles
+                    .filter(file => file.name.toLowerCase().includes(query.toLowerCase()))
+                    .slice(0, 10);
+
+                results.innerHTML = filtered
+                    .map((file, index) => 
+                        `<div class="quick-search-item ${index === 0 ? 'selected' : ''}" data-path="${file.path}">
+                            ${this.getFileIcon(file.name)} ${file.path}
+                        </div>`
+                    ).join('');
+
+                // Add click handlers
+                results.querySelectorAll('.quick-search-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        this.selectFileByPath(item.dataset.path);
+                        this.hideQuickSearch();
+                    });
+                });
+            }
+
+            navigateQuickSearch(direction) {
+                const items = document.querySelectorAll('.quick-search-item');
+                const current = document.querySelector('.quick-search-item.selected');
+                
+                if (!items.length) return;
+                
+                let newIndex = 0;
+                if (current) {
+                    const currentIndex = Array.from(items).indexOf(current);
+                    newIndex = currentIndex + direction;
+                    if (newIndex < 0) newIndex = items.length - 1;
+                    if (newIndex >= items.length) newIndex = 0;
+                    current.classList.remove('selected');
+                }
+                
+                items[newIndex].classList.add('selected');
+            }
+
+            selectQuickSearchItem() {
+                const selected = document.querySelector('.quick-search-item.selected');
+                if (selected) {
+                    this.selectFileByPath(selected.dataset.path);
+                    this.hideQuickSearch();
+                }
+            }
+
+            selectFileByPath(path) {
+                const file = this.repoData.get(path);
+                if (file && file.type === 'file') {
+                    this.selectFile(file);
+                }
+            }
+
+            updateUrl(path = '') {
+                const hash = this.currentRepo + (path ? '/' + path : '');
+                if (window.location.hash.slice(1) !== hash) {
+                    window.history.pushState(null, '', '#' + hash);
+                }
+            }
+
+            loadFromHash() {
+                const hash = window.location.hash.slice(1);
+                if (!hash) return;
+
+                const parts = hash.split('/');
+                const repo = parts.slice(0, 2).join('/');
+                const path = parts.slice(2).join('/');
+
+                if (repo !== this.currentRepo) {
+                    document.getElementById('repoInput').value = repo;
+                    this.loadRepository().then(() => {
+                        if (path) {
+                            setTimeout(() => this.selectFileByPath(path), 1000);
+                        }
+                    });
+                } else if (path) {
+                    this.selectFileByPath(path);
+                }
+            }
+        }
+
+        // Initialize the browser
+        const browser = new GitHubBrowser();
+
+        // Global functions for button clicks
+        function loadRepository() {
+            browser.loadRepository();
+        }
+
+        function filterFiles() {
+            browser.filterFiles();
+        }
+    </script>
+</body>
+</html>
