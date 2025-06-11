@@ -8,15 +8,13 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="Version 2025-06-04">
+  <meta name="version" content="Version 2025-06-10">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
   <!-- Copyright 2025 Theo Armour. MIT license -->
 
   <link id=CORstyle rel="stylesheet" href="style-core.css">
-
-
 
 </head>
 
@@ -47,10 +45,8 @@
             <h1>
               <div class="title-link">
                 <a id=aSource href="" target="_top" title="Click to go to the source code on GitHub">
-                  <img id="imgGitHub" src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
-                <a href="" title="Click this title to reload this page">
-                  <span id=spnTitle></span>
-                  <span id=spnVersion></span>
+                  <img id=imgGitHub src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg"></a>
+                <a href="" id=aTitle title="Click this title to reload this page">
                 </a>
               </div>
             </h1>
@@ -59,15 +55,13 @@
 
         </div>
         <div id=divNavExtras>
+
           Text size:
-          <button id="btnDecreaseText" onclick="adjustTextSize(-0.1)" style="font-size: 1.2rem\;"
-            title="Decrease text size">A-</button>
-          <button id="btnIncreaseText" onclick="adjustTextSize(0.1)" style="font-size: 1.2rem;"
-            title="Increase text size">A+</button>
+          <button id="btnDecreaseText" onclick="adjustTextSize(-0.1)" title="Decrease text size">A-</button>
+          <button id="btnIncreaseText" onclick="adjustTextSize(0.1)" title="Increase text size">A+</button>
           <button id="btnResetText" onclick="resetTextSize()" style="font-size: 1rem;"
             title="Reset text size">A</button>
-          &nbsp;
-          <a style="display: none;font-size: 1.5rem;" id=pencil href="./tootoo-edit.html">✎</a>
+          <button style="display: none;" onclick=onButton() id=pencil>✎</button>
 
         </div>
 
@@ -102,7 +96,7 @@
 
   <main id=main>
 
-    <div id="divMessage">Version: 2025-06-04</div>
+    <div id="divMessage"></div>
     <div id="divMainContent"></div>
 
   </main>
@@ -113,26 +107,63 @@
 
     function init() {
 
-      // Load saved text scale
+      document.title = COR.menuTitle;
+      aTitle.innerText = COR.menuTitle;
+      aSource.href = COR.urlSource + location.hash.slice(1);
+      divMessage.title = document.querySelector("[ name=version ]").content;
+
       loadTextScale(); //main.js
 
-      pencil.href = COR.pathApps + "tootoo-edit.html";
+      updateBreadcrumb(''); //main.js
 
-      document.title = COR.menuTitle;
-      spnTitle.innerText = COR.menuTitle;
-      document.getElementById("aSource").href = COR.urlSource;
-      main.title = document.querySelector("[ name=version ]").content;
+      sumNavMenu.hidden = true;
+
+      if (location.protocol === "https:") {
+
+        window.history.pushState("", "", COR.urlPushPath + location.hash);
+
+      }
+
+      window.addEventListener('resize', handleMenuToggleForWindowSize);
+
+      // Click outside menu to close
+      document.addEventListener('click', function (event) {
+
+        // Only close menu if hamburger is visible and menu is open
+        if (!sumNavMenu.hidden &&
+          detNavMenu.open &&
+          !navMenu.contains(event.target) &&
+          !sumNavMenu.contains(event.target)) {
+          detNavMenu.open = false;
+        }
+      });
+
 
       COR.accessToken = localStorage.getItem("githubAccessToken") || "";
-      if (COR.accessToken) { pencil.style.display = "block"; }
 
-      // Initialize breadcrumb
-      updateBreadcrumb('');
+      if (COR.accessToken) {
+
+        pencil.style.display = "block";
+
+      }
+
+      // onHashChange > github-file-open.js
+      window.addEventListener("hashchange", onHashChange, false);
+
+      location.hash = location.hash ? location.hash : COR.defaultFile;
+
+      COR.divContent = divMainContent;
+
+      onHashChange();
+
+    }
+
+    function handleMenuToggleForWindowSize() {
 
       if (window.innerWidth < 800 || window.innerHeight < 500) {
-
         detNavMenu.open = false;
         sumNavMenu.hidden = false;
+
 
       } else {
 
@@ -141,37 +172,7 @@
 
       }
 
-      if (location.protocol === "https:") {
-
-        window.history.pushState("", "", COR.urlPushPath + location.hash);
-
-      }
-
-      // Click outside menu to close
-      document.addEventListener('click', function(event) {
-        const navMenu = document.getElementById('navMenu');
-        const detNavMenu = document.getElementById('detNavMenu');
-        const sumNavMenu = document.getElementById('sumNavMenu');
-        
-        // Only close menu if hamburger is visible and menu is open
-        if (!sumNavMenu.hidden && 
-            detNavMenu.open && 
-            !navMenu.contains(event.target) && 
-            !sumNavMenu.contains(event.target)) {
-          detNavMenu.open = false;
-        }
-      });
-
-      // onHashChange > github-file-open.js
-
-      window.addEventListener("hashchange", onHashChange, false);
-
-      location.hash = location.hash ? location.hash : COR.defaultFile;
-
-      onHashChange();
-
     }
-
   </script>
 
 </body>

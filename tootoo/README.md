@@ -51,8 +51,8 @@ _"Templates Read Me" in a resizable window_
 
 ## To Do / Wish List
 
+* 2025-06-10 ~ Breadcrumbs: better no file handling
 * 2025-06-09 ~ Ignore all index.html files
-* 2025-06-04 ~ start tips & tricks page
 * 2025-06-04 ~ Add sort files by two numbers at front of filename
 * 2025-06-09 ~ GitHub icon links to actual file not just repo 
 * 2025-05-29 ~ date sorting folders are identified in COR{}
@@ -63,8 +63,11 @@ _"Templates Read Me" in a resizable window_
 * 2023-10-13 ~ Check if follows Win11 light and dark mode
 
 
-## Issues
+## Issues 
 
+* Keep Config and App separate 
+* Avoid trying to mix excellent viewing with excellent editing. Mixing front end and back end
+* Avoid trying to mix markdown and HTML
 
 
 ## Links of Interest
@@ -77,6 +80,7 @@ _"Templates Read Me" in a resizable window_
 
 Done
 
+* 2025-06-04 ~ start tips & tricks page
 * Styles cleaned up and refactored
 * Pencil toggles between edit and view apps
 * Right click toggle folders open and closed
@@ -124,9 +128,7 @@ on a hash change make sure its associated "file-container" menu item for that it
 
 Another complicated day. 
 
-
 I tried to get rid of notesy. but failed. Something to do with permissions and GAT.
-
 
 Other than that, I'm not sure what I got done except for a code cleanup. 
 
@@ -167,12 +169,19 @@ Done or deprecated
 * 2025-01-16 ~ update style sheet
 * 2025-01-16 ~ check links for GitHub icons
 
+### 2025-05-15
+
+* TooToo: Many changes
+
+
 ### 2025-05-14
 
 Trying to fix Source Control issues
 
 ### 2025-04-26
 
+* Fix link to GitHub.
+* Improve file loading
 * Add diminishing font size to to folder titles
 * Add indents to folder titles
 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage Happenings Reader</title>
+    <link rel="stylesheet" href="assets/styles/main.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to the Heritage Happenings Reader</h1>
+        <p>Your wild and wacky way to browse and view files!</p>
+    </header>
+    <main>
+        <section id="token-setup">
+            <h2>GitHub Token Setup</h2>
+            <div>
+                <label for="github-token">GitHub Personal Access Token:</label>
+                <input type="password" id="github-token" placeholder="Enter your GitHub token">
+                <button id="connect-btn">Connect</button>
+            </div>
+            <p><small>Need a token? <a href="https://github.com/settings/tokens" target="_blank">Create one here</a></small></p>
+        </section>
+        <section id="file-list" style="display: none;">
+            <h2>Available Files</h2>
+            <ul id="files"></ul>
+        </section>
+        <section id="file-viewer" style="display: none;">
+            <h2>File Viewer</h2>
+            <div id="content"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Heritage Happenings</p>
+    </footer>
+    <script src="assets/scripts/github-api.js"></script>
+    <script src="assets/scripts/fileReader.js"></script>
+    <script src="assets/scripts/app.js"></script>
+</body>
+</html>

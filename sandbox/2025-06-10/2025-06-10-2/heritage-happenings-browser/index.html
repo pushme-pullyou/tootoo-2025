@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage Happenings Browser</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            text-align: center;
+        }
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .file-item {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px 0;
+            padding: 15px;
+            transition: background-color 0.3s;
+        }
+        .file-item:hover {
+            background-color: #e0f7fa;
+        }
+        .file-link {
+            text-decoration: none;
+            color: #2980b9;
+            font-size: 1.2em;
+        }
+        .file-link:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Heritage Happenings Browser</h1>
+    <p>Browse and view markdown and other files from the <a href="https://heritage-happenings.github.io" target="_blank">heritage-happenings.github.io</a> repository.</p>
+    <ul class="file-list" id="fileList"></ul>
+    <footer>
+        <p>&copy; 2023 Heritage Happenings. All rights reserved.</p>
+    </footer>
+    <script>
+        const fileList = document.getElementById('fileList');
+
+        async function fetchFiles() {
+            const response = await fetch('https://api.github.com/repos/heritage-happenings/heritage-happenings.github.io/contents/');
+            const files = await response.json();
+            files.forEach(file => {
+                if (file.type === 'file') {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'file-item';
+                    const link = document.createElement('a');
+                    link.href = file.download_url;
+                    link.className = 'file-link';
+                    link.textContent = file.name;
+                    link.target = '_blank';
+                    listItem.appendChild(link);
+                    fileList.appendChild(listItem);
+                }
+            });
+        }
+
+        fetchFiles();
+    </script>
+</body>
+</html>

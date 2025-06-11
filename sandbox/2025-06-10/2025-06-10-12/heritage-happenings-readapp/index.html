@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage Happenings ReadApp</title>
+    <style>
+        body {
+            font-family: Verdana, sans-serif;
+            font-size: 14pt;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        #left-pane {
+            width: 30%;
+            background-color: #ffffff;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+        }
+        #right-pane {
+            width: 70%;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .folder, .file {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .folder:hover, .file:hover {
+            background-color: #e0e0e0;
+        }
+        .hidden {
+            display: none;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="left-pane">
+        <h2>File Explorer</h2>
+        <div id="folder-tree"></div>
+    </div>
+    <div id="right-pane">
+        <h2>File Content</h2>
+        <div id="file-content">Select a file to view its content.</div>
+        <iframe id="pdf-viewer" class="hidden"></iframe>
+    </div>
+    <script>
+        const folderTree = document.getElementById('folder-tree');
+        const fileContent = document.getElementById('file-content');
+        const pdfViewer = document.getElementById('pdf-viewer');
+
+        // Function to fetch and display folders and files
+        async function fetchFiles() {
+            const response = await fetch('https://api.github.com/repos/heritage-happenings/heritage-happenings.github.io/contents');
+            const data = await response.json();
+            displayFolders(data);
+        }
+
+        function displayFolders(data) {
+            data.forEach(item => {
+                if (item.type === 'dir' && ['Blog', 'Dining Service', 'Heritage Documents'].includes(item.name)) {
+                    const folderDiv = document.createElement('div');
+                    folderDiv.className = 'folder';
+                    folderDiv.textContent = item.name;
+                    folderDiv.onclick = () => fetchFolderContents(item.path);
+                    folderTree.appendChild(folderDiv);
+                }
+            });
+        }
+
+        async function fetchFolderContents(folderPath) {
+            const response = await fetch(`https://api.github.com/repos/heritage-happenings/heritage-happenings.github.io/contents/${folderPath}`);
+            const data = await response.json();
+            displayFiles(data);
+        }
+
+        function displayFiles(data) {
+            folderTree.innerHTML = ''; // Clear previous folder view
+            data.forEach(item => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'file';
+                fileDiv.textContent = item.name;
+                fileDiv.onclick = () => fetchFileContent(item.path);
+                folderTree.appendChild(fileDiv);
+            });
+        }
+
+        async function fetchFileContent(filePath) {
+            const response = await fetch(`https://api.github.com/repos/heritage-happenings/heritage-happenings.github.io/contents/${filePath}`);
+            const data = await response.json();
+            renderFile(data);
+        }
+
+        function renderFile(fileData) {
+            const contentType = fileData.type;
+            const content = atob(fileData.content); // Decode base64 content
+
+            if (fileData.name.endsWith('.md')) {
+                fileContent.innerHTML = marked(content); // Use marked.js to render Markdown
+                pdfViewer.classList.add('hidden');
+            } else if (fileData.name.endsWith('.pdf')) {
+                pdfViewer.src = content; // Set PDF source
+                pdfViewer.classList.remove('hidden');
+                fileContent.innerHTML = '';
+            } else {
+                fileContent.textContent = content; // Display plain text
+                pdfViewer.classList.add('hidden');
+            }
+        }
+
+        fetchFiles(); // Initial fetch
+    </script>
+</body>
+</html>

@@ -37,16 +37,7 @@ Try
 
 * Refactor 404.html ~ Add entered URL & search
 
-### 2025-05-15
 
-* TooToo: Many changes
-
-### 2025-04-26
-
-* Fix link to GitHub.
-* Add diminishing font sizes to details.
-* Add indentations to details.
-* Improve file loading
 
 ### 2025-01-09 First Commit
 

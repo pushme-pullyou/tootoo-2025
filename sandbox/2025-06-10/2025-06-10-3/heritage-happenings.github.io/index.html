@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage Happenings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #ff4500;
+            font-size: 2.5em;
+        }
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .file-item {
+            background-color: #fff;
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            margin: 10px 0;
+            padding: 15px;
+            transition: transform 0.2s;
+        }
+        .file-item:hover {
+            transform: scale(1.05);
+        }
+        .file-link {
+            text-decoration: none;
+            color: #ff4500;
+            font-size: 1.5em;
+        }
+        .file-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .file-link {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Heritage Happenings!</h1>
+    <p>Browse our wild and wacky collection of files!</p>
+    <ul class="file-list" id="fileList"></ul>
+
+    <script>
+        const fileList = document.getElementById('fileList');
+
+        // Simulated file structure (this should be replaced with actual file fetching logic)
+        const files = [
+            { name: 'README.md', path: 'README.md' },
+            { name: 'example1.md', path: 'example1.md' },
+            { name: 'example2.md', path: 'example2.md' },
+            // Add more files as needed
+        ];
+
+        files.forEach(file => {
+            const listItem = document.createElement('li');
+            listItem.className = 'file-item';
+            const link = document.createElement('a');
+            link.className = 'file-link';
+            link.href = file.path;
+            link.textContent = file.name;
+            listItem.appendChild(link);
+            fileList.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heritage Happenings - Repository Browser</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 18px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .auth-section {
+            margin-top: 10px;
+        }
+
+        .auth-input {
+            padding: 8px 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+            width: 300px;
+        }
+
+        .auth-button {
+            padding: 8px 15px;
+            font-size: 16px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .auth-button:hover {
+            background: #45a049;
+        }
+
+        .main-content {
+            display: flex;
+            width: 100%;
+            margin-top: 120px;
+        }
+
+        .sidebar {
+            width: 35%;
+            background: #f8f9fa;
+            border-right: 3px solid #dee2e6;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .content-area {
+            width: 65%;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .folder-tree {
+            padding: 20px;
+        }
+
+        .tree-item {
+            margin: 8px 0;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 18px;
+            border: 2px solid transparent;
+        }
+
+        .tree-item:hover {
+            background: #e9ecef;
+            border-color: #6c757d;
+            transform: translateX(5px);
+        }
+
+        .tree-item.folder {
+            background: linear-gradient(90deg, #ffecd2 0%, #fcb69f 100%);
+            font-weight: bold;
+        }
+
+        .tree-item.file {
+            background: linear-gradient(90deg, #a8edea 0%, #fed6e3 100%);
+            margin-left: 20px;
+        }
+
+        .tree-item.markdown {
+            background: linear-gradient(90deg, #d299c2 0%, #fef9d7 100%);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-size: 24px;
+            color: #6c757d;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            border-radius: 15px;
+            margin: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .error {
+            background: linear-gradient(45deg, #ff6b6b, #ffa8a8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px;
+            font-size: 20px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .file-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 3px solid #e9ecef;
+        }
+
+        .file-content h1, .file-content h2, .file-content h3 {
+            color: #495057;
+            margin: 20px 0 15px 0;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 8px;
+        }
+
+        .file-content h1 { font-size: 32px; }
+        .file-content h2 { font-size: 26px; }
+        .file-content h3 { font-size: 22px; }
+
+        .file-content p {
+            margin: 15px 0;
+            font-size: 20px;
+            line-height: 1.8;
+        }
+
+        .file-content pre {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+            overflow-x: auto;
+            font-size: 16px;
+        }
+
+        .file-content code {
+            background: #f8f9fa;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .welcome {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            margin: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .welcome h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .main-content {
+                flex-direction: column;
+                margin-top: 140px;
+            }
+            
+            .sidebar, .content-area {
+                width: 100%;
+                max-height: 300px;
+            }
+            
+            .auth-input {
+                width: 200px;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏛️ Heritage Happenings - Repository Explorer</h1>
+        <div class="auth-section">
+            <input type="password" id="tokenInput" class="auth-input" placeholder="Enter GitHub Personal Access Token (optional for public repos)">
+            <button onclick="saveToken()" class="auth-button">💾 Save Token</button>
+            <span id="tokenStatus"></span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="sidebar">
+                <div class="folder-tree" id="fileTree">
+                    <div class="loading">🔍 Loading repository files...</div>
+                </div>
+            </div>
+            <div class="content-area">
+                <div id="fileContent">
+                    <div class="welcome">
+                        <h2>Welcome to Heritage Happenings! 🎉</h2>
+                        <p style="font-size: 22px;">Click on any file in the left panel to view its contents.</p>
+                        <p style="font-size: 18px; margin-top: 20px;">📁 Folders are shown in orange<br>📄 Files are shown in blue-green<br>📝 Markdown files are shown in purple-yellow</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        class HeritageHappeningsApp {
+            constructor() {
+                this.owner = 'heritage-happenings';
+                this.repo = 'heritage-happenings.github.io';
+                this.branch = 'master';
+                this.apiBase = 'https://api.github.com';
+                this.token = localStorage.getItem('github_token') || '';
+                this.init();
+            }
+
+            init() {
+                this.updateTokenStatus();
+                this.loadRepository();
+            }
+
+            getHeaders() {
+                const headers = {
+                    'Accept': 'application/vnd.github.v3+json'
+                };
+                if (this.token) {
+                    headers['Authorization'] = `token ${this.token}`;
+                }
+                return headers;
+            }
+
+            async loadRepository() {
+                try {
+                    const tree = await this.getRepositoryTree();
+                    this.renderFileTree(tree);
+                } catch (error) {
+                    document.getElementById('fileTree').innerHTML = 
+                        `<div class="error">❌ Error loading repository: ${error.message}</div>`;
+                }
+            }
+
+            async getRepositoryTree() {
+                const url = `${this.apiBase}/repos/${this.owner}/${this.repo}/git/trees/${this.branch}?recursive=1`;
+                const response = await fetch(url, { headers: this.getHeaders() });
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load repository: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.tree;
+            }
+
+            renderFileTree(tree) {
+                const fileTreeElement = document.getElementById('fileTree');
+                const folders = new Map();
+                
+                // Organize files by folders
+                tree.forEach(item => {
+                    if (item.type === 'blob') {
+                        const pathParts = item.path.split('/');
+                        const fileName = pathParts.pop();
+                        const folderPath = pathParts.join('/') || 'Root';
+                        
+                        if (!folders.has(folderPath)) {
+                            folders.set(folderPath, []);
+                        }
+                        folders.get(folderPath).push({
+                            name: fileName,
+                            path: item.path,
+                            url: item.url
+                        });
+                    }
+                });
+
+                let html = '<h3 style="color: #495057; margin-bottom: 20px; font-size: 24px;">📚 Repository Contents</h3>';
+                
+                // Sort folders
+                const sortedFolders = Array.from(folders.entries()).sort();
+                
+                sortedFolders.forEach(([folderPath, files]) => {
+                    html += `<div class="tree-item folder" onclick="toggleFolder('${folderPath}')">
+                        📁 ${folderPath === 'Root' ? '🏠 Root Directory' : folderPath}
+                    </div>`;
+                    
+                    html += `<div id="folder-${folderPath.replace(/[\/\s]/g, '-')}" style="display: block;">`;
+                    
+                    files.sort((a, b) => a.name.localeCompare(b.name)).forEach(file => {
+                        const isMarkdown = file.name.toLowerCase().endsWith('.md');
+                        const icon = isMarkdown ? '📝' : '📄';
+                        const className = isMarkdown ? 'tree-item file markdown' : 'tree-item file';
+                        
+                        html += `<div class="${className}" onclick="loadFile('${file.path}')">
+                            ${icon} ${file.name}
+                        </div>`;
+                    });
+                    
+                    html += '</div>';
+                });
+
+                fileTreeElement.innerHTML = html;
+            }
+
+            async loadFile(filePath) {
+                const contentArea = document.getElementById('fileContent');
+                contentArea.innerHTML = '<div class="loading">📖 Loading file...</div>';
+
+                try {
+                    const url = `${this.apiBase}/repos/${this.owner}/${this.repo}/contents/${filePath}`;
+                    const response = await fetch(url, { headers: this.getHeaders() });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Failed to load file: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    const content = atob(data.content);
+                    
+                    let html = `<div class="file-content">`;
+                    html += `<h2 style="color: #667eea;">📄 ${filePath}</h2>`;
+                    
+                    if (filePath.toLowerCase().endsWith('.md')) {
+                        html += marked.parse(content);
+                    } else if (filePath.toLowerCase().match(/\.(json|js|css|html|xml|txt)$/)) {
+                        html += `<pre><code>${this.escapeHtml(content)}</code></pre>`;
+                    } else {
+                        html += `<p style="font-size: 20px; color: #6c757d;">This file type cannot be displayed as text.</p>`;
+                    }
+                    
+                    html += '</div>';
+                    contentArea.innerHTML = html;
+                    
+                } catch (error) {
+                    contentArea.innerHTML = `<div class="error">❌ Error loading file: ${error.message}</div>`;
+                }
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            saveToken() {
+                const token = document.getElementById('tokenInput').value.trim();
+                if (token) {
+                    localStorage.setItem('github_token', token);
+                    this.token = token;
+                } else {
+                    localStorage.removeItem('github_token');
+                    this.token = '';
+                }
+                this.updateTokenStatus();
+                this.loadRepository();
+            }
+
+            updateTokenStatus() {
+                const statusElement = document.getElementById('tokenStatus');
+                if (this.token) {
+                    statusElement.innerHTML = '<span style="color: #4CAF50;">✅ Token saved</span>';
+                } else {
+                    statusElement.innerHTML = '<span style="color: #ffc107;">⚠️ No token (public access only)</span>';
+                }
+            }
+        }
+
+        // Global functions for onclick handlers
+        function toggleFolder(folderPath) {
+            const folderId = 'folder-' + folderPath.replace(/[\/\s]/g, '-');
+            const folderElement = document.getElementById(folderId);
+            if (folderElement) {
+                folderElement.style.display = folderElement.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        function loadFile(filePath) {
+            app.loadFile(filePath);
+        }
+
+        function saveToken() {
+            app.saveToken();
+        }
+
+        // Initialize the app
+        const app = new HeritageHappeningsApp();
+    </script>
+</body>
+</html>
