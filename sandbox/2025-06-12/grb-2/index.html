@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>GitHub Repository File Browser & Viewer</title>
+
+  <!-- Highlight.js (syntax highlighting) -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+
+  <style>
+    :root {
+      --sidebar-width: 240px;
+      --bg: #fafbfc;
+      --border: #d0d7de;
+      --text: #24292f;
+      --link: #0969da;
+    }
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* ---------- Top bar ---------- */
+    header {
+      padding: .5rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: .5rem;
+      align-items: center;
+      background: #fff;
+    }
+    header input[type=text]{
+      flex:1;
+      padding:.4rem .6rem;
+      border:1px solid var(--border);
+      border-radius:4px;
+    }
+    header button{
+      padding:.4rem .8rem;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+    }
+    #loadBtn{background:var(--link);color:#fff}
+    #historySelect{
+      padding:.35rem;
+      border:1px solid var(--border);
+      border-radius:4px;
+      background:#fff;
+    }
+    #menuToggle{display:none;font-size:1.5rem;background:none}
+
+    /* ---------- Main layout ---------- */
+    #container{flex:1;display:flex;min-height:0}
+    #sidebar{
+      width:var(--sidebar-width);
+      min-width:150px;
+      max-width:60vw;
+      border-right:1px solid var(--border);
+      background:#fff;
+      overflow:auto;
+      resize:horizontal;
+      transition:transform .3s;
+    }
+    #sidebar.collapsed{transform:translateX(-100%)}
+
+    #tree{padding:.5rem .25rem}
+
+    /* Tree styles */
+    #tree details>summary{cursor:pointer;padding:.15rem .25rem;border-radius:3px}
+    #tree details>summary::before{content:"▶ "}
+    #tree details[open]>summary::before{content:"▼ "}
+    #tree .file{
+      cursor:pointer;
+      padding:.15rem 1.25rem;
+      border-radius:3px;
+    }
+    #tree .file:hover,
+    #tree details>summary:hover{background:#eaecef}
+
+    /* Viewer */
+    #viewer{
+      flex:1;
+      overflow:auto;
+      position:relative;
+      padding:1rem;
+      font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+      white-space:pre;
+    }
+    #viewer code{
+      line-height:1.5;
+      counter-reset:line;
+    }
+    #viewer code .line::before{
+      counter-increment:line;
+      content:counter(line);
+      display:inline-block;
+      width:3ch;
+      margin-right:1ch;
+      color:#6e7781;
+      text-align:right;
+    }
+
+    /* Spinner */
+    #spinner{
+      position:absolute;top:1rem;right:1rem;
+      width:1.5rem;height:1.5rem;
+      border:3px solid var(--border);
+      border-top:3px solid var(--link);
+      border-radius:50%;
+      animation:spin 1s linear infinite;
+      display:none;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* Error banner */
+    #errorBanner{
+      display:none;
+      padding:.5rem 1rem;
+      background:#ffdce0;
+      color:#82071e;
+      border-bottom:1px solid #d1242f;
+    }
+
+    /* Small screens */
+    @media(max-width:600px){
+      #menuToggle{display:block}
+      #sidebar{position:absolute;height:100%;z-index:2}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <button id="menuToggle" aria-label="Toggle repository tree">☰</button>
+    <input id="repoInput" type="text" placeholder="owner/repo" aria-label="GitHub repository">
+    <button id="loadBtn" disabled>Load</button>
+    <select id="historySelect" aria-label="Recent repositories">
+      <option value="">Recent</option>
+    </select>
+  </header>
+
+  <div id="errorBanner" role="alert"></div>
+
+  <div id="container">
+    <nav id="sidebar" role="tree"><div id="tree"></div></nav>
+    <main id="viewer" aria-label="File viewer">
+      <div id="spinner"></div>
+      <p>Select a file from the tree to view its contents here.</p>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+  'use strict';
+  (function(){
+    /* ---------- DOM ---------- */
+    const repoInput  = document.getElementById('repoInput');
+    const loadBtn    = document.getElementById('loadBtn');
+    const treeDiv    = document.getElementById('tree');
+    const viewer     = document.getElementById('viewer');
+    const spinner    = document.getElementById('spinner');
+    const errorBanner= document.getElementById('errorBanner');
+    const historySel = document.getElementById('historySelect');
+    const sidebar    = document.getElementById('sidebar');
+    const menuToggle = document.getElementById('menuToggle');
+
+    /* ---------- State ---------- */
+    let currentOwner='', currentRepo='', currentBranch='master';
+
+    /* ---------- Helpers ---------- */
+    const datePat=/^\\d{4}-\\d{2}-\\d{2}/;
+const escapeHtml = s => s.replace(/[&<>"']/g, m => ({
+  '&':  '&amp;',
+  '<':  '&lt;',
+  '>':  '&gt;',
+  '"':  '&quot;',
+  "'": '&#039;'       // now OK – key wrapped in double quotes
+}[m]));
+
+    const showError=msg=>{
+      errorBanner.textContent=msg;
+      errorBanner.style.display='block';
+      setTimeout(()=>errorBanner.style.display='none',5_000);
+    };
+    const toggleSpinner=flag=>{spinner.style.display=flag?'block':'none'};
+    const validateRepo=r=>/^[^/]+\/[^/]+$/.test(r.trim());
+
+    /* ---------- History ---------- */
+    function saveHistory(repo){
+      const h=JSON.parse(localStorage.getItem('gh-repo-hist')||'[]');
+      const i=h.indexOf(repo);
+      if(i!==-1)h.splice(i,1);
+      h.unshift(repo);
+      if(h.length>5)h.pop();
+      localStorage.setItem('gh-repo-hist',JSON.stringify(h));
+      renderHistory();
+    }
+    function renderHistory(){
+      const h=JSON.parse(localStorage.getItem('gh-repo-hist')||'[]');
+      historySel.innerHTML='<option value="">Recent</option>';
+      h.forEach(r=>{
+        const o=document.createElement('option');
+        o.value=o.textContent=r;
+        historySel.appendChild(o);
+      });
+    }
+
+    /* ---------- Sorting ---------- */
+    function sortEntries(a,b){
+      if(a.type!==b.type) return a.type==='tree'?-1:1;
+      if(a.type==='blob'){
+        const ad=a.name.match(datePat), bd=b.name.match(datePat);
+        if(ad&&bd) return new Date(bd[0])-new Date(ad[0]);
+        if(ad) return -1;
+        if(bd) return  1;
+      }
+      return a.name.localeCompare(b.name);
+    }
+
+    /* ---------- GitHub API ---------- */
+    async function fetchTree(owner,repo){
+      for(const br of ['master','main']){
+        const url=`https://api.github.com/repos/${owner}/${repo}/git/trees/${br}?recursive=1`;
+        const res=await fetch(url);
+        if(res.status===404) continue;
+        if(!res.ok) throw res;
+        return {branch:br,tree:(await res.json()).tree};
+      }
+      const e=new Error('Repository or branches not found');e.status=404;throw e;
+    }
+
+    /* ---------- Tree building ---------- */
+    function toNested(entries){
+      const root={name:'/',type:'tree',children:[]};
+      for(const e of entries){
+        if(e.type!=='blob') continue;
+        const parts=e.path.split('/');
+        let cur=root;
+        parts.forEach((p,i)=>{
+          let child=cur.children.find(c=>c.name===p);
+          if(!child){
+            child={name:p,type:i===parts.length-1?'blob':'tree',path:e.path,children:[]};
+            cur.children.push(child);
+          }
+          cur=child;
+        });
+      }
+      (function sort(n){n.children.sort(sortEntries);n.children.forEach(sort);})(root);
+      return root;
+    }
+
+    /* ---------- Rendering ---------- */
+    function makeNode(node){
+      if(node.type==='tree'){
+        const det=document.createElement('details');
+        det.setAttribute('role','treeitem');
+        const sum=document.createElement('summary');sum.textContent=node.name;
+        det.appendChild(sum);
+        const inner=document.createElement('div');inner.style.paddingLeft='1rem';
+        node.children.forEach(c=>inner.appendChild(makeNode(c)));
+        det.appendChild(inner);
+        return det;
+      }
+      const file=document.createElement('div');
+      file.className='file';file.textContent=node.name;
+      file.setAttribute('role','treeitem');file.tabIndex=0;
+      const load=()=>loadFile(node.path);
+      file.addEventListener('click',load);
+      file.addEventListener('keydown',e=>{if(e.key==='Enter')load()});
+      return file;
+    }
+    function renderTree(root){
+      treeDiv.innerHTML='';
+      root.children.forEach(c=>treeDiv.appendChild(makeNode(c)));
+    }
+
+    /* ---------- File loading ---------- */
+    async function loadFile(path){
+      const url=encodeURI(`https://raw.githubusercontent.com/${currentOwner}/${currentRepo}/${currentBranch}/${path}`);
+      try{
+        toggleSpinner(true);
+        const res=await fetch(url);
+        if(!res.ok) throw res;
+        const txt=await res.text();
+        displayFile(txt,path);
+      }catch(err){showError('Failed to load file: '+(err.status||err.message))}
+      finally{toggleSpinner(false)}
+    }
+    function displayFile(content,path){
+      const ext=path.split('.').pop().toLowerCase();
+      const pre=document.createElement('pre');
+      const code=document.createElement('code');
+      pre.appendChild(code); viewer.innerHTML=''; viewer.appendChild(pre);
+
+      const lines=content.replace(/\\t/g,'  ').split(/\\r?\\n/);
+      code.innerHTML=lines.map(l=>`<span class="line">${escapeHtml(l)}</span>`).join('\\n');
+
+      if(['js','html','css','md','json','ts','txt'].includes(ext)){
+        hljs.highlightElement(code);
+      }
+    }
+
+    /* ---------- UI & events ---------- */
+    repoInput.addEventListener('input',()=>{loadBtn.disabled=!validateRepo(repoInput.value)});
+    loadBtn.addEventListener('click',()=>loadRepo(repoInput.value.trim()));
+    historySel.addEventListener('change',()=>{
+      if(historySel.value){
+        repoInput.value=historySel.value;
+        loadBtn.disabled=false;
+        loadRepo(historySel.value);
+      }
+    });
+    menuToggle.addEventListener('click',()=>sidebar.classList.toggle('collapsed'));
+
+    /* Basic keyboard nav */
+    treeDiv.addEventListener('keydown',e=>{
+      if(!['ArrowDown','ArrowUp'].includes(e.key)) return;
+      const items=[...treeDiv.querySelectorAll('[role="treeitem"]')];
+      const i=items.indexOf(document.activeElement);
+      if(i===-1) return;
+      const n=i+(e.key==='ArrowDown'?1:-1);
+      if(n>=0&&n<items.length){items[n].focus();e.preventDefault();}
+    });
+
+    async function loadRepo(repo){
+      if(!validateRepo(repo)) {showError('Invalid repository format');return;}
+      const [owner,r]=repo.split('/');
+      try{
+        toggleSpinner(true);
+        const {branch,tree}=await fetchTree(owner,r);
+        currentOwner=owner;currentRepo=r;currentBranch=branch;
+        renderTree(toNested(tree));
+        viewer.innerHTML='<p>Select a file from the tree to view its contents here.</p>';
+        saveHistory(repo);
+      }catch(err){
+        if(err.status===403) showError('API rate limit exceeded. Try again later.');
+        else if(err.status===404) showError('Repository or branch not found.');
+        else showError('Error: '+(err.status||err.message));
+      }finally{toggleSpinner(false);}
+    }
+
+    /* Kick-off */
+    renderHistory();
+  })();
+  </script>
+</body>
+</html>
