@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repository Tree Browser</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            background-color: #f6f8fa;
+        }
+        #sidebar {
+            width: 20rem;
+            background-color: #ffffff;
+            border-right: 1px solid #e1e4e8;
+            overflow-y: auto;
+            transition: width 0.3s;
+        }
+        #main {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            padding: 1rem;
+            background-color: #24292e;
+            color: white;
+        }
+        details {
+            margin: 0.5rem 0;
+        }
+        summary {
+            cursor: pointer;
+            padding: 0.5rem;
+            background-color: #f1f1f1;
+            border-radius: 4px;
+        }
+        summary:hover {
+            background-color: #e1e4e8;
+        }
+        .file {
+            padding-left: 1rem;
+            color: #0366d6;
+        }
+        .selected {
+            background-color: #cce5ff;
+        }
+        #repo-input {
+            width: calc(100% - 2rem);
+            margin: 1rem;
+            padding: 0.5rem;
+        }
+        #status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #586069;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h1>File Tree</h1>
+        <input type="text" id="repo-input" placeholder="Enter owner/repo" />
+        <div id="file-tree"></div>
+        <div id="status"></div>
+    </div>
+    <div id="main">
+        <h1>Current Path</h1>
+        <div id="current-path">No file selected</div>
+    </div>
+
+    <script>
+        const repoInput = document.getElementById('repo-input');
+        const fileTree = document.getElementById('file-tree');
+        const currentPath = document.getElementById('current-path');
+        const status = document.getElementById('status');
+
+        repoInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                loadRepository(repoInput.value);
+            }
+        });
+
+        async function loadRepository(repo) {
+            try {
+                const response = await fetch(`https://api.github.com/repos/${repo}/git/trees/main?recursive=1`);
+                if (!response.ok) throw new Error('Repository not found or API limit exceeded');
+                const data = await response.json();
+                displayFileTree(data.tree);
+                status.textContent = `Loaded repository: ${repo}`;
+            } catch (error) {
+                status.textContent = error.message;
+            }
+        }
+
+        function displayFileTree(files) {
+            fileTree.innerHTML = '';
+            const tree = buildTree(files);
+            renderTree(tree, fileTree);
+        }
+
+        function buildTree(files) {
+            const tree = {};
+            files.forEach(file => {
+                const parts = file.path.split('/');
+                let current = tree;
+                parts.forEach(part => {
+                    if (!current[part]) {
+                        current[part] = {};
+                    }
+                    current = current[part];
+                });
+            });
+            return tree;
+        }
+
+        function renderTree(node, parentElement) {
+            for (const key in node) {
+                const details = document.createElement('details');
+                const summary = document.createElement('summary');
+                summary.textContent = key;
+                details.appendChild(summary);
+                parentElement.appendChild(details);
+                renderTree(node[key], details);
+            }
+        }
+
+        fileTree.addEventListener('click', function (e) {
+            if (e.target.tagName === 'SUMMARY') {
+                const selectedFile = e.target.textContent;
+                currentPath.textContent = selectedFile;
+                e.target.parentElement.classList.toggle('selected');
+            }
+        });
+    </script>
+</body>
+</html>

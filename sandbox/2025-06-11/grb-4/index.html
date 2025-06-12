@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GitHub Repository Tree Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --sidebar-width: 20rem;
+      --accent: #0366d6;
+      --bg: #fafbfc;
+      --fg: #24292e;
+      --hover: #f6f8fa;
+    }
+    * { box-sizing: border-box; margin:0; padding:0 }
+    body, html { height:100%; font-family: sans-serif; color: var(--fg); }
+    .container { display: flex; height:100%; }
+    aside { 
+      width: var(--sidebar-width); 
+      border-right: 1px solid #ddd; 
+      background: var(--bg); 
+      display: flex; flex-direction: column; 
+      resize: horizontal; overflow: auto;
+    }
+    .controls {
+      padding: 0.5rem; display: flex; gap:0.5rem; flex-wrap: wrap;
+    }
+    .controls input, .controls select {
+      flex:1; padding: 0.3rem; border:1px solid #ccc; border-radius:4px;
+    }
+    .controls button {
+      padding: 0.3rem 0.6rem; border:none; background: var(--accent); color:#fff; border-radius:4px; cursor:pointer;
+    }
+    #treeContainer { flex:1; overflow:auto; padding:0.5rem; }
+    details { margin-left:1rem; }
+    summary { cursor: pointer; padding:2px 4px; border-radius:3px; }
+    summary:hover { background: var(--hover); }
+    .file { display: block; padding:2px 4px; margin-left:2rem; cursor:pointer; border-radius:3px; }
+    .file:hover { background: var(--hover); }
+    .selected { background: rgba(3,102,214,0.1); }
+    .hidden { display:none; }
+    .error { color: red; padding:0.5rem; }
+    #stats { padding:0.5rem; font-size:0.9rem; border-top:1px solid #ddd; }
+    main { flex:1; padding:1rem; overflow:auto; }
+    #spinner { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(255,255,255,0.9); padding:1rem; border:1px solid #ccc; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside>
+      <div class="controls">
+        <input id="repoInput" placeholder="owner/repo">
+        <select id="repoHistory"></select>
+        <button id="loadBtn">Load</button>
+        <button id="toggleBtn">Toggle All</button>
+      </div>
+      <div id="treeContainer"></div>
+      <div id="stats"></div>
+    </aside>
+    <main>
+      <div id="content">Current hash: <code id="hashDisplay"></code></div>
+    </main>
+  </div>
+  <div id="spinner" class="hidden">Loading…</div>
+  <div id="error" class="error hidden"></div>
+
+  <script>
+    const repoInput = document.getElementById('repoInput');
+    const repoHistory = document.getElementById('repoHistory');
+    const loadBtn = document.getElementById('loadBtn');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const treeContainer = document.getElementById('treeContainer');
+    const stats = document.getElementById('stats');
+    const spinner = document.getElementById('spinner');
+    const errorBox = document.getElementById('error');
+    const hashDisplay = document.getElementById('hashDisplay');
+
+    let currentRepo = '';
+    let fileMap = new Map();
+    let allDetailsOpen = false;
+
+    function showSpinner(show) { spinner.classList.toggle('hidden', !show); }
+    function showError(msg) { errorBox.textContent = msg; errorBox.classList.toggle('hidden', !msg); }
+    function saveHistory(repo) {
+      if (!repo) return;
+      let list = JSON.parse(localStorage.getItem('github-repos')||'[]');
+      list = list.filter(r=>r!==repo);
+      list.unshift(repo);
+      if (list.length>10) list.pop();
+      localStorage.setItem('github-repos', JSON.stringify(list));
+      loadHistory();
+    }
+    function loadHistory() {
+      repoHistory.innerHTML = '<option value="">History</option>';
+      JSON.parse(localStorage.getItem('github-repos')||'[]').forEach(r=>{
+        const opt = document.createElement('option');
+        opt.value = r; opt.textContent = r;
+        repoHistory.appendChild(opt);
+      });
+    }
+    function buildTree(data) {
+      treeContainer.innerHTML = '';
+      stats.textContent = '';
+      fileMap.clear();
+      // nest items
+      const root = {children: new Map()};
+      data.forEach(item=>{
+        const parts = item.path.split('/');
+        let node = root;
+        parts.forEach((p,i)=>{
+          if (!node.children.has(p)) {
+            node.children.set(p, { children: new Map(), isFile: i===parts.length-1 && item.type==='blob', path: parts.slice(0,i+1).join('/') });
+          }
+          node = node.children.get(p);
+        });
+      });
+      function sorter(a,b) {
+        const aDate = /^\d{4}-\d{2}-\d{2}/.test(a[0]);
+        const bDate = /^\d{4}-\d{2}-\d{2}/.test(b[0]);
+        if (a[1].children.size && !b[1].children.size) return -1;
+        if (!a[1].children.size && b[1].children.size) return 1;
+        if (aDate && bDate) return b[0].localeCompare(a[0]);
+        if (aDate||bDate) return aDate? -1:1;
+        return a[0].localeCompare(b[0]);
+      }
+      function recurse(node, container) {
+        Array.from(node.children).sort(sorter).forEach(([name,child])=>{
+          if (child.children.size) {
+            const d = document.createElement('details');
+            const s = document.createElement('summary');
+            s.textContent = '📁 '+name;
+            d.appendChild(s);
+            container.appendChild(d);
+            recurse(child,d);
+          } else {
+            const f = document.createElement('div');
+            f.className = 'file';
+            f.textContent = emoji(name)+' '+name;
+            f.dataset.path = child.path;
+            f.addEventListener('click',()=>selectFile(child.path));
+            container.appendChild(f);
+            fileMap.set(child.path, f);
+          }
+        });
+      }
+      recurse(root, treeContainer);
+      updateStats();
+    }
+    function emoji(name) {
+      if (name.endsWith('.js')) return '📜';
+      if (name.endsWith('.html')) return '🌐';
+      if (name.endsWith('.css')) return '🎨';
+      if (name.endsWith('.md')) return '📝';
+      if (name.endsWith('.json')) return '📊';
+      return '📄';
+    }
+    function updateStats() {
+      const files = treeContainer.querySelectorAll('.file').length;
+      const folders = treeContainer.querySelectorAll('details').length;
+      stats.textContent = `${folders} folders, ${files} files`;
+    }
+    function toggleAll() {
+      allDetailsOpen = !allDetailsOpen;
+      treeContainer.querySelectorAll('details').forEach(d=> d.open = allDetailsOpen);
+    }
+    function selectFile(path) {
+      hashDisplay.textContent = `#${currentRepo}/${path}`;
+      location.hash = `${currentRepo}/${path}`;
+      treeContainer.querySelectorAll('.file.selected').forEach(el=>el.classList.remove('selected'));
+      const el = fileMap.get(path);
+      if (el) {
+        el.classList.add('selected');
+        el.scrollIntoView({block:'nearest'});
+        // open parents
+        let parent = el.parentElement;
+        while (parent && parent.tagName==='DETAILS') {
+          parent.open = true;
+          parent = parent.parentElement;
+        }
+      }
+    }
+    async function loadRepo(repo) {
+      if (!repo) return;
+      currentRepo = repo;
+      showError('');
+      showSpinner(true);
+      treeContainer.innerHTML = '';
+      try {
+        // try main, then master
+        let res = await fetch(`https://api.github.com/repos/${repo}/git/trees/main?recursive=1`);
+        if (!res.ok) res = await fetch(`https://api.github.com/repos/${repo}/git/trees/master?recursive=1`);
+        if (!res.ok) throw new Error(res.statusText);
+        const data = await res.json();
+        buildTree(data.tree);
+        saveHistory(repo);
+        applyHash();
+      } catch (err) {
+        showError('Error: '+err.message);
+      } finally {
+        showSpinner(false);
+      }
+    }
+    function applyHash() {
+      const h = location.hash.slice(1);
+      if (!h) return;
+      const [repo,...rest] = h.split('/');
+      const path = rest.join('/');
+      if (repo===currentRepo && fileMap.has(path)) {
+        selectFile(path);
+      }
+    }
+
+    loadBtn.addEventListener('click',()=>loadRepo(repoInput.value.trim()));
+    repoHistory.addEventListener('change',()=>loadRepo(repoHistory.value));
+    toggleBtn.addEventListener('click',toggleAll);
+    repoInput.addEventListener('keydown', e=>{
+      if (e.key==='Enter') loadRepo(repoInput.value.trim());
+    });
+    window.addEventListener('hashchange',applyHash);
+    loadHistory();
+    applyHash();
+  </script>
+</body>
+</html>

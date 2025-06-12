@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Repo Tree Browser</title>
+  <style>
+    :root {
+      --sidebar-width: 20rem;
+      --bg-color: #f6f8fa;
+      --sidebar-bg: #fff;
+      --main-bg: #fff;
+      --text-color: #24292e;
+      --highlight-bg: #cce5ff;
+      --accent-color: #0366d6;
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: sans-serif;
+    }
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--sidebar-bg);
+      overflow: auto;
+      border-right: 1px solid #e1e4e8;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar-header {
+      padding: 1rem;
+      border-bottom: 1px solid #e1e4e8;
+    }
+    .main {
+      flex: 1;
+      padding: 1rem;
+      background: var(--main-bg);
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .controls input,
+    .controls select,
+    .controls button {
+      margin-right: 0.5rem;
+    }
+    .tree {
+      flex: 1;
+      overflow: auto;
+      padding: 1rem;
+    }
+    .tree details {
+      margin-left: 1rem;
+    }
+    .tree summary {
+      cursor: pointer;
+      user-select: none;
+    }
+    .tree .file {
+      cursor: pointer;
+      padding: 0.2rem 0.5rem;
+      display: block;
+    }
+    .tree .file.selected {
+      background: var(--highlight-bg);
+    }
+    .stats {
+      padding: 0.5rem;
+      border-top: 1px solid #e1e4e8;
+      font-size: 0.9rem;
+    }
+    .highlight {
+      background: yellow;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="controls">
+        <input id="repo-input" type="text" placeholder="owner/repo" />
+        <select id="repo-history"><option value="">History</option></select>
+        <button id="load-btn">Load</button>
+        <button id="toggle-all-btn">Toggle All</button>
+        <button id="show-hidden-btn">Show Hidden</button>
+        <input id="search-input" type="text" placeholder="Search (/)">
+      </div>
+    </div>
+    <div id="tree-container" class="tree"></div>
+    <div id="stats" class="stats">Folders: 0, Files: 0</div>
+  </div>
+  <div class="main">
+    <h2 id="current-repo"></h2>
+    <p>Selected file: <span id="selected-path"></span></p>
+    <p>Hash: <span id="current-hash"></span></p>
+  </div>
+  <script>
+    (async function() {
+      const repoInput = document.getElementById('repo-input');
+      const historySelect = document.getElementById('repo-history');
+      const loadBtn = document.getElementById('load-btn');
+      const toggleAllBtn = document.getElementById('toggle-all-btn');
+      const showHiddenBtn = document.getElementById('show-hidden-btn');
+      const searchInput = document.getElementById('search-input');
+      const treeContainer = document.getElementById('tree-container');
+      const statsEl = document.getElementById('stats');
+      const currentRepoEl = document.getElementById('current-repo');
+      const selectedPathEl = document.getElementById('selected-path');
+      const currentHashEl = document.getElementById('current-hash');
+
+      let treeData = new Map();
+      let hiddenItems = new Set();
+      let showingHidden = false;
+      let selectedNode = null;
+      let authToken = null;
+      let currentRepo = '';
+
+      function saveHistory(repo) {
+        let history = JSON.parse(localStorage.getItem('github-repos')||'[]');
+        history = history.filter(r=>r!==repo);
+        history.unshift(repo);
+        if(history.length>10) history.pop();
+        localStorage.setItem('github-repos', JSON.stringify(history));
+        renderHistory();
+      }
+
+      function renderHistory() {
+        const history = JSON.parse(localStorage.getItem('github-repos')||'[]');
+        historySelect.innerHTML = '<option value="">History</option>';
+        history.forEach(r=> {
+          const opt = document.createElement('option'); opt.value=r; opt.textContent=r; historySelect.append(opt);
+        });
+      }
+
+      function saveHidden(repo) {
+        localStorage.setItem('hidden-'+repo, JSON.stringify(Array.from(hiddenItems)));
+      }
+
+      function loadHidden(repo) {
+        hiddenItems = new Set(JSON.parse(localStorage.getItem('hidden-'+repo)||'[]'));
+      }
+
+      function clearTree() {
+        treeContainer.innerHTML='';
+        statsEl.textContent='Folders: 0, Files: 0';
+      }
+
+      function updateStats() {
+        let folders=0, files=0;
+        treeContainer.querySelectorAll('details').forEach(d=>folders++);
+        treeContainer.querySelectorAll('.file').forEach(f=>files++);
+        statsEl.textContent=`Folders: ${folders}, Files: ${files}`;
+      }
+
+      function getDatePrefix(name) {
+        const m = name.match(/^(\d{4}-\d{2}-\d{2})/);
+        return m? m[1] : null;
+      }
+
+      function buildTree(entries) {
+        const root = new Map();
+        entries.forEach(({path, type})=>{
+          const parts=path.split('/');
+          let map=root;
+          parts.forEach((part,i)=>{
+            const isFile = i===parts.length-1 && type==='blob';
+            if(!map.has(part)) {
+              map.set(part,{children:new Map(),type: isFile?'file':'folder',date:getDatePrefix(part)});
+            }
+            const node = map.get(part);
+            if(!isFile) {
+              map=node.children;
+            }
+          });
+        });
+        return root;
+      }
+
+      function sortEntries(map) {
+        return Array.from(map.entries()).sort(([a,na],[b,nb])=>{
+          const da = na.date, db=nb.date;
+          if(da&&db) {
+            if(da!==db) return db.localeCompare(da);
+          } else if(da||db) {
+            return db?1:-1;
+          }
+          if(na.type!==nb.type) {
+            return na.type==='folder'? -1:1;
+          }
+          return a.localeCompare(b);
+        });
+      }
+
+      function renderNode(map, parentPath='') {
+        const fragment=document.createDocumentFragment();
+        sortEntries(map).forEach(([name,node])=>{
+          const fullPath = parentPath? parentPath+'/'+name : name;
+          if(hiddenItems.has(fullPath) && !showingHidden) return;
+          if(node.type==='folder') {
+            const details=document.createElement('details');
+            const summary=document.createElement('summary');
+            summary.textContent='📁 '+name;
+            details.append(summary);
+            details.append(renderNode(node.children,fullPath));
+            details.addEventListener('contextmenu',e=>{
+              e.preventDefault();
+              hiddenItems.add(fullPath);
+              saveHidden(currentRepo);
+              render();
+            });
+            let xStart=null;
+            details.addEventListener('touchstart',e=>{ xStart=e.touches[0].clientX;});
+            details.addEventListener('touchend',e=>{
+              const xEnd=e.changedTouches[0].clientX;
+              if(xStart!==null){
+                const diff=xEnd-xStart;
+                if(diff>50) details.open=true;
+                else if(diff<-50) details.open=false;
+              }
+              xStart=null;
+            });
+            fragment.append(details);
+          } else {
+            const fileEl=document.createElement('div');
+            const ext = name.slice(name.lastIndexOf('.'));
+            let icon='📄';
+            switch(ext){
+              case'.js': icon='📜'; break;
+              case'.html': icon='🌐'; break;
+              case'.css': icon='🎨'; break;
+              case'.md': icon='📝'; break;
+              case'.json': icon='📊'; break;
+              case'.py': icon='🐍'; break;
+            }
+            fileEl.textContent=icon+' '+name;
+            fileEl.className='file';
+            fileEl.tabIndex=0;
+            fileEl.addEventListener('click',()=>{
+              selectFile(fullPath,fileEl);
+            });
+            fileEl.addEventListener('contextmenu',e=>{
+              e.preventDefault();
+              hiddenItems.add(fullPath);
+              saveHidden(currentRepo);
+              render();
+            });
+            fragment.append(fileEl);
+          }
+        });
+        return fragment;
+      }
+
+      function selectFile(path, el) {
+        if(selectedNode) selectedNode.classList.remove('selected');
+        el.classList.add('selected');
+        selectedNode=el;
+        location.hash=`${currentRepo}/${path}`;
+        selectedPathEl.textContent=path;
+        currentHashEl.textContent=location.hash;
+        let parent=el.parentElement;
+        while(parent&&parent!==treeContainer){
+          if(parent.tagName==='DETAILS') parent.open=true;
+          parent=parent.parentElement;
+        }
+        el.scrollIntoView({behavior:'smooth',block:'center'});
+      }
+
+      function parseHash() {
+        if(location.hash) {
+          const hash=location.hash.substring(1);
+          const [repo, ...pathParts]=hash.split('/');
+          if(repo===currentRepo) {
+            const path=pathParts.join('/');
+            const el=Array.from(treeContainer.querySelectorAll('.file'))
+              .find(f=>f.textContent.endsWith(path));
+            if(el) selectFile(path,el);
+          } else {
+            repoInput.value=repo;
+            loadRepo(repo);
+          }
+        }
+      }
+
+      async function fetchTree(repo) {
+        const url=`https://api.github.com/repos/${repo}/git/trees/HEAD?recursive=1`;
+        const headers={Accept:'application/vnd.github.v3+json'};
+        if(authToken) headers.Authorization=`token ${authToken}`;
+        let res=await fetch(url,{headers});
+        if(res.status===401){
+          authToken=prompt('Private repo: please enter your GitHub token:');
+          if(authToken) return fetchTree(repo);
+          else throw new Error('Authentication required');
+        }
+        if(!res.ok) throw new Error(`GitHub API error: ${res.status}`);
+        const data=await res.json();
+        return data.tree.filter(item=>item.type==='blob'||item.type==='tree');
+      }
+
+      async function loadRepo(repo) {
+        clearTree();
+        currentRepo=repo;
+        currentRepoEl.textContent=repo;
+        historySelect.value='';
+        saveHistory(repo);
+        loadHidden(repo);
+        try {
+          const entries=await fetchTree(repo);
+          treeData=buildTree(entries);
+          render();
+          parseHash();
+        } catch(e) {
+          alert(e.message);
+        }
+      }
+
+      function render() {
+        treeContainer.innerHTML='';
+        treeContainer.append(renderNode(treeData));
+        updateStats();
+      }
+
+      loadBtn.addEventListener('click',()=> loadRepo(repoInput.value.trim()));
+      repoInput.addEventListener('keyup',e=>{ if(e.key==='Enter') loadRepo(repoInput.value.trim());});
+      historySelect.addEventListener('change',e=>{ if(e.target.value) loadRepo(e.target.value);});
+      toggleAllBtn.addEventListener('click',()=>{
+        const all=treeContainer.querySelectorAll('details');
+        const anyClosed=Array.from(all).some(d=>!d.open);
+        all.forEach(d=>d.open=anyClosed);
+      });
+      showHiddenBtn.addEventListener('click',()=>{
+        showingHidden=!showingHidden;
+        showHiddenBtn.textContent=showingHidden? 'Hide Hidden':'Show Hidden';
+        render();
+      });
+      searchInput.addEventListener('input',()=>{
+        const q=searchInput.value.trim().toLowerCase();
+        Array.from(treeContainer.querySelectorAll('.file, summary')).forEach(el=> {
+          const text=el.textContent.toLowerCase();
+          const match = q && !text.includes(q);
+          el.classList.toggle('hidden', match);
+          el.innerHTML=el.textContent.replace(new RegExp(q,'gi'),match=>`<span class="highlight">${match}</span>`);
+        });
+      });
+      document.addEventListener('keydown',e=>{
+        if(e.key==='/'&&document.activeElement!==searchInput){
+          e.preventDefault();
+          searchInput.focus();
+        } else if(e.key==='Escape'&&document.activeElement===searchInput){
+          searchInput.value='';searchInput.dispatchEvent(new Event('input'));
+        }
+      });
+      treeContainer.addEventListener('keydown',e=>{
+        const focusable=Array.from(treeContainer.querySelectorAll('.file'));
+        const idx=focusable.indexOf(document.activeElement);
+        if(idx>-1){
+          if(e.key==='ArrowDown'&&idx<focusable.length-1){
+            focusable[idx+1].focus();
+          } else if(e.key==='ArrowUp'&&idx>0){
+            focusable[idx-1].focus();
+          } else if(e.key==='ArrowRight'){
+            const parent=document.activeElement.parentElement;
+            if(parent.tagName==='DETAILS') parent.open=true;
+          } else if(e.key==='ArrowLeft'){
+            const parent=document.activeElement.parentElement;
+            if(parent.tagName==='DETAILS') parent.open=false;
+          } else if(e.key==='Enter'){
+            document.activeElement.click();
+          }
+        }
+      });
+      renderHistory();
+      const stored = JSON.parse(localStorage.getItem('github-repos')||'[]')[0];
+      if(stored) { repoInput.value=stored; loadRepo(stored);}      
+      window.addEventListener('hashchange',parseHash);
+    })();
+  </script>
+</body>
+</html>

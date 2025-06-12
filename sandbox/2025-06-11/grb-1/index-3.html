@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repository Tree Browser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f6f8fa;
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 20rem 1fr;
+            grid-template-rows: auto 1fr;
+            gap: 1px;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            background: white;
+            border-bottom: 1px solid #d1d9e0;
+            padding: 1rem;
+        }
+
+        .repo-input-container {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .repo-input {
+            flex: 1;
+            padding: 0.5rem;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .repo-dropdown {
+            min-width: 200px;
+            padding: 0.5rem;
+            border: 1px solid #d1d9e0;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .load-btn {
+            padding: 0.5rem 1rem;
+            background: #0969da;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .load-btn:hover {
+            background: #0860ca;
+        }
+
+        .load-btn:disabled {
+            background: #8c959f;
+            cursor: not-allowed;
+        }
+
+        .sidebar {
+            background: white;
+            border-right: 1px solid #d1d9e0;
+            overflow-y: auto;
+            resize: horizontal;
+            min-width: 200px;
+            max-width: 50vw;
+        }
+
+        .tree-container {
+            padding: 1rem;
+        }
+
+        .tree-stats {
+            position: sticky;
+            bottom: 0;
+            background: #f6f8fa;
+            padding: 0.5rem;
+            font-size: 12px;
+            color: #656d76;
+            border-top: 1px solid #d1d9e0;
+        }
+
+        .content {
+            background: white;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .file-tree details {
+            margin-left: 1rem;
+        }
+
+        .file-tree summary {
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            user-select: none;
+        }
+
+        .file-tree summary:hover {
+            background: #f3f4f6;
+        }
+
+        .file-item {
+            padding: 0.25rem 0.5rem;
+            margin-left: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-item:hover {
+            background: #f3f4f6;
+        }
+
+        .file-item.selected {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .file-item.keyboard-selected {
+            background: #e5e7eb;
+            outline: 2px solid #3b82f6;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #656d76;
+        }
+
+        .error {
+            color: #d1242f;
+            background: #fff5f5;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #fecaca;
+        }
+
+        .hash-display {
+            font-family: 'Courier New', monospace;
+            background: #f6f8fa;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid #d1d9e0;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr;
+            }
+            
+            .sidebar {
+                max-height: 40vh;
+                resize: vertical;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="repo-input-container">
+            <input type="text" class="repo-input" placeholder="owner/repository" id="repoInput">
+            <select class="repo-dropdown" id="repoDropdown">
+                <option value="">Recent repositories...</option>
+            </select>
+            <button class="load-btn" id="loadBtn">Load Repository</button>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="tree-container" id="treeContainer">
+            <div class="loading">Enter a repository to browse files</div>
+        </div>
+        <div class="tree-stats" id="treeStats" style="display: none;"></div>
+    </div>
+
+    <div class="content">
+        <h2>Current Location Hash</h2>
+        <div class="hash-display" id="hashDisplay">No file selected</div>
+    </div>
+
+    <script>
+        class GitHubRepositoryBrowser {
+            constructor() {
+                this.fileMap = new Map();
+                this.selectedFile = null;
+                this.keyboardSelectedIndex = -1;
+                this.fileItems = [];
+                this.currentRepo = '';
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.loadRecentRepos();
+                this.updateHashDisplay();
+            }
+
+            initializeElements() {
+                this.repoInput = document.getElementById('repoInput');
+                this.repoDropdown = document.getElementById('repoDropdown');
+                this.loadBtn = document.getElementById('loadBtn');
+                this.treeContainer = document.getElementById('treeContainer');
+                this.treeStats = document.getElementById('treeStats');
+                this.hashDisplay = document.getElementById('hashDisplay');
+            }
+
+            setupEventListeners() {
+                this.loadBtn.addEventListener('click', () => this.loadRepository());
+                this.repoInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.loadRepository();
+                });
+                
+                this.repoDropdown.addEventListener('change', (e) => {
+                    if (e.target.value) {
+                        this.repoInput.value = e.target.value;
+                    }
+                });
+
+                window.addEventListener('hashchange', () => this.updateHashDisplay());
+                
+                document.addEventListener('keydown', (e) => this.handleKeyboardNavigation(e));
+            }
+
+            async loadRepository() {
+                const repoName = this.repoInput.value.trim();
+                if (!repoName || !repoName.includes('/')) {
+                    this.showError('Please enter a valid repository name (owner/repository)');
+                    return;
+                }
+
+                this.currentRepo = repoName;
+                this.showLoading();
+                this.loadBtn.disabled = true;
+
+                try {
+                    const response = await fetch(`https://api.github.com/repos/${repoName}/git/trees/HEAD?recursive=1`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Repository not found or API error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    this.processRepositoryData(data.tree);
+                    this.saveToRecentRepos(repoName);
+                    this.updateRecentReposDropdown();
+                    
+                } catch (error) {
+                    this.showError(`Failed to load repository: ${error.message}`);
+                } finally {
+                    this.loadBtn.disabled = false;
+                }
+            }
+
+            processRepositoryData(treeData) {
+                this.fileMap.clear();
+                
+                // Build file structure
+                const structure = this.buildFileStructure(treeData);
+                
+                // Render tree
+                this.renderFileTree(structure);
+                
+                // Update stats
+                const stats = this.calculateStats(treeData);
+                this.updateStats(stats);
+                
+                // Reset keyboard navigation
+                this.updateFileItemsList();
+                this.keyboardSelectedIndex = -1;
+            }
+
+            buildFileStructure(treeData) {
+                const structure = { folders: {}, files: [] };
+
+                treeData.forEach(item => {
+                    this.fileMap.set(item.path, item);
+                    
+                    if (item.type === 'tree') {
+                        this.addToStructure(structure, item.path, 'folder');
+                    } else {
+                        this.addToStructure(structure, item.path, 'file');
+                    }
+                });
+
+                return structure;
+            }
+
+            addToStructure(structure, path, type) {
+                const parts = path.split('/');
+                let current = structure;
+
+                for (let i = 0; i < parts.length; i++) {
+                    const part = parts[i];
+                    
+                    if (i === parts.length - 1) {
+                        if (type === 'file') {
+                            current.files.push(part);
+                        }
+                    } else {
+                        if (!current.folders[part]) {
+                            current.folders[part] = { folders: {}, files: [] };
+                        }
+                        current = current.folders[part];
+                    }
+                }
+            }
+
+            renderFileTree(structure) {
+                this.treeContainer.innerHTML = this.renderStructure(structure, '');
+                this.treeStats.style.display = 'block';
+            }
+
+            renderStructure(structure, currentPath) {
+                let html = '';
+
+                // Sort folders first, then files
+                const sortedFolders = Object.keys(structure.folders).sort();
+                const sortedFiles = structure.files.sort();
+
+                // Render folders
+                sortedFolders.forEach(folderName => {
+                    const folderPath = currentPath ? `${currentPath}/${folderName}` : folderName;
+                    html += `
+                        <details class="folder-details">
+                            <summary>📁 ${folderName}</summary>
+                            ${this.renderStructure(structure.folders[folderName], folderPath)}
+                        </details>
+                    `;
+                });
+
+                // Render files
+                sortedFiles.forEach(fileName => {
+                    const filePath = currentPath ? `${currentPath}/${fileName}` : fileName;
+                    const icon = this.getFileIcon(fileName);
+                    html += `
+                        <div class="file-item" data-path="${filePath}">
+                            ${icon} ${fileName}
+                        </div>
+                    `;
+                });
+
+                return html;
+            }
+
+            getFileIcon(fileName) {
+                const ext = fileName.split('.').pop().toLowerCase();
+                const iconMap = {
+                    'js': '📜',
+                    'html': '🌐',
+                    'css': '🎨',
+                    'md': '📝',
+                    'json': '⚙️',
+                    'yml': '⚙️',
+                    'yaml': '⚙️',
+                    'txt': '📄',
+                    'png': '🖼️',
+                    'jpg': '🖼️',
+                    'jpeg': '🖼️',
+                    'gif': '🖼️',
+                    'svg': '🖼️',
+                    'pdf': '📑'
+                };
+                return iconMap[ext] || '📄';
+            }
+
+            showLoading() {
+                this.treeContainer.innerHTML = '<div class="loading">Loading repository...</div>';
+                this.treeStats.style.display = 'none';
+            }
+
+            showError(message) {
+                this.treeContainer.innerHTML = `<div class="error">${message}</div>`;
+                this.treeStats.style.display = 'none';
+            }
+
+            calculateStats(treeData) {
+                const stats = { folders: 0, files: 0 };
+                treeData.forEach(item => {
+                    if (item.type === 'tree') {
+                        stats.folders++;
+                    } else {
+                        stats.files++;
+                    }
+                });
+                return stats;
+            }
+
+            updateStats(stats) {
+                this.treeStats.textContent = `${stats.folders} folders, ${stats.files} files`;
+            }
+
+            updateFileItemsList() {
+                this.fileItems = Array.from(this.treeContainer.querySelectorAll('.file-item'));
+                this.fileItems.forEach((item, index) => {
+                    item.addEventListener('click', () => this.selectFile(item, index));
+                });
+            }
+
+            selectFile(fileElement, index) {
+                // Remove previous selection
+                this.treeContainer.querySelectorAll('.file-item.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+
+                // Add selection to clicked file
+                fileElement.classList.add('selected');
+                this.selectedFile = fileElement.dataset.path;
+                this.keyboardSelectedIndex = index;
+
+                // Update hash
+                window.location.hash = `${this.currentRepo}/${this.selectedFile}`;
+            }
+
+            handleKeyboardNavigation(e) {
+                if (this.fileItems.length === 0) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    this.keyboardSelectedIndex = Math.min(this.keyboardSelectedIndex + 1, this.fileItems.length - 1);
+                    this.updateKeyboardSelection();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    this.keyboardSelectedIndex = Math.max(this.keyboardSelectedIndex - 1, 0);
+                    this.updateKeyboardSelection();
+                } else if (e.key === 'Enter' && this.keyboardSelectedIndex >= 0) {
+                    e.preventDefault();
+                    this.selectFile(this.fileItems[this.keyboardSelectedIndex], this.keyboardSelectedIndex);
+                }
+            }
+
+            updateKeyboardSelection() {
+                // Remove previous keyboard selection
+                this.fileItems.forEach(item => {
+                    item.classList.remove('keyboard-selected');
+                });
+
+                // Add keyboard selection
+                if (this.keyboardSelectedIndex >= 0) {
+                    const selectedItem = this.fileItems[this.keyboardSelectedIndex];
+                    selectedItem.classList.add('keyboard-selected');
+                    selectedItem.scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            updateHashDisplay() {
+                const hash = window.location.hash.slice(1);
+                this.hashDisplay.textContent = hash || 'No file selected';
+            }
+
+            saveToRecentRepos(repoName) {
+                let recentRepos = JSON.parse(localStorage.getItem('recentRepos') || '[]');
+                recentRepos = recentRepos.filter(repo => repo !== repoName);
+                recentRepos.unshift(repoName);
+                recentRepos = recentRepos.slice(0, 10); // Keep only 10 recent repos
+                localStorage.setItem('recentRepos', JSON.stringify(recentRepos));
+            }
+
+            loadRecentRepos() {
+                this.updateRecentReposDropdown();
+            }
+
+            updateRecentReposDropdown() {
+                const recentRepos = JSON.parse(localStorage.getItem('recentRepos') || '[]');
+                this.repoDropdown.innerHTML = '<option value="">Recent repositories...</option>';
+                
+                recentRepos.forEach(repo => {
+                    const option = document.createElement('option');
+                    option.value = repo;
+                    option.textContent = repo;
+                    this.repoDropdown.appendChild(option);
+                });
+            }
+        }
+
+        // Initialize the application
+        new GitHubRepositoryBrowser();
+    </script>
+</body>
+</html>

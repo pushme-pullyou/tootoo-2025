@@ -3,354 +3,560 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub Repository Browser</title>
+    <title>GitHub Repository Tree Browser</title>
     <style>
-        :root {
-            --sidebar-width: 20rem;
-            --primary-color: #0366d6;
-            --border-color: #e1e4e8;
-            --text-color: #24292e;
-            --bg-color: #ffffff;
-            --hover-bg: #f6f8fa;
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: var(--text-color);
-            background: var(--bg-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background-color: #0d1117;
+            color: #e6edf3;
+            height: 100vh;
             overflow: hidden;
         }
 
-        .app-container {
-            display: flex;
+        .container {
+            display: grid;
+            grid-template-columns: 20rem 1fr;
             height: 100vh;
         }
 
-        /* Sidebar Styles */
-        .file-tree-sidebar {
-            width: var(--sidebar-width);
-            min-width: 200px;
-            max-width: 50vw;
-            border-right: 1px solid var(--border-color);
-            background: var(--bg-color);
+        .sidebar {
+            background-color: #161b22;
+            border-right: 1px solid #30363d;
             display: flex;
             flex-direction: column;
             resize: horizontal;
             overflow: hidden;
+            min-width: 15rem;
+            max-width: 40rem;
+        }
+
+        .controls {
+            padding: 1rem;
+            border-bottom: 1px solid #30363d;
         }
 
         .repo-input {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .repo-input input {
             width: 100%;
             padding: 0.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #e6edf3;
+            font-size: 14px;
+            margin-bottom: 0.5rem;
+        }
+
+        .repo-input:focus {
+            outline: none;
+            border-color: #1f6feb;
+        }
+
+        .repo-dropdown {
+            width: 100%;
+            padding: 0.5rem;
+            background-color: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #e6edf3;
+            font-size: 14px;
+            margin-bottom: 0.5rem;
+        }
+
+        .toggle-btn {
+            padding: 0.5rem;
+            background-color: #238636;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
             font-size: 14px;
         }
 
-        .file-tree {
+        .toggle-btn:hover {
+            background-color: #2ea043;
+        }
+
+        .tree-container {
             flex: 1;
             overflow-y: auto;
-            padding: 0.5rem;
+            padding: 1rem;
         }
 
-        /* Content Area Styles */
-        .content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem;
-            text-align: center;
+        .file-tree {
+            list-style: none;
         }
 
-        /* Tree Item Styles */
         .tree-item {
-            display: block;
-            padding: 0.25rem 0.5rem;
-            cursor: pointer;
+            margin: 2px 0;
+        }
+
+        .file-item, .folder-item {
+            padding: 4px 8px;
             border-radius: 4px;
-            margin: 1px 0;
-            text-decoration: none;
-            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
         }
 
-        .tree-item:hover {
-            background: var(--hover-bg);
+        .file-item:hover, .folder-item:hover {
+            background-color: #30363d;
         }
 
-        .tree-item.selected {
-            background: var(--primary-color);
+        .file-item.selected {
+            background-color: #1f6feb;
             color: white;
         }
 
-        .tree-item-icon {
-            margin-right: 0.5rem;
-            width: 16px;
-            display: inline-block;
-        }
-
         details {
-            margin-left: 1rem;
+            margin: 2px 0;
         }
 
         details > summary {
-            list-style: none;
+            padding: 4px 8px;
+            border-radius: 4px;
             cursor: pointer;
-            padding: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            list-style: none;
+        }
+
+        details > summary:hover {
+            background-color: #30363d;
         }
 
         details > summary::-webkit-details-marker {
             display: none;
         }
 
-        details > summary::before {
-            content: '▶';
-            margin-right: 0.5rem;
-            transition: transform 0.2s;
+        .folder-icon {
+            transition: transform 0.2s ease;
         }
 
-        details[open] > summary::before {
+        details[open] .folder-icon {
             transform: rotate(90deg);
+        }
+
+        .nested {
+            margin-left: 1.5rem;
+        }
+
+        .stats {
+            padding: 1rem;
+            border-top: 1px solid #30363d;
+            font-size: 12px;
+            color: #7d8590;
+        }
+
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+            background-color: #0d1117;
         }
 
         .loading {
             text-align: center;
-            padding: 2rem;
-            color: #666;
+            color: #7d8590;
+            font-style: italic;
         }
 
         .error {
-            color: #d73a49;
-            background: #ffeef0;
+            color: #f85149;
             padding: 1rem;
-            border-radius: 4px;
+            background-color: #21262d;
+            border: 1px solid #f85149;
+            border-radius: 6px;
             margin: 1rem 0;
         }
 
-        #hashDisplay {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin: 2rem 0;
-            word-break: break-all;
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .sidebar {
+                resize: none;
+                height: 40vh;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <aside class="file-tree-sidebar">
-            <div class="repo-input">
-                <input type="text" id="repoInput" placeholder="owner/repository (e.g., facebook/react)" />
-                <button onclick="loadRepository()">Load Repository</button>
+    <div class="container">
+        <div class="sidebar">
+            <div class="controls">
+                <input type="text" class="repo-input" placeholder="owner/repository" id="repoInput">
+                <select class="repo-dropdown" id="repoDropdown">
+                    <option value="">Select previous repository...</option>
+                </select>
+                <button class="toggle-btn" id="toggleBtn">Toggle All</button>
             </div>
-            <div class="file-tree" id="fileTree">
-                <div class="loading">Enter a repository above to browse files</div>
+            <div class="tree-container" id="treeContainer">
+                <div class="loading">Enter a repository to browse</div>
             </div>
-        </aside>
-        <main class="content-area">
-            <h3>GitHub Repository Browser</h3>
-            <p>Click on files in the tree to see the location.hash</p>
-            <div id="hashDisplay">No file selected</div>
-        </main>
+            <div class="stats" id="stats"></div>
+        </div>
+        <div class="main-content">
+            <h1>GitHub Repository Tree Browser</h1>
+            <p>Current location: <code id="currentPath">#</code></p>
+            <div id="errorContainer"></div>
+        </div>
     </div>
 
     <script>
-        class GitHubBrowser {
+        class GitHubTreeBrowser {
             constructor() {
-                this.apiBase = 'https://api.github.com';
                 this.currentRepo = '';
-                this.repoData = new Map();
+                this.treeData = new Map();
+                this.fileList = [];
+                this.selectedIndex = -1;
+                this.allDetailsOpen = false;
+                this.repositories = JSON.parse(localStorage.getItem('github-repos') || '[]');
                 
-                this.initializeEventListeners();
+                this.initializeElements();
+                this.bindEvents();
+                this.loadRepositoryDropdown();
+                this.handleInitialHash();
             }
 
-            initializeEventListeners() {
-                // Hash change for routing
-                window.addEventListener('hashchange', () => this.updateHashDisplay());
+            initializeElements() {
+                this.repoInput = document.getElementById('repoInput');
+                this.repoDropdown = document.getElementById('repoDropdown');
+                this.toggleBtn = document.getElementById('toggleBtn');
+                this.treeContainer = document.getElementById('treeContainer');
+                this.currentPath = document.getElementById('currentPath');
+                this.stats = document.getElementById('stats');
+                this.errorContainer = document.getElementById('errorContainer');
+            }
 
-                // Repository input
-                document.getElementById('repoInput').addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter') {
+            bindEvents() {
+                this.repoInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.loadRepository();
+                });
+
+                this.repoDropdown.addEventListener('change', (e) => {
+                    if (e.target.value) {
+                        this.repoInput.value = e.target.value;
                         this.loadRepository();
                     }
+                });
+
+                this.toggleBtn.addEventListener('click', () => this.toggleAllDetails());
+
+                document.addEventListener('keydown', (e) => this.handleKeyboard(e));
+                window.addEventListener('hashchange', () => this.updateFromHash());
+            }
+
+            loadRepositoryDropdown() {
+                this.repoDropdown.innerHTML = '<option value="">Select previous repository...</option>';
+                this.repositories.forEach(repo => {
+                    const option = document.createElement('option');
+                    option.value = repo;
+                    option.textContent = repo;
+                    this.repoDropdown.appendChild(option);
                 });
             }
 
             async loadRepository() {
-                const repo = document.getElementById('repoInput').value.trim();
-                if (!repo) return;
+                const repo = this.repoInput.value.trim();
+                if (!repo || !repo.includes('/')) {
+                    this.showError('Please enter a valid repository in format "owner/repository"');
+                    return;
+                }
 
                 this.currentRepo = repo;
-                this.repoData.clear();
-                
-                const fileTree = document.getElementById('fileTree');
-                fileTree.innerHTML = '<div class="loading">Loading repository...</div>';
+                this.showLoading();
+                this.clearError();
 
                 try {
-                    await this.loadEntireRepository();
-                    this.renderFileTree();
-                } catch (error) {
-                    fileTree.innerHTML = `<div class="error">Error loading repository: ${error.message}</div>`;
-                }
-            }
-
-            async loadEntireRepository() {
-                if (!this.currentRepo) return;
-
-                const url = `${this.apiBase}/repos/${this.currentRepo}/git/trees/HEAD?recursive=1`;
-                const response = await fetch(url);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                
-                data.tree.forEach(item => {
-                    const pathParts = item.path.split('/');
+                    const response = await fetch(`https://api.github.com/repos/${repo}/git/trees/HEAD?recursive=1`);
                     
-                    this.repoData.set(item.path, {
-                        path: item.path,
-                        name: pathParts[pathParts.length - 1],
-                        type: item.type === 'tree' ? 'dir' : 'file'
-                    });
-                });
-            }
-
-            renderFileTree() {
-                const container = document.getElementById('fileTree');
-                container.innerHTML = '';
-                
-                const tree = this.buildTreeStructure();
-                this.renderTreeLevel(tree, container);
-            }
-
-            buildTreeStructure() {
-                const tree = {};
-                const sortedPaths = Array.from(this.repoData.keys()).sort();
-                
-                sortedPaths.forEach(path => {
-                    const parts = path.split('/');
-                    let current = tree;
-                    
-                    parts.forEach((part, index) => {
-                        if (!current[part]) {
-                            current[part] = {
-                                name: part,
-                                path: parts.slice(0, index + 1).join('/'),
-                                isFile: index === parts.length - 1 && this.repoData.get(path).type === 'file',
-                                children: {}
-                            };
-                        }
-                        current = current[part].children;
-                    });
-                });
-                
-                return tree;
-            }
-
-            renderTreeLevel(tree, container) {
-                const entries = Object.entries(tree).sort(([a, aData], [b, bData]) => {
-                    if (aData.isFile !== bData.isFile) {
-                        return aData.isFile ? 1 : -1;
+                    if (!response.ok) {
+                        throw new Error(`Repository not found or API error (${response.status})`);
                     }
-                    return a.localeCompare(b);
-                });
-                
-                entries.forEach(([name, data]) => {
-                    const element = this.createTreeItem(data);
-                    container.appendChild(element);
-                });
-            }
 
-            createTreeItem(data) {
-                if (data.isFile) {
-                    const link = document.createElement('a');
-                    link.href = '#';
-                    link.className = 'tree-item';
-                    link.innerHTML = `<span class="tree-item-icon">${this.getFileIcon(data.name)}</span>${data.name}`;
-                    
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        this.selectFile(data.path);
-                    });
-                    
-                    return link;
-                } else {
-                    const details = document.createElement('details');
-                    const summary = document.createElement('summary');
-                    summary.className = 'tree-item tree-folder';
-                    summary.innerHTML = `<span class="tree-item-icon">📁</span>${data.name}`;
-                    
-                    details.appendChild(summary);
-                    
-                    const childContainer = document.createElement('div');
-                    details.appendChild(childContainer);
-                    
-                    this.renderTreeLevel(data.children, childContainer);
-                    
-                    return details;
+                    const data = await response.json();
+                    this.processTreeData(data.tree);
+                    this.saveRepository(repo);
+                    this.renderTree();
+                    this.updateFromHash();
+                } catch (error) {
+                    this.showError(error.message);
                 }
             }
 
-            getFileIcon(filename) {
-                const ext = filename.split('.').pop().toLowerCase();
+            processTreeData(tree) {
+                this.treeData.clear();
+                this.fileList = [];
+                
+                tree.forEach(item => {
+                    this.treeData.set(item.path, item);
+                    if (item.type === 'blob') {
+                        this.fileList.push(item.path);
+                    }
+                });
+
+                this.fileList.sort(this.customSort);
+            }
+
+            customSort(a, b) {
+                const aIsDateFile = /^\d{4}-\d{2}-\d{2}/.test(a.split('/').pop());
+                const bIsDateFile = /^\d{4}-\d{2}-\d{2}/.test(b.split('/').pop());
+                
+                if (aIsDateFile && bIsDateFile) {
+                    return b.localeCompare(a); // Newest first
+                }
+                
+                return a.localeCompare(b);
+            }
+
+            renderTree() {
+                const folders = new Map();
+                
+                // Build folder structure
+                this.treeData.forEach((item, path) => {
+                    const parts = path.split('/');
+                    let currentPath = '';
+                    
+                    for (let i = 0; i < parts.length - (item.type === 'blob' ? 1 : 0); i++) {
+                        const prevPath = currentPath;
+                        currentPath = prevPath ? `${prevPath}/${parts[i]}` : parts[i];
+                        
+                        if (!folders.has(currentPath)) {
+                            folders.set(currentPath, {
+                                name: parts[i],
+                                path: currentPath,
+                                parent: prevPath || null,
+                                children: []
+                            });
+                        }
+                    }
+                });
+
+                const html = this.buildTreeHTML(folders);
+                this.treeContainer.innerHTML = html;
+                this.updateStats();
+                this.bindTreeEvents();
+            }
+
+            buildTreeHTML(folders) {
+                const rootItems = [];
+                const folderMap = new Map(folders);
+
+                // Build hierarchy
+                folderMap.forEach(folder => {
+                    if (folder.parent) {
+                        const parent = folderMap.get(folder.parent);
+                        if (parent) parent.children.push(folder);
+                    } else {
+                        rootItems.push(folder);
+                    }
+                });
+
+                return `<ul class="file-tree">${this.renderTreeLevel(rootItems, folderMap, '')}</ul>`;
+            }
+
+            renderTreeLevel(items, folderMap, basePath) {
+                const sortedItems = [...items].sort((a, b) => a.name.localeCompare(b.name));
+                
+                return sortedItems.map(item => {
+                    const fullPath = basePath ? `${basePath}/${item.name}` : item.name;
+                    const files = this.getFilesInFolder(fullPath);
+                    const hasChildren = item.children.length > 0 || files.length > 0;
+
+                    if (hasChildren) {
+                        return `
+                            <li class="tree-item">
+                                <details>
+                                    <summary class="folder-item">
+                                        <span class="folder-icon">▶</span>
+                                        <span>📁</span>
+                                        <span>${item.name}</span>
+                                    </summary>
+                                    <ul class="nested">
+                                        ${this.renderTreeLevel(item.children, folderMap, fullPath)}
+                                        ${files.map(file => this.renderFile(file)).join('')}
+                                    </ul>
+                                </details>
+                            </li>
+                        `;
+                    } else {
+                        return this.renderFile(fullPath);
+                    }
+                }).join('');
+            }
+
+            getFilesInFolder(folderPath) {
+                return this.fileList.filter(file => {
+                    const fileParts = file.split('/');
+                    const folderParts = folderPath.split('/');
+                    return fileParts.length === folderParts.length + 1 && 
+                           file.startsWith(folderPath + '/');
+                });
+            }
+
+            renderFile(filePath) {
+                const fileName = filePath.split('/').pop();
+                const icon = this.getFileIcon(fileName);
+                
+                return `
+                    <li class="tree-item">
+                        <div class="file-item" data-path="${filePath}">
+                            <span>${icon}</span>
+                            <span>${fileName}</span>
+                        </div>
+                    </li>
+                `;
+            }
+
+            getFileIcon(fileName) {
+                const ext = fileName.split('.').pop().toLowerCase();
                 const icons = {
-                    'js': '📜',
-                    'html': '🌐',
-                    'css': '🎨',
-                    'md': '📝',
-                    'json': '📋',
-                    'png': '🖼️',
-                    'jpg': '🖼️',
-                    'jpeg': '🖼️',
-                    'gif': '🖼️',
-                    'svg': '🖼️',
-                    'pdf': '📄',
-                    'txt': '📄',
-                    'py': '🐍',
-                    'java': '☕',
-                    'ts': '📘'
+                    'js': '📜', 'html': '🌐', 'css': '🎨', 'md': '📝',
+                    'json': '📋', 'txt': '📄', 'png': '🖼️', 'jpg': '🖼️',
+                    'svg': '🎭', 'pdf': '📕', 'zip': '📦'
                 };
                 return icons[ext] || '📄';
             }
 
+            bindTreeEvents() {
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        const path = e.currentTarget.dataset.path;
+                        this.selectFile(path);
+                    });
+                });
+            }
+
             selectFile(path) {
-                // Update selection
-                document.querySelectorAll('.tree-item').forEach(el => el.classList.remove('selected'));
-                event.target.classList.add('selected');
+                location.hash = `${this.currentRepo}/${path}`;
+            }
+
+            updateFromHash() {
+                const hash = location.hash.slice(1);
+                this.currentPath.textContent = hash || '#';
                 
-                // Update location.hash
-                const hash = `${this.currentRepo}/${path}`;
-                window.location.hash = hash;
+                if (hash && hash.includes('/')) {
+                    const [repo, ...pathParts] = hash.split('/');
+                    const filePath = pathParts.join('/');
+                    
+                    if (repo === this.currentRepo && this.fileList.includes(filePath)) {
+                        this.highlightFile(filePath);
+                        this.expandToFile(filePath);
+                    }
+                }
             }
 
-            updateHashDisplay() {
-                const hashDisplay = document.getElementById('hashDisplay');
-                hashDisplay.textContent = `location.hash = "${window.location.hash}"`;
+            highlightFile(path) {
+                document.querySelectorAll('.file-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                
+                const fileItem = document.querySelector(`[data-path="${path}"]`);
+                if (fileItem) {
+                    fileItem.classList.add('selected');
+                    fileItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    this.selectedIndex = this.fileList.indexOf(path);
+                }
+            }
+
+            expandToFile(path) {
+                const pathParts = path.split('/');
+                let currentPath = '';
+                
+                for (let i = 0; i < pathParts.length - 1; i++) {
+                    currentPath = currentPath ? `${currentPath}/${pathParts[i]}` : pathParts[i];
+                    const details = document.querySelector(`details summary:contains("${pathParts[i]}")`);
+                    if (details) {
+                        details.closest('details').open = true;
+                    }
+                }
+            }
+
+            toggleAllDetails() {
+                const details = document.querySelectorAll('details');
+                this.allDetailsOpen = !this.allDetailsOpen;
+                details.forEach(detail => detail.open = this.allDetailsOpen);
+                this.toggleBtn.textContent = this.allDetailsOpen ? 'Close All' : 'Open All';
+            }
+
+            handleKeyboard(e) {
+                if (!this.fileList.length) return;
+                
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    this.navigateFiles(1);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    this.navigateFiles(-1);
+                }
+            }
+
+            navigateFiles(direction) {
+                if (this.selectedIndex === -1) {
+                    this.selectedIndex = direction > 0 ? 0 : this.fileList.length - 1;
+                } else {
+                    this.selectedIndex = Math.max(0, Math.min(this.fileList.length - 1, this.selectedIndex + direction));
+                }
+                
+                const path = this.fileList[this.selectedIndex];
+                this.selectFile(path);
+            }
+
+            updateStats() {
+                const folders = new Set();
+                this.treeData.forEach((item, path) => {
+                    if (item.type === 'tree') folders.add(path);
+                });
+                
+                this.stats.textContent = `${folders.size} folders, ${this.fileList.length} files`;
+            }
+
+            saveRepository(repo) {
+                if (!this.repositories.includes(repo)) {
+                    this.repositories.unshift(repo);
+                    this.repositories = this.repositories.slice(0, 10); // Keep only last 10
+                    localStorage.setItem('github-repos', JSON.stringify(this.repositories));
+                    this.loadRepositoryDropdown();
+                }
+            }
+
+            showLoading() {
+                this.treeContainer.innerHTML = '<div class="loading">Loading repository...</div>';
+            }
+
+            showError(message) {
+                this.errorContainer.innerHTML = `<div class="error">${message}</div>`;
+            }
+
+            clearError() {
+                this.errorContainer.innerHTML = '';
+            }
+
+            handleInitialHash() {
+                const hash = location.hash.slice(1);
+                if (hash && hash.includes('/')) {
+                    const [repo] = hash.split('/');
+                    this.repoInput.value = repo;
+                    this.loadRepository();
+                }
             }
         }
 
-        // Initialize the browser
-        const browser = new GitHubBrowser();
-
-        // Global function for button click
-        function loadRepository() {
-            browser.loadRepository();
-        }
-
-        // Initial hash display
-        browser.updateHashDisplay();
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', () => {
+            new GitHubTreeBrowser();
+        });
     </script>
 </body>
 </html>
