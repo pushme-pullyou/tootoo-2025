@@ -106,7 +106,7 @@ const GFO = ( function () {
       } )
       .then( txt => {
         const extension = getExtension(url);
-     
+        
         // Handle text-based content types
         if ( [ "", "/license", "txt", "md", "markdown" ].includes( extension ) ) {
           // Process Markdown content
