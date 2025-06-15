@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="Get and put Markdown files to a private or public GitHub repo">
+    <meta name="date" content="2024-12-24"> <title>notesy</title>
+
+    <style>
+        body {
+            border: 0px solid red;
+            box-sizing: border-box;
+            font: 100% monospace;
+            margin: 0;
+            max-width: 50rem; /* Or adjust as per your preference */
+            padding: 0;
+        }
+
+        a {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        p {
+            margin: 0 0 0.25rem 0;
+            padding: 0;
+        }
+
+        br {
+            margin: 0.5em 0;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0 0 0 1rem;
+        }
+
+        li {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* main h2 { display: inline; margin: 0; } /* Retained as per original, review if needed */
+
+        h1 {
+            font-size: 150%;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            color: darkblue;
+            font-size: 120%;
+            margin: 0;
+            padding: 0;
+        }
+
+        h3 {
+            font-size: 100%;
+            color: maroon;
+            margin: 0;
+            padding: 0;
+        }
+
+        img {
+            max-width: 100%;
+            vertical-align: middle;
+        }
+
+        input {
+            vertical-align: middle;
+        }
+
+        summary {
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        summary p {
+            margin: 0;
+            padding: 0;
+        }
+
+        .aDingbat {
+            text-decoration: none;
+            font-size: 1.5rem;
+        }
+
+        #header {
+            background: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0; /* Added for full width */
+            z-index: 1;
+            padding: 0.25rem; /* Added some padding */
+            border-bottom: 1px solid #ccc; /* Added for visual separation */
+        }
+
+        #divContent {
+            border: 1px solid #ccc;
+            margin: 50px 0 0 0; /* Increased margin-top to accommodate header padding */
+            padding: 0.25rem;
+            /* top: 25px; /* Redundant with margin-top */
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <script src="https://unpkg.com/showdown@2.1.0/dist/showdown.js"></script>
+
+    <main>
+
+        <div id="header">
+            <h2>
+                <a id="aSource" href="https://github.com/theo-armour/qdata/tree/main/apps/notesy" target="_blank"
+                    title="delSha/getSHA: test3"><img
+                        src="https://pushme-pullyou.github.io/assets/svg/mark-github.svg" alt="Notesy Source Code on GitHub"></a>
+                <a href="" id="aPath" title="Click this menu title to reload the file">
+                    <span id="spnTitle"></span><span id="spnVersion"></span></a>
+            </h2>
+            <div id="divMessage" style="display:inline; margin-left: 10px; color: #666;"></div>
+            <button id="saveButtonHeader" onclick="getSha()" style="float: right;">save</button> </div>
+
+        <div id="divContent" contenteditable="true"></div>
+
+        <center title="Hello! Click me to go up to the top" style="margin-top: 1rem;">
+            <a class="aDingbat" href="javascript:window.scrollTo(0,0);"> ❦ </a>
+        </center>
+
+        <div style="margin-top: 1rem; padding: 0.25rem;"> <button id="toggleMarkdowButton" onclick="toggleMarkdown()">markdown&lt;&gt;html</button>
+            <button id="toggleTextButton" onclick="toggleText()">text&lt;&gt;html</button>
+            <button id="saveButtonBottom" onclick="getSha()">save</button> <br>
+            <button onclick="test1()">notesy readme</button>
+            <button onclick="test2()">test</button>
+            <button onclick="test3()">text-to-hack</button>
+            <button onclick="test4()">agenda</button>
+            <button onclick="location.hash=''">clear hash</button> <button onclick="delSha()">delSha (clear token)</button>
+        </div>
+    </main>
+
+    <script>
+        // copyright 2024 Theo Armour. MIT license.
+        // Updated based on recommendations - 2025-05-09
+
+        // [X]MLHTTPRequest [G]itHub [P]ush (XGP)
+
+        const XGP = {
+            base: "https://api.github.com/repos/theo-armour/agenda/contents/", // Default, gets overridden
+            path: "1-notes.md", // Default, gets overridden
+            branch: "main", // **RECOMMENDATION APPLIED**: Initialized default branch
+            // Other base/path examples commented out for clarity
+            // base: "https://api.github.com/repos/theo-armour/qdata/contents/",
+            // path: "text-to-hack.md",
+            lastSaveTime: 0,
+            saving: false,
+            state: "html", // Initial state is HTML after markdown conversion
+            notesyURL: "https://theo-armour.github.io/qdata/apps/notesy/#", // Or your deployed URL
+            content: "", // To store original fetched content for comparison
+            sha: null, // To store current file SHA
+            accessToken: "",
+            saveInterval: null, // For setInterval ID
+            url: "" // Full API URL of the current file
+        };
+
+
+        if (window.self === window.top) {
+            init();
+        }
+
+        function init(url) { // url can be passed when called from an iframe
+
+            if (!showdown) {
+                console.error("Showdown library not loaded!");
+                divMessage.innerText = "Error: Showdown library missing.";
+                return;
+            }
+            showdown.setFlavor("github");
+
+            XGP.url = url || XGP.base + XGP.path; // Use provided URL or default
+
+            aPath.title = document.head.querySelector("[name=date]").content; // Meta date for tooltip
+
+            XGP.accessToken = localStorage.getItem("githubAccessToken") || "";
+
+            if (!XGP.accessToken || XGP.accessToken === "null") { // Check for "null" string
+                XGP.accessToken = prompt("Enter GitHub Personal Access Token (PAT)\nThis token will be stored in your browser's localStorage.");
+                if (XGP.accessToken) { // Only save if a token was entered
+                    localStorage.setItem("githubAccessToken", XGP.accessToken);
+                } else {
+                    divMessage.innerText = "GitHub PAT required to load and save files.";
+                    console.warn("GitHub PAT not provided.");
+                    return; // Stop initialization if no token
+                }
+            }
+
+            window.addEventListener("hashchange", onHashChange, false);
+            window.addEventListener("beforeunload", checkForChange);
+            divContent.addEventListener('blur', onBlur); // Save on blur
+
+            autoSave(); // Toggle auto-save interval behavior
+            onHashChange(); // Initial content load based on hash or default URL
+        };
+
+        // Test functions to load specific files via hash change
+        test1 = () => location.hash = "https://api.github.com/repos/theo-armour/qdata/contents/apps/notesy/README.md"; // Example: ensure this base path is what you want
+        test2 = () => location.hash = "https://api.github.com/repos/theo-armour/qdata/contents/apps/notesy/test.md";
+        test3 = () => location.hash = "https://api.github.com/repos/theo-armour/qdata/contents/text-to-hack.md";
+        test4 = () => location.hash = "https://api.github.com/repos/theo-armour/agenda/contents/apps/notesy/original-agenda.md"; // Adjusted, ensure path exists
+
+        delSha = () => {
+            localStorage.removeItem("githubAccessToken"); // More explicit removal
+            XGP.accessToken = "";
+            divMessage.innerText = "GitHub Access Token cleared from localStorage.";
+            console.log("GitHub Access Token cleared.");
+        };
+
+        function onHashChange(event) {
+            const newUrl = location.hash ? location.hash.slice(1) : XGP.url;
+            if (XGP.url === newUrl && XGP.content) { // Avoid reload if hash points to the same loaded file
+                // Potentially check for unsaved changes before skipping fetch
+                // For now, if URL is same, assume no new fetch needed unless forced
+                // console.log("Hash changed to already loaded URL:", newUrl);
+                // return;
+            }
+            XGP.url = newUrl;
+            console.log("Attempting to load URL from hash:", XGP.url);
+
+            try {
+                const urlParts = XGP.url.split("/contents/");
+                XGP.base = urlParts[0] + "/contents/";
+                XGP.path = urlParts[1];
+                XGP.fileName = XGP.path.split("/").pop();
+            } catch (e) {
+                console.error("Error parsing URL from hash:", XGP.url, e);
+                divMessage.innerText = "Error: Invalid URL format in hash.";
+                return;
+            }
+            
+            // console.log("XGP.base derived:", XGP.base);
+            // console.log("XGP.fileName from hash:", XGP.fileName);
+
+            // Basic check for unsaved changes before fetching new file
+            if (XGP.content && divContent.innerHTML !== XGP.content) {
+                if (!confirm("You have unsaved changes. Are you sure you want to load a new file?")) {
+                    if (event) location.hash = "#" + (event.oldURL ? event.oldURL.split('#')[1] || '' : XGP.url); // Revert hash if possible
+                    return;
+                }
+            }
+            fetchMarkdown();
+        };
+
+        function checkForChange(event) {
+            if (divContent.innerHTML === XGP.content) { return; }
+            // if (!XGP.url.endsWith(".md")) return; // Allow saving for any file if content changed
+
+            console.log("checkForChange: Unsaved content detected for", XGP.fileName);
+            event.preventDefault();
+            event.returnValue = "You have unsaved changes. Are you sure you want to leave?"; // Standard browser message
+            return event.returnValue;
+        };
+
+        function onBlur(event) {
+            if (divContent.innerHTML === XGP.content) { return; }
+            // Avoid saving if content starts with # (likely Markdown being edited) or < (HTML being edited raw)
+            // if (divContent.innerText.trim().startsWith("#")) return;
+            // if (divContent.innerText.trim().startsWith("<")) return;
+            console.log("onBlur detected change, attempting save for", XGP.fileName);
+            divMessage.innerText = "Change detected on blur...";
+            getSha();
+        };
+
+        function fetchMarkdown() {
+            if (!XGP.url || !XGP.accessToken) {
+                divMessage.innerText = "Missing URL or GitHub Token for fetching.";
+                console.warn("fetchMarkdown: Missing URL or GitHub Token.");
+                return;
+            }
+            const xhr = new XMLHttpRequest();
+            divMessage.innerText = `Workspaceing ${XGP.fileName}...`;
+            divMessage.style.color = "#666";
+
+            xhr.open("GET", XGP.url, true);
+            xhr.setRequestHeader("Authorization", "token " + XGP.accessToken);
+            xhr.responseType = "json";
+            xhr.onload = (e) => onLoad(xhr); // Pass the xhr object itself
+            xhr.onerror = (e) => onError(xhr); // Pass the xhr object
+            xhr.send(null);
+        }
+
+        function onError(xhr) {
+            console.error("Error fetching file:", XGP.url, xhr.status, xhr.statusText, xhr.response);
+            divMessage.innerText = `Error fetching ${XGP.fileName}: ${xhr.status} ${xhr.statusText || "Network issue"}`;
+            divMessage.style.color = "red";
+        }
+
+        function onLoad(xhr) {
+            // **RECOMMENDATION APPLIED**: Corrected logic for HTTP status check
+            if (xhr.status !== 200) {
+                console.error("Error response when fetching file:", XGP.url, xhr.status, xhr.statusText, xhr.response);
+                divMessage.innerText = `Error ${xhr.status} fetching ${XGP.fileName}: ${ (xhr.response && xhr.response.message) ? xhr.response.message : xhr.statusText }`;
+                divMessage.style.color = "red";
+                if (xhr.status === 401) { // Unauthorized
+                    divMessage.innerText += " Check your GitHub PAT.";
+                    localStorage.removeItem("githubAccessToken"); // Clear potentially bad token
+                    XGP.accessToken = "";
+                } else if (xhr.status === 404) { // Not Found
+                     divMessage.innerText += " File not found.";
+                }
+                return;
+            }
+
+            const responseData = xhr.target.response;
+            if (!responseData || !responseData.content) {
+                console.error("Invalid response structure or empty content:", responseData);
+                divMessage.innerText = `Error: Invalid response for ${XGP.fileName}.`;
+                divMessage.style.color = "red";
+                return;
+            }
+
+            XGP.sha = responseData.sha; // Store SHA for saving
+
+            let content;
+            try {
+                // **RECOMMENDATION APPLIED**: Replaced deprecated escape() with TextDecoder
+                const binaryString = window.atob(responseData.content);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                content = new TextDecoder().decode(bytes);
+            } catch (e) {
+                console.error("Error decoding content:", e);
+                divMessage.innerText = "Error decoding file content.";
+                divMessage.style.color = "red";
+                return;
+            }
+            
+            // Clean potential template comments if they exist
+            // content = content.replace(/\

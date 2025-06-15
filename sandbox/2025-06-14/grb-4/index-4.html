@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Repository Tree Browser</title>
+    <style>
+        /* Reset & basic layout */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #f6f8fa;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 20rem auto;
+            height: 100%;
+        }
+        .sidebar {
+            background-color: #fff;
+            border-right: 1px solid #e1e4e8;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .main {
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid #d1d5da;
+            border-radius: 4px;
+        }
+        button {
+            cursor: pointer;
+            background-color: #2ea44f;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        li {
+            margin: 0.2rem 0;
+            cursor: pointer;
+        }
+        .tree-item {
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+        }
+        .tree-item:hover {
+            background-color: #e1e4e8;
+        }
+        .selected {
+            background-color: #0366d6;
+            color: white;
+        }
+        details {
+            margin-left: 1rem;
+        }
+        .stats {
+            margin-top: auto;
+            font-size: 0.85rem;
+            border-top: 1px solid #e1e4e8;
+            padding-top: 0.5rem;
+        }
+        .loading {
+            text-align: center;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <!-- Repository loading & history -->
+            <input type="text" id="repoInput" placeholder="owner/repository">
+            <button id="loadRepoBtn">Load Repository</button>
+            <select id="repoHistory"></select>
+            <!-- Search & expand controls -->
+            <input type="text" id="searchInput" placeholder="Search files..." />
+            <button id="toggleAllBtn">Toggle All</button>
+            <!-- File tree display -->
+            <div id="treeContainer"></div>
+            <!-- Statistics -->
+            <div class="stats" id="stats">Folders: 0 | Files: 0</div>
+        </div>
+        <div class="main">
+            <h2>Selected File Path</h2>
+            <div id="selectedPath">None</div>
+            <hr>
+            <h3>Repository Info</h3>
+            <div id="repoInfo">No repository loaded.</div>
+        </div>
+    </div>
+    <script>
+        // ES6 class-based GitHub Repository Tree Browser
+        class GitHubTreeBrowser {
+            constructor() {
+                // Get DOM elements
+                this.repoInput = document.getElementById('repoInput');
+                this.loadRepoBtn = document.getElementById('loadRepoBtn');
+                this.repoHistory = document.getElementById('repoHistory');
+                this.searchInput = document.getElementById('searchInput');
+                this.toggleAllBtn = document.getElementById('toggleAllBtn');
+                this.treeContainer = document.getElementById('treeContainer');
+                this.statsEl = document.getElementById('stats');
+                this.selectedPathEl = document.getElementById('selectedPath');
+                this.repoInfoEl = document.getElementById('repoInfo');
+                // Internal tree & stats
+                this.rootTree = {};
+                this.foldersCount = 0;
+                this.filesCount = 0;
+                // Bind events and initialize history and routing
+                this.loadEvents();
+                this.loadHistory();
+                this.handleHashRouting();
+            }
+
+            loadEvents() {
+                this.loadRepoBtn.addEventListener('click', () => this.loadRepo());
+                window.addEventListener('hashchange', () => this.handleHashRouting());
+                this.toggleAllBtn.addEventListener('click', () => this.toggleAll());
+                this.searchInput.addEventListener('input', () => this.applySearch());
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === '/') {
+                        e.preventDefault();
+                        this.searchInput.focus();
+                    }
+                    // Additional keyboard shortcuts like arrow keys can be added here.
+                });
+                this.repoInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        this.loadRepo();
+                    }
+                });
+            }
+
+            loadHistory() {
+                let repos = JSON.parse(localStorage.getItem('github-repos')) || [];
+                this.repoHistory.innerHTML = '';
+                repos.forEach(repo => {
+                    let option = document.createElement('option');
+                    option.value = repo;
+                    option.textContent = repo;
+                    this.repoHistory.appendChild(option);
+                });
+                this.repoHistory.addEventListener('change', () => {
+                    this.repoInput.value = this.repoHistory.value;
+                });
+            }
+
+            saveHistory(repo) {
+                let repos = JSON.parse(localStorage.getItem('github-repos')) || [];
+                if (!repos.includes(repo)) {
+                    repos.unshift(repo);
+                    if (repos.length > 10) repos.pop();
+                    localStorage.setItem('github-repos', JSON.stringify(repos));
+                    this.loadHistory();
+                }
+            }
+
+            async loadRepo() {
+                const repo = this.repoInput.value.trim();
+                if (!repo.match(/^[^\/]+\/[^\/]+$/)) {
+                    alert('Invalid repository format. Use "owner/repository".');
+                    return;
+                }
+                this.repoInfoEl.textContent = 'Loading repository data...';
+                this.treeContainer.innerHTML = '<div class="loading">Loading...</div>';
+                try {
+                    // Get repository info to detect default branch
+                    const repoData = await fetch(`https://api.github.com/repos/${repo}`);
+                    if (!repoData.ok) throw new Error('Repository not found.');
+                    const repoJson = await repoData.json();
+                    const defaultBranch = repoJson.default_branch;
+                    // Fetch repository tree with recursive mode
+                    const treeResponse = await fetch(`https://api.github.com/repos/${repo}/git/trees/${defaultBranch}?recursive=1`);
+                    if (!treeResponse.ok) throw new Error('Error fetching repository tree.');
+                    const treeJson = await treeResponse.json();
+                    this.buildTree(treeJson.tree);
+                    this.displayTree();
+                    this.repoInfoEl.textContent = `Repository: ${repo} (Default branch: ${defaultBranch})`;
+                    this.saveHistory(repo);
+                } catch (err) {
+                    this.repoInfoEl.textContent = err.message;
+                    this.treeContainer.innerHTML = '';
+                }
+            }
+
+            buildTree(items) {
+                // Build a nested tree structure
+                this.rootTree = {};
+                this.foldersCount = 0;
+                this.filesCount = 0;
+                items.forEach(item => {
+                    const parts = item.path.split('/');
+                    let current = this.rootTree;
+                    parts.forEach((part, index) => {
+                        if (index === parts.length - 1) {
+                            // Last part: file or folder
+                            if (item.type === 'tree') {
+                                if (!current[part]) {
+                                    current[part] = { __type: 'folder', children: {} };
+                                    this.foldersCount++;
+                                }
+                            } else {
+                                current[part] = { __type: 'file', path: item.path };
+                                this.filesCount++;
+                            }
+                        } else {
+                            if (!current[part]) {
+                                current[part] = { __type: 'folder', children: {} };
+                                this.foldersCount++;
+                            }
+                            current = current[part].children;
+                        }
+                    });
+                });
+            }
+
+            displayTree() {
+                this.treeContainer.innerHTML = '';
+                const ul = document.createElement('ul');
+                this.createTreeNodes(this.rootTree, ul);
+                this.treeContainer.appendChild(ul);
+                this.updateStats();
+            }
+
+            createTreeNodes(tree, container) {
+                // Sorting: folders first, then date-prefixed newest first, then alphabetically
+                const folders = [];
+                const files = [];
+                Object.keys(tree).forEach(key => {
+                    if (tree[key].__type === 'folder') {
+                        folders.push(key);
+                    } else {
+                        files.push(key);
+                    }
+                });
+                const dateSort = (a, b) => {
+                    const dateA = a.match(/^\d{4}-\d{2}-\d{2}/) ? a : '0000-00-00';
+                    const dateB = b.match(/^\d{4}-\d{2}-\d{2}/) ? b : '0000-00-00';
+                    return dateA < dateB ? 1 : (dateA > dateB ? -1 : 0);
+                };
+                folders.sort((a, b) => a.localeCompare(b));
+                files.sort((a, b) => {
+                    if (a.match(/^\d{4}-\d{2}-\d{2}/) || b.match(/^\d{4}-\d{2}-\d{2}/)) {
+                        return dateSort(a, b);
+                    }
+                    return a.localeCompare(b);
+                });
+                [...folders, ...files].forEach(key => {
+                    const item = tree[key];
+                    const li = document.createElement('li');
+                    if (item.__type === 'folder') {
+                        const details = document.createElement('details');
+                        const summary = document.createElement('summary');
+                        summary.textContent = '📁 ' + key;
+                        details.appendChild(summary);
+                        const childUl = document.createElement('ul');
+                        childUl.style.paddingLeft = '1rem';
+                        this.createTreeNodes(item.children, childUl);
+                        details.appendChild(childUl);
+                        // Optional: add click listener to folder summary if needed.
+                        summary.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
+                        li.appendChild(details);
+                    } else {
+                        li.textContent = '📜 ' + key;
+                        li.className = 'tree-item';
+                        li.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            this.selectFile(item.path, li);
+                        });
+                    }
+                    container.appendChild(li);
+                });
+            }
+
+            selectFile(path, element) {
+                // Clear previous selection and mark new file
+                const prev = this.treeContainer.querySelector('.selected');
+                if (prev) prev.classList.remove('selected');
+                element.classList.add('selected');
+                location.hash = path;
+                this.selectedPathEl.textContent = path;
+                this.autoExpand(path);
+                this.scrollIntoView(element);
+            }
+
+            autoExpand(path) {
+                // Open all parent folders containing the selected file
+                const segments = path.split('/');
+                segments.forEach(seg => {
+                    const summaries = this.treeContainer.querySelectorAll('summary');
+                    summaries.forEach(sum => {
+                        if (sum.textContent.includes(seg)) {
+                            sum.parentElement.open = true;
+                        }
+                    });
+                });
+            }
+
+            scrollIntoView(element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            handleHashRouting() {
+                const hash = decodeURIComponent(location.hash.slice(1));
+                if (hash) {
+                    this.selectedPathEl.textContent = hash;
+                    // Highlight the matching file if exists
+                    const items = Array.from(this.treeContainer.getElementsByClassName('tree-item'));
+                    items.forEach(item => {
+                        if (item.textContent.includes(hash.split('/').pop())) {
+                            item.classList.add('selected');
+                            this.scrollIntoView(item);
+                        } else {
+                            item.classList.remove('selected');
+                        }
+                    });
+                }
+            }
+
+            toggleAll() {
+                // Expand or collapse all folders
+                const details = this.treeContainer.querySelectorAll('details');
+                const anyClosed = Array.from(details).some(d => !d.open);
+                details.forEach(d => d.open = anyClosed);
+            }
+
+            applySearch() {
+                const query = this.searchInput.value.toLowerCase();
+                const items = this.treeContainer.getElementsByTagName('li');
+                Array.from(items).forEach(li => {
+                    if (li.textContent.toLowerCase().includes(query)) {
+                        li.style.display = '';
+                        // Auto-expand parent folders containing matching text
+                        let parent = li.parentElement;
+                        while (parent && parent.tagName !== 'BODY') {
+                            if (parent.tagName === 'DETAILS') {
+                                parent.open = true;
+                            }
+                            parent = parent.parentElement;
+                        }
+                    } else {
+                        li.style.display = 'none';
+                    }
+                });
+            }
+
+            updateStats() {
+                this.statsEl.textContent = `Folders: ${this.foldersCount} | Files: ${this.filesCount}`;
+            }
+        }
+
+        // Initialize the GitHub Tree Browser on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new GitHubTreeBrowser();
+        });
+    </script>
+</body>
+</html>
