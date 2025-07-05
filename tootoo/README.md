@@ -54,7 +54,7 @@ _"Templates Read Me" in a resizable window_
 * 2025-06-10 ~ Breadcrumbs: better no file handling
 * 2025-06-09 ~ Ignore all index.html files
 * 2025-06-04 ~ Add sort files by two numbers at front of filename
-* 2025-06-09 ~ GitHub icon links to actual file not just repo 
+* 2025-06-09 ~ GitHub icon links to actual file not just repo
 * 2025-05-29 ~ date sorting folders are identified in COR{}
 * 2025-05-29 ~ Add new file
 * 2025-05-25 ~ omitting the date from the file name in the menu, and adding the date to the file title
@@ -63,12 +63,12 @@ _"Templates Read Me" in a resizable window_
 * 2023-10-13 ~ Check if follows Win11 light and dark mode
 
 
-## Issues 
+## Issues
 
-* Keep Config and App separate 
+* Keep Config and App separate
 * Avoid trying to mix excellent viewing with excellent editing. Mixing front end and back end
 * Avoid trying to mix markdown and HTML
-
+* Fix issue where body text is covered by the menu on iPad
 
 ## Links of Interest
 
@@ -93,25 +93,25 @@ Done
 * Clean-up & refactor
 * 2023-10-14 ~ Cursor keys to load next file in menu
 
-#### prompt
+#### Prompt: Improvements
 
 Suggest further improvements, retaining the notion that the project is intended to be as simple as possible, and given that the project operates in a known and well-maintained environment, it requires only the minimum of error checking, if any
 
-#### Prompt
+#### Prompt: Navigation
 
 On the tree view menu, add the capability to open and view the next or previous file in the menu using the cursor keys.
 
-#### prompt
+#### Prompt: Toggle Details
 
-currently there is a toggle to open or close all the details tags in the tree view. 
+Currently there is a toggle to open or close all the details tags in the tree view.
 
 Improve this by adding a right-click menu to toggle between opening and closing all the sub-folders of the currently selected details tag in the tree view.
 
-worked!
+Worked!
 
-#### prompt: 
+#### Prompt: Text Scaling
 
-Add a function that scales the text size larger and smaller of of all the item in the menu and body, including the tree view, using two buttons, one to increase the text size and one to decrease it.
+Add a function that scales the text size larger and smaller of all the items in the menu and body, including the tree view, using two buttons, one to increase the text size and one to decrease it.
 
 Worked!
 
