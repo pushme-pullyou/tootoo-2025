@@ -10,19 +10,19 @@ const baseUrl = 'https://api.github.com';
 async function fetchGitHubRepoContents(user, repo) {
 
   // Get GitHub access token for authorization
-  const accessToken = localStorage.getItem("githubAccessToken") || COR.accessToken;
+  // const accessToken = localStorage.getItem("githubAccessToken") || COR.accessToken;
 
-  const headers = {};
-  if (accessToken) {
-    headers['Authorization'] = `token ${accessToken}`;
-  }
+  // const headers = {};
+  // if (accessToken) {
+  //   headers['Authorization'] = `token ${accessToken}`;
+  // }
 
-  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`, { headers });
+  const response = await fetch(`${baseUrl}/repos/${user}/${repo}/git/trees/${branch}?recursive=1`, {});
 
-  if (!response.ok) {
-    console.error(`GitHub API request failed: ${response.status} ${response.statusText}`);
-    throw new Error(`Failed to fetch repository contents: ${response.status}`);
-  }
+  // if (!response.ok) {
+  //   console.error(`GitHub API request failed: ${response.status} ${response.statusText}`);
+  //   throw new Error(`Failed to fetch repository contents: ${response.status}`);
+  // }
 
   const { tree } = await response.json();
   const div = document.getElementById('divNavTreeView');
@@ -52,7 +52,12 @@ async function fetchGitHubRepoContents(user, repo) {
         details.classList.add('top-level-folder');
       }
 
-      // Context menu removed
+      // // Add right-click context menu functionality
+      // details.addEventListener('contextmenu', (e) => {
+      //   e.preventDefault();
+      //   e.stopPropagation();
+      //   showContextMenu(e, details);
+      // });
 
       details.appendChild(summary);
 
@@ -110,18 +115,18 @@ async function fetchGitHubRepoContents(user, repo) {
 
       //if (COR.accessToken) {
 
-        const fileSource = document.createElement('a');
-        fileSource.innerHTML = COR.iconGitHub;
-        fileSource.href = COR.urlSource + item.path;
-        fileSource.title = "Source code on GitHub"
-        fileSource.target = "_blank"
-        //console.log( "fileSource", fileSource );
+        // const fileSource = document.createElement('a');
+        // fileSource.innerHTML = COR.iconGitHub;
+        // fileSource.href = COR.urlSource + item.path;
+        // fileSource.title = "Source code on GitHub"
+        // fileSource.target = "_blank"
+        // //console.log( "fileSource", fileSource );
 
-        const editmeLink = document.createElement('a');
-        if (/\.(md|txt|ini)$/i.test(item.path)) {
-          editmeLink.textContent = "✎";
-          editmeLink.href = `#@@${item.path}`;
-        }
+        // const editmeLink = document.createElement('a');
+        // if (/\.(md|txt|ini)$/i.test(item.path)) {
+        //   editmeLink.textContent = "✎";
+        //   editmeLink.href = `#@@${item.path}`;
+        // }
 
       //}
 
@@ -138,12 +143,12 @@ async function fetchGitHubRepoContents(user, repo) {
 
       const fileContainer = document.createElement('p');
 
-      if (COR.accessToken) {
-        fileContainer.appendChild(fileSource);
-        fileContainer.appendChild(document.createTextNode(" "));
-        fileContainer.appendChild(editmeLink);
-        fileContainer.appendChild(document.createTextNode(" "));
-      }
+      // if (COR.accessToken) {
+      //   fileContainer.appendChild(fileSource);
+      //   fileContainer.appendChild(document.createTextNode(" "));
+      //   fileContainer.appendChild(editmeLink);
+      //   fileContainer.appendChild(document.createTextNode(" "));
+      // }
 
       fileContainer.appendChild(fileLink);
       fileContainer.appendChild(document.createTextNode(" "));
@@ -210,8 +215,6 @@ function formatDisplayName(fileName, isFolder = false) {
   return displayName;
 
 }
-
-// Context menu functionality removed
 
 // Keyboard navigation functionality
 function initKeyboardNavigation() {

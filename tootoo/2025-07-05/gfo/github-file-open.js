@@ -4,7 +4,7 @@ function onHashChange() {
 
   let hash = location.hash.slice(1);
   COR.hash = hash;
-  
+
   divContent = COR.divContent;
 
   //console.log( "div", divContent );
@@ -24,36 +24,18 @@ function onHashChange() {
     return;
   }
 
-  // Update breadcrumb navigation
-  if (typeof updateBreadcrumb === 'function') {
-    updateBreadcrumb(hash);
-  }
-
   //console.log("hash", hash, "url", COR.pathContent);
 
   if (/\.(md|txt|ini)$/i.test(hash)) {
-
-    if (hash.includes("@@")) {
-
-      console.log("notesy", COR.hash);
-
-      //COR.hash = hash.replace("@@", "");
-      divContent.innerHTML =
-
-        `<iframe id=ifr class="iframe-resize" onload=onLoad() src="${COR.pathApps}/ggpf/github-get-put-file.html"><iframe>`;
-
-    } else {
 
       console.log("getHTMLfromURL", hash);
 
       getHTMLfromURL(hash);
 
-    }
-
   } else if (/\.(jpg|jpeg|png|gif|svg|ico|bmp|tiff|webp)$/i.test(hash)) {
 
     console.log("img", hash);
-    
+
     divContent.innerHTML = `<img src="${COR.pathContent}${hash}" ></img>`;
 
   } else if (hash === "LICENSE") {
@@ -66,6 +48,7 @@ function onHashChange() {
 
     console.log("some other type", COR.urlPathContent + hash);
     divContent.innerHTML = `<iframe id=ifr class="iframe-resize" src="${COR.urlPathContent}${hash}" ></iframe>`
+
   }
 
   // see github-tree-view.js

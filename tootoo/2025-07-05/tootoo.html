@@ -8,21 +8,13 @@
   <meta name="description"
     content="TooToo 2025 uses the GitHub API to provide access to all the current files in a repository hosted with GitHub Pages.">
   <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-  <meta name="version" content="Version 2025-07-04">
+  <meta name="version" content="Version 2025-06-10">
   <meta name="author" content="Theo Armour">
   <meta name="creator" content="https://github.com/pushme-pullyou/tootoo-2025/tree/main/tootoo">
 
   <!-- Copyright 2025 Theo Armour. MIT license -->
 
   <link id=CORstyle rel="stylesheet" href="style-core.css">
-
-  <!-- <style>
-    @media (min-width: 768px) and (max-width: 1024px) {
-      #sumNavMenu {
-        display: block;
-      }
-    }
-  </style> -->
 
 </head>
 
@@ -103,7 +95,6 @@
 
   <main id=main>
 
-    <div id="divMessage"></div>
     <div id="divMainContent"></div>
 
   </main>
@@ -132,23 +123,23 @@
       window.addEventListener('resize', handleMenuToggleForWindowSize);
 
       // Click outside menu to close
-      // document.addEventListener('click', function (event) {
+      document.addEventListener('click', function (event) {
 
-      //   // Only close menu if hamburger is visible and menu is open
-      //   if (!sumNavMenu.hidden &&
-      //     detNavMenu.open &&
-      //     !navMenu.contains(event.target) &&
-      //     !sumNavMenu.contains(event.target)) {
-      //     detNavMenu.open = false;
-      //   }
-      // });
+        if (//!sumNavMenu.hidden &&
+          detNavMenu.open &&
+          !navMenu.contains(event.target) &&
+          !sumNavMenu.contains(event.target)) {
+          detNavMenu.open = false;
+        }
+      });
 
 
-      // Removed functionality related to editing markdown files
       // COR.accessToken = localStorage.getItem("githubAccessToken") || "";
 
       // if (COR.accessToken) {
+
       //   pencil.style.display = "block";
+
       // }
 
       // onHashChange > github-file-open.js
@@ -160,19 +151,10 @@
 
       onHashChange();
 
+      handleMenuToggleForWindowSize();
     }
 
-    function handleMenuToggleForWindowSize() {
-      //const isIPadResolution = window.innerWidth >= 768 && window.innerWidth <= 1024;
-
-      if (window.innerWidth < 800 || window.innerHeight < 400 || isIPadResolution) {
-        detNavMenu.open = false;
-        //sumNavMenu.hidden = false;
-      } else {
-        detNavMenu.open = true;
-        //sumNavMenu.hidden = true;
-      }
-    }
+ 
   </script>
 
 </body>

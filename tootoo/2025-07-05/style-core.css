@@ -3,11 +3,9 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
 
 :root {
-
   font-size: 100%;
   /* updated at run time ~ see config.sys */
   --mnu-width: 20rem;
-  --main-width: 30rem;
   /*  updated at run time ~ 0 to 360 10=red 120=green 240=blue */
   --main-hue: 10;
   --margin: 0.5rem;
@@ -233,11 +231,13 @@ div div>.folder-contents>details>summary:hover {
   border: 0px solid red;
   /* height: 100vh; */
   left: calc(var(--mnu-width) + 5rem);
-  max-width: var( --main-width);
+  max-width: 30rem;
   position: absolute;
   top: 0;
   width: calc(100% - var(--mnu-width) - 2rem);
 }
+
+
 
 /* scroll bars */
 
@@ -266,6 +266,42 @@ body::-webkit-scrollbar-thumb,
   /* creates padding around scroll thumb */
 }
 
+/* Context menu styles */
+.context-menu {
+  position: fixed;
+  background: var(--color-1-background);
+  border: 1px solid var(--color-2-background);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  color: var(--color-1-text);
+  font-size: 0.9rem;
+  min-width: 180px;
+  padding: 4px 0;
+  display: none;
+  z-index: 1000;
+}
+
+.context-menu-item {
+  border-bottom: 1px solid var(--color-2-background);
+  cursor: pointer;
+  padding: 10px 16px;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.context-menu-item:last-child {
+  border-bottom: none;
+}
+
+.context-menu-item:hover {
+  background-color: var(--color-3-background);
+  color: var(--color-3-text);
+}
+
+.context-menu-item:active {
+  background-color: var(--color-2-background);
+}
+
 /* Mobile */
 
 @media all and (max-width: 800px) {
@@ -285,7 +321,7 @@ body::-webkit-scrollbar-thumb,
 
 }
 
-@media all and (max-height: 400px) {
+@media all and (max-height: 500px) {
 
   #main {
     left: 0;
@@ -302,17 +338,42 @@ body::-webkit-scrollbar-thumb,
 
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
-  #navMenu {
-    display: block;
-    margin-top: 1.5rem;
-    max-width: 75%;
-    width: var(--mnu-width);
+@media (max-width: 768px) {
+  .breadcrumb-container {
+    font-size: 0.8em;
   }
 
-  #main {
-    left: 0;
-    padding: var(--margin);
-    width: 100%;
+  .breadcrumb-link, .breadcrumb-current {
+    padding: 1px 2px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .breadcrumb-link {
+    color: #66b3ff;
+  }
+
+  .breadcrumb-link:hover {
+    background-color: #1a1a2e;
+    color: #80c7ff;
+  }
+
+  .breadcrumb-current {
+    color: #e0e0e0;
+  }
+
+  .breadcrumb-separator {
+    color: #999;
+  }
+
+  .breadcrumb-ellipsis {
+    background-color: #2a2a2a;
+    color: #ccc;
+  }
+
+  .breadcrumb-ellipsis:hover {
+    background-color: #3a3a3a;
+    color: #fff;
   }
 }

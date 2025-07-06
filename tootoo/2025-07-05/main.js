@@ -113,7 +113,7 @@ function scaleTreeViewElements() {
   // Remove existing dynamic style if it exists
   const existingStyle = document.getElementById('dynamic-text-scaling');
   if (existingStyle) {
-    existingStyle.remove();
+    eaccessTokenxistingStyle.remove();
   }
 
   // Base font sizes for tree view elements
@@ -173,23 +173,6 @@ function saveTextScale() {
   localStorage.setItem('tootoo-text-scale', currentScale.toString());
 }
 
-// onButton
-
-function onButton() {
-  pencil.style.display = "block";
-
-  if (COR.accessToken) {
-    divNavTreeView.innerHTML = "";
-    COR.accessToken = null;
-    fetchGitHubRepoContents(user, repo);
-
-  } else {
-    COR.accessToken = localStorage.getItem("githubAccessToken") || "";
-    divNavTreeView.innerHTML = "";
-    fetchGitHubRepoContents(user, repo);
-  }
-}
-
 function delgat() { localStorage.setItem("githubAccessToken", "");}
 
 function setgat() {
@@ -198,26 +181,6 @@ function setgat() {
 
 				localStorage.setItem("githubAccessToken", COR.accessToken);
 
-}
-
-function getFileIcon(fileName) {
-  const extension = fileName.split('.').pop().toLowerCase();
-  const iconMap = {
-    'md': '📝',
-    'js': '📜',
-    'css': '🎨',
-    'html': '🌐',
-    'json': '📋',
-    'txt': '📄',
-    'png': '🖼️',
-    'jpg': '🖼️',
-    'jpeg': '🖼️',
-    'gif': '🖼️',
-    'svg': '🖼️',
-    'pdf': '📕',
-    'zip': '📦'
-  };
-  return iconMap[extension] || '📄';
 }
 
 function navigateToPath(path) {
@@ -230,3 +193,19 @@ function navigateToPath(path) {
     location.hash = path;
   }
 }
+
+   function handleMenuToggleForWindowSize() {
+
+      if (window.innerWidth < 800 || window.innerHeight < 500) {
+        detNavMenu.open = false;
+        //sumNavMenu.hidden = false;
+
+
+      } else {
+
+        detNavMenu.open = true;
+        //sumNavMenu.hidden = true;
+
+      }
+
+    }
