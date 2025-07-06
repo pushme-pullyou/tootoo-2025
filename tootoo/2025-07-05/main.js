@@ -113,7 +113,7 @@ function scaleTreeViewElements() {
   // Remove existing dynamic style if it exists
   const existingStyle = document.getElementById('dynamic-text-scaling');
   if (existingStyle) {
-    eaccessTokenxistingStyle.remove();
+    existingStyle.remove();
   }
 
   // Base font sizes for tree view elements
@@ -196,15 +196,12 @@ function navigateToPath(path) {
 
    function handleMenuToggleForWindowSize() {
 
-      if (window.innerWidth < 800 || window.innerHeight < 500) {
+      if (window.innerWidth < 600 || window.innerHeight < 500) {
         detNavMenu.open = false;
-        //sumNavMenu.hidden = false;
-
 
       } else {
 
         detNavMenu.open = true;
-        //sumNavMenu.hidden = true;
 
       }
 

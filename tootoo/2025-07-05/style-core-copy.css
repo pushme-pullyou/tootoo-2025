@@ -130,42 +130,14 @@ img {
   width: 25px;
 }
 
-
-/* Flex container for nav and main */
-#appFlexContainer {
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-  width: 100vw;
-}
-
-/* Ensure navMenu stays on the left */
-#divShowHide {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Main content to the right of navMenu */
-/* Main content to the right of navMenu */
 #main {
-  position: relative;
-  max-width: 30rem;
-  width: 100%;
-  flex: 1 1 0;
-  border: 0;
-  outline: none;
-  margin-left: var(--mnu-width);
-  /* Ensures #main is to the right of navMenu in flex row */
-}
-
-/* #main {
   border: 0px solid red;
   left: calc(var(--mnu-width) + 5rem);
   max-width: 30rem;
   position: absolute;
   top: 0;
   width: calc(100% - var(--mnu-width) - 2rem);
-} */
+}
 
 #navMenu {
   background-color: var(--color-1-background);
@@ -281,16 +253,14 @@ body::-webkit-scrollbar-thumb,
 /* Mobile & Small height screens */
 
 @media all and (max-width: 600px), all and (max-height: 500px) {
-  #appFlexContainer {
-    flex-direction: column;
-  }
+
   #main {
-    margin-left: 0;
-    width: 100vw;
-    max-width: 100vw;
+    left: 0;
     position: static;
-    padding: var(--margin);
+    padding: var(--margin);;
+    width: 100vw;
   }
+
   #navMenu {
     position: fixed;
     left: 0;
@@ -306,4 +276,5 @@ body::-webkit-scrollbar-thumb,
     resize: none;
     z-index: 1;
   }
+
 }
