@@ -302,7 +302,7 @@ body::-webkit-scrollbar-thumb,
 
 /* Mobile */
 
-@media all and (max-width: 800px) {
+@media all and (max-width: 800px), all and (max-height: 400px) {
 
   #main {
     left: 0;
@@ -317,36 +317,4 @@ body::-webkit-scrollbar-thumb,
     width: var(--mnu-width);
   }
 
-}
-
-@media all and (max-height: 400px) {
-
-  #main {
-    left: 0;
-    padding: var(--margin);
-    width: 100%;
-  }
-
-  #navMenu {
-    display: block;
-    margin-top: 1.5rem;
-    max-width: 75%;
-    width: var(--mnu-width);
-  }
-
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  #navMenu {
-    display: block;
-    margin-top: 1.5rem;
-    max-width: 75%;
-    width: var(--mnu-width);
-  }
-
-  #main {
-    left: 0;
-    padding: var(--margin);
-    width: 100%;
-  }
 }

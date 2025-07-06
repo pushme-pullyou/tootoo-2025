@@ -5,7 +5,7 @@
 :root {
   font-size: 100%;
   /* updated at run time ~ see config.sys */
-  --mnu-width: 20rem;
+  --mnu-width: 50rem;
   /*  updated at run time ~ 0 to 360 10=red 120=green 240=blue */
   --main-hue: 10;
   --margin: 0.5rem;
@@ -100,10 +100,6 @@ img {
   text-decoration: none;
 }
 
-.file-container {
-  margin: 0 0 6px 0;
-}
-
 .iframe-resize {
   height: 95vh;
   overflow: hidden;
@@ -114,72 +110,39 @@ img {
 
 /* IDs in alphabetical order */
 
-#detNavMenu {
-  z-index: 1;
-}
-
 #imgGitHub {
   background-color: white;
   border-radius: 50%;
-  /* box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); */
   height: 25px;
   margin-right: 8px;
   padding: 2px;
-  /* position: relative; */
   vertical-align: middle;
   width: 25px;
 }
 
-
-/* Flex container for nav and main */
-#appFlexContainer {
-  display: flex;
-  flex-direction: row;
-  min-height: 100vh;
-  width: 100vw;
-}
-
 /* Ensure navMenu stays on the left */
 #divShowHide {
-  display: flex;
-  flex-direction: column;
+  position: fixed;
 }
 
-/* Main content to the right of navMenu */
 /* Main content to the right of navMenu */
 #main {
-  position: relative;
-  max-width: 30rem;
-  width: 100%;
-  flex: 1 1 0;
-  border: 0;
-  outline: none;
-  margin-left: var(--mnu-width);
-  /* Ensures #main is to the right of navMenu in flex row */
-}
-
-/* #main {
-  border: 0px solid red;
   left: calc(var(--mnu-width) + 5rem);
   max-width: 30rem;
-  position: absolute;
+  padding: var(--margin);
+  position: fixed;
   top: 0;
-  width: calc(100% - var(--mnu-width) - 2rem);
-} */
+}
 
 #navMenu {
+  max-height: calc(100vh - 2rem);
+  width: calc(--mnu-width);
   background-color: var(--color-1-background);
   border: 1px solid var(--color-3-text);
   border-radius: var(--margin);
-  left: var(--margin);
-  max-height: calc(100vh - 2rem);
-  /* max-width: 35%; */
+  overflow:scroll;
   padding: var(--margin);
-  overflow: auto;
   position: fixed;
-  resize: both;
-  top: var(--margin);
-  width: auto;
   z-index: 1;
 }
 
@@ -190,12 +153,10 @@ img {
   color: var(--color-3-text);
   cursor: pointer;
   font-size: 120%;
-  outline: none;
+  left: var(--margin);
   padding: var(--margin);
   position: fixed;
-  left: var(--margin);
-  /* display: none; */
-  top: -1rem; /* var(--margin); */
+  top: -1rem;
   z-index: 2;
 }
 
@@ -280,22 +241,21 @@ body::-webkit-scrollbar-thumb,
 
 /* Mobile & Small height screens */
 
-@media all and (max-width: 600px), all and (max-height: 500px) {
-  #appFlexContainer {
-    flex-direction: column;
-  }
+@media all and (max-width: 600px),
+all and (max-height: 500px) {
+
+
   #main {
     margin-left: 0;
     width: 100vw;
     max-width: 100vw;
-    position: static;
+    position: fixed;
     padding: var(--margin);
   }
+
   #navMenu {
-    position: fixed;
     left: 0;
     top: 0;
-    width: auto;
     max-width: 70vw;
     min-width: 0;
     margin: 0 0 1rem 0;
@@ -303,7 +263,9 @@ body::-webkit-scrollbar-thumb,
     border-left: none;
     border-right: none;
     box-shadow: none;
+    position: fixed;
     resize: none;
+    width: calc(--mnu-width);
     z-index: 1;
   }
 }

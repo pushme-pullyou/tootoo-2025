@@ -15,6 +15,6 @@ const CONFIG = {
 
     /* 0 to 360 10=red 120=green 240=blue */
     mainHue: 120,
-    baseMenuWidth: 18,
+    baseMenuWidth: 30,
 
 }

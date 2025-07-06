@@ -91,7 +91,7 @@ function applyTextScale() {
   const baseMenuWidth = CONFIG.baseMenuWidth; // rem
   const scaledMenuWidth = baseMenuWidth * currentScale;
   document.documentElement.style.setProperty('--mnu-width', scaledMenuWidth + 'rem');
-
+  console.log( "scaledMenuWidth", scaledMenuWidth );
   // Scale the GitHub image proportionally
   const imgGitHub = document.getElementById('imgGitHub');
   if (imgGitHub) {
@@ -159,7 +159,7 @@ function scaleTreeViewElements() {
 function updateButtonStyles() {
   const buttons = document.querySelectorAll('#divNavExtras button');
   buttons.forEach(button => {
-    if (button.id === 'btnDecreaseText' ) {
+    if (button.id === 'btnDecreaseText') {
       button.style.fontSize = (0.9 * currentScale) + 'rem';
     } else if (button.id === 'btnIncreaseText') {
       button.style.fontSize = (1.2 * currentScale) + 'rem';
@@ -173,13 +173,13 @@ function saveTextScale() {
   localStorage.setItem('tootoo-text-scale', currentScale.toString());
 }
 
-function delgat() { localStorage.setItem("githubAccessToken", "");}
+function delgat() { localStorage.setItem("githubAccessToken", ""); }
 
 function setgat() {
 
-				COR.accessToken = prompt("Enter GitHub Personal Access Token");
+  COR.accessToken = prompt("Enter GitHub Personal Access Token");
 
-				localStorage.setItem("githubAccessToken", COR.accessToken);
+  localStorage.setItem("githubAccessToken", COR.accessToken);
 
 }
 
@@ -194,15 +194,16 @@ function navigateToPath(path) {
   }
 }
 
-   function handleMenuToggleForWindowSize() {
+function handleMenuToggleForWindowSize() {
 
-      if (window.innerWidth < 600 || window.innerHeight < 500) {
-        detNavMenu.open = false;
+  if (window.innerWidth < 600 || window.innerHeight < 500) {
 
-      } else {
+    detNavMenu.open = false;
 
-        detNavMenu.open = true;
+  } else {
 
-      }
+    detNavMenu.open = true;
 
-    }
+  }
+
+}
