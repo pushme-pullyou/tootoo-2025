@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Copyright 2025 Theo Armour. MIT License */
+        :root {
+            font-size: 200%;
+        }
+
+        * {
+            font-family: monospace;
+        }
+
+        /* Font scale controls */
+        .font-controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            /* Vertically center all items */
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .font-controls-title {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .font-btn {
+            background: #007acc;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 1rem;
+            /* Use rem so it scales with root font size */
+            transition: background-color 0.2s;
+        }
+
+        .font-btn:hover {
+            background: #005a9e;
+        }
+
+        .font-btn:focus {
+            outline: 2px solid #ffd700;
+            outline-offset: 2px;
+        }
+
+        .font-btn:active {
+            background: #004080;
+        }
+
+        /* Screen reader only text */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"></script>
+
+    <!-- Font scaling controls -->
+    <div class="font-controls" role="toolbar" aria-label="Font size controls">
+        <span class="font-controls-title">Heritage Happenings</span>
+        <button class="font-btn" onclick="decreaseFontSize()" aria-label="Decrease font size">
+            A-
+            <span class="sr-only">Make text smaller</span>
+        </button>
+        <button class="font-btn" onclick="resetFontSize()" aria-label="Reset font size to default">
+            A
+            <span class="sr-only">Reset text size to default</span>
+        </button>
+        <button class="font-btn" onclick="increaseFontSize()" aria-label="Increase font size">
+            A+
+            <span class="sr-only">Make text larger</span>
+        </button>
+    </div>
+
+    <main>
+
+
+        <div id=divContent style="margin-top: 60px; padding: 20px;">
+            "Grant, O Lord, that in all the joys of life we may never forget to be kind. Help us to be unselfish in
+            friendship,
+            thoughtful of those less happy than ourselves, and eager to bear the burdens of others; through Jesus Christ
+            our Savior.
+            Amen."
+        </div>
+
+    </main>
+        <script>
+        let currentFontSize = 200; // Start at 200%
+
+        let defaultFile = "../README.md";
+
+        //defaultFile = "../../test-cases/heritage-front.jpg"
+
+        //location.hash = ""; // test
+        //location.hash = "../../test-cases/style-sample-tags.html"
+
+        init();
+
+        function init() {
+
+            showdown.setFlavor("github");
+
+            // Load saved font size from localStorage
+            loadFontSize();
+
+            if (!location.hash) { location.hash = defaultFile; }
+
+            location.hash.endsWith(".md") ? onHashChange() : window.location.href = location.hash.slice(1);
+
+            window.addEventListener("hashchange", onHashChange, false);
+
+        }
+
+        function delhash() { location.hash = ""; }
+
+        function loadFontSize() {
+            const savedFontSize = localStorage.getItem('heritageHappeningsFontSize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize, 10);
+                // Ensure the loaded value is within valid range
+                currentFontSize = Math.max(100, Math.min(500, currentFontSize));
+                updateFontSize();
+            }
+        }
+
+        function saveFontSize() {
+            localStorage.setItem('heritageHappeningsFontSize', currentFontSize.toString());
+        }
+
+        function onHashChange() {
+
+            // if no file extension then probably an internal link
+            if (!location.hash.includes(".")) { return; }
+
+            const url = location.hash.slice(1);
+
+            const txt = url.split("/").pop();
+            let title = txt
+                .split("-")
+                .filter(x => x.length > 0)
+                .map((x) => (x.charAt(0).toUpperCase() + x.slice(1)))
+                .join(" ");
+            document.title = title;
+            //const options = { openLinksInNewWindow: false, excludeTrailingPunctuationFromURLs: true, ghMention: true, simplifiedAutoLink: true, simpleLineBreaks: true, emoji: true };
+
+            const options = {
+                backslashEscapesHTMLTags: true,
+                completeHTMLDocument: false,
+                disableForced4SpacesIndentedSublists: true,
+                emoji: true,
+                excludeTrailingPunctuationFromURLs: true,
+                ghMention: true,
+                noHeaderId: true,
+                openLinksInNewWindow: false,
+                simplifiedAutoLink: true,
+                simpleLineBreaks: true,
+                smoothLivePreview: true,
+                strikethrough: true,
+                tasklists: true,
+            };
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("get", url, true);
+            xhr.onload = () => {
+                let txt = xhr.responseText;
+                divContent.innerHTML = new showdown.Converter(options).makeHtml(txt);
+                window.scrollTo(0, 0);
+            };
+            xhr.send(null);
+
+        }
+
+        function decreaseFontSize() {
+            if (currentFontSize > 100) { // Minimum 100%
+                currentFontSize -= 50;
+                updateFontSize();
+                saveFontSize();
+            }
+        }
+
+        function increaseFontSize() {
+            if (currentFontSize < 500) { // Maximum 500%
+                currentFontSize += 50;
+                updateFontSize();
+                saveFontSize();
+            }
+        }
+
+        function resetFontSize() {
+            currentFontSize = 200;
+            updateFontSize();
+            saveFontSize();
+        }
+
+        function updateFontSize() {
+            document.documentElement.style.fontSize = currentFontSize + '%';
+            // Announce the change to screen readers
+            announceToScreenReader(`Font size changed to ${currentFontSize}%`);
+        }
+
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'polite');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            document.body.appendChild(announcement);
+
+            // Remove after announcement
+            setTimeout(() => {
+                document.body.removeChild(announcement);
+            }, 1000);
+        }
+
+        // Keyboard accessibility
+        document.addEventListener('keydown', function (e) {
+            // Ctrl/Cmd + Plus/Minus for font scaling
+            if ((e.ctrlKey || e.metaKey) && !e.shiftKey) {
+                if (e.key === '=' || e.key === '+') {
+                    e.preventDefault();
+                    increaseFontSize();
+                } else if (e.key === '-') {
+                    e.preventDefault();
+                    decreaseFontSize();
+                } else if (e.key === '0') {
+                    e.preventDefault();
+                    resetFontSize();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
