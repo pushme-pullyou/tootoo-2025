@@ -4,21 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description"
-		content="File wrangler. Default index.html file. Opens HTML or Markdown files. Passes location.hash.">
-	<meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
-	<meta name="version" content="2022-10-08">
+    <title>Document</title>
+    <meta name="description"
+        content="File wrangler. Default index.html file. Opens HTML or Markdown files. Passes location.hash.">
+    <meta name="keywords" content="ShowDown,Markdown,AJAX,JavaScript,HTML,CSS,GitHub,FOSS">
+    <meta name="version" content="2022-10-08">
+
     <style>
         /* Copyright 2025 Theo Armour. MIT License */
-		/* Essential tags first followed by specials, all alphabetical */
         :root {
-			font: 14pt verdana, sans-serif;
-			--color: #880000;
-			--color-light: crimson;
+            font-size: 200%;
+            --color: #880000;
+            --color-light: crimson;
+
+        }
+
+        * {
+            box-sizing: border-box;
+            font: 14pt verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+
+		a {
+			color: var(--color-light);
 		}
 
-		* {
-			box-sizing: border-box;
+		a:hover,
+		a:focus,
+		a:active {
+			color: var(--color-light);
+			text-decoration: underline;
+		}
+
+		h1,
+		h2,
+		h3 {
+			color: var(--color);
+		}
+
+		h1,
+		h2 {
+			margin: 0.5rem 0 0.25rem 0;
+		}
+		h3 {
+			margin: 0.8rem 0 0 0;
+		}
+		h4 {
+			margin: 0;
 		}
 
         img {
@@ -26,6 +59,7 @@
             width: 100%;
             max-width: 500px;
         }
+
         /* Font scale controls */
         .font-controls {
             position: fixed;
@@ -189,7 +223,8 @@
             A+
             <span class="sr-only">Make text larger</span>
         </button>
-        <button class="font-btn file-list-toggle" onclick="toggleFileList()" aria-label="Toggle file list" aria-expanded="false" aria-controls="file-list-panel">
+        <button class="font-btn file-list-toggle" onclick="toggleFileList()" aria-label="Toggle file list"
+            aria-expanded="false" aria-controls="file-list-panel">
             📁
             <span class="sr-only">Show or hide file list</span>
         </button>
