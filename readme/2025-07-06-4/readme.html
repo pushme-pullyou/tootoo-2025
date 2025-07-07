@@ -73,7 +73,7 @@
             background: rgba(255, 255, 255, 0.9);
             padding: 5px 10px;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .font-controls-title {
@@ -161,7 +161,7 @@
             display: block;
             padding: 8px 12px;
             text-decoration: none;
-            color: #007acc;
+            color: var(--color);
             transition: background-color 0.2s;
         }
 
@@ -213,7 +213,7 @@
     <div class="font-controls" role="toolbar" aria-label="Font size controls">
         <a href="" class="font-controls-title">Heritage Happenings</a>
 
-        <button class="font-btn file-list-toggle" onclick="toggleFileList()" aria-label="Toggle file list"
+        <button title="List of Articles" class="font-btn file-list-toggle" onclick="toggleFileList()" aria-label="Toggle file list"
             aria-expanded="false" aria-controls="file-list-panel">
             📁Posts
             <span class="sr-only">Show or hide file list</span>
